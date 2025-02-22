@@ -16,9 +16,9 @@ namespace Template.Domain.Common.IRepository
 
         #region Add
         Task AddAsync(TEntity entity);
-        Task AddRangeAsync(IEnumerable<TEntity> entity);
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
         void Add(TEntity entity);
-        void AddRange(IEnumerable<TEntity> entity);
+        void AddRange(IEnumerable<TEntity> entities);
         #endregion
 
         #region Update
@@ -31,10 +31,10 @@ namespace Template.Domain.Common.IRepository
         #region Delete
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(Expression<Func<TEntity, bool>> filter);
-        Task DeleteRangeAsync(IEnumerable<TEntity> items);
+        Task DeleteRangeAsync(IEnumerable<TEntity> entities);
         void Delete(TEntity entity);
         void Delete(Expression<Func<TEntity, bool>> filter);
-        void DeleteRange(IEnumerable<TEntity> items);
+        void DeleteRange(IEnumerable<TEntity> entities);
         void SoftDelete(TEntity entity);
         void SoftDelete(Expression<Func<TEntity, bool>> filter);
         Task SoftDeleteAsync(TEntity entity);

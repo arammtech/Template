@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Template.Domain.Common.IRepository;
+﻿using Template.Domain.Common.IRepository;
 
 namespace Template.Domain.Common.IUnitOfWork
 {
