@@ -29,7 +29,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddEntityFrameworkStores<AppDbContext>()
-    //.AddDefaultUI()
     .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
