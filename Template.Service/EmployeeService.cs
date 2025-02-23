@@ -1,5 +1,4 @@
-﻿
-}using AutoMapper;
+﻿using AutoMapper;
 using System.Linq.Expressions;
 using Template.Domain.Common.IUnitOfWork;
 using Template.Domain.Entities;

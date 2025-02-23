@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Service", "Templat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.API", "Template.API\Template.API.csproj", "{EDE90943-9173-4A3E-B80E-B5891AFA931C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Utilities", "Template.Utilities\Template.Utilities.csproj", "{21ACB293-1B49-4F96-800E-E4F21A63BF3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,8 +41,15 @@ Global
 		{EDE90943-9173-4A3E-B80E-B5891AFA931C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDE90943-9173-4A3E-B80E-B5891AFA931C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDE90943-9173-4A3E-B80E-B5891AFA931C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21ACB293-1B49-4F96-800E-E4F21A63BF3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21ACB293-1B49-4F96-800E-E4F21A63BF3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21ACB293-1B49-4F96-800E-E4F21A63BF3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21ACB293-1B49-4F96-800E-E4F21A63BF3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8164F330-7A54-4066-8203-F65C9D91FBAC}
 	EndGlobalSection
 EndGlobal

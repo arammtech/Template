@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <partial name="_StyleLinksPartial"></partial>
+
+    @* <link rel="stylesheet" href="~/css/Identity/Identity.css" asp-append-version="true" /> *@
+    @await RenderSectionAsync("Styles",required:false)
+</head>
+<body dir="rtl">
+    <div class="row m-0 h-100 w-100">
+        <div class="container col col-md-6 m-0 h-100 bg-text position-relative d-flex justify-content-center align-content-center">
+            <div class="logo-container position-absolute">
+                <a asp-area="Customer" asp-controller="Home" asp-action="Index">
+                    <img src="/images/Logo-2.svg" alt="" />
+                </a>
+            </div>
+
+            @RenderBody()
+
+        </div>
+
+        <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center gap-4 bg-main">
+            @* @await RenderSectionAsync("HeroSide", required: false) *@
+
+        </div>
+    </div>
+
+
+    <!-- Validations JS Scripts -->
+    <partial name="_ValidationScriptsPartial"></partial>
+
+    <partial name="_ScriptsPartial"></partial>
+
+    @* <script src="~/js/Identity/identityLaout.js" asp-append-version="true"></script> *@
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

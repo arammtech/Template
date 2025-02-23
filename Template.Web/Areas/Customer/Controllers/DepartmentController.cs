@@ -2,8 +2,9 @@
 using Template.Service.DTOs;
 using Template.Service.IService;
 
-namespace Template.Web.Controllers
+namespace Template.Web.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class DepartmentController : Controller
     {
         private readonly IDepartmentService _departmentService;
