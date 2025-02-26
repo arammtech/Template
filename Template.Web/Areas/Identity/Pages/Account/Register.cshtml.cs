@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Template.Domain.Identity;
+using Template.Utilities.Identity;
 
 namespace Template.Web.Areas.Identity.Pages.Account
 {
@@ -23,13 +26,15 @@ namespace Template.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -37,65 +42,55 @@ namespace Template.Web.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new();
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
+
+            
+            [Required(ErrorMessage = "حقل الايميل مطلوب")]
             [EmailAddress]
-            [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "حقل الاسم الأول مطلوب")]
+            public string FirstName { get; set; }
+
+            [Required(ErrorMessage = "حقل الاسم الأخير مطلوب")]
+            public string LastName { get; set; }
+
+            public string? Role { get; set; }
+
+            [ValidateNever]
+            public IEnumerable<SelectListItem> RolesList { get; set; }
+
+            [Required(ErrorMessage = "حقل كلمة المرور مطلوب")]
+            [StringLength(100, ErrorMessage = "يجب أن يكون {0} على الأقل {2} أحرف وطوله الأقصى {1} أحرف", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required(ErrorMessage = "حقل تأكيد كلمة المرور مطلوب")]
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "كلمة المرور وتأكيد كلمة المرور غير متطابقين")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage = "يجب عليك الموافقة على الأحكام والشروط")]
+            [Display(Name = "الاحكام والشروط ")]
+            public bool AgreedToTerms { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            Input.RolesList = GetRoles();
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -107,6 +102,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                AssignCustomUserProperties(user);
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -115,6 +111,11 @@ namespace Template.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (!string.IsNullOrEmpty(Input.Role))
+                        await _userManager.AddToRoleAsync(user, Input.Role);
+                    else
+                        await _userManager.AddToRoleAsync(user, AppUserRoles.RoleCustomer);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -147,7 +148,14 @@ namespace Template.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
+        private void AssignCustomUserProperties(ApplicationUser user)
+        {
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.Email = Input.Email;
+            user.UserName = Input.Email;
+            user.PasswordHash = Input.Password;
+        }
         private ApplicationUser CreateUser()
         {
             try
@@ -169,6 +177,18 @@ namespace Template.Web.Areas.Identity.Pages.Account
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
+        }
+
+        private IEnumerable<SelectListItem> GetRoles()
+        {
+            IEnumerable<SelectListItem> roles = _roleManager.Roles.Select(role => new SelectListItem
+            {
+                Value = role.Name,
+                Text = role.Name,
+
+            }).ToList();
+
+            return roles;
         }
     }
 }
