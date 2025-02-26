@@ -27,7 +27,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
+{
+    option.Password.RequiredLength = 4;
+    option.Password.RequireDigit = false;
+    option.Password.RequireNonAlphanumeric = false;
+    option.Password.RequireUppercase = false;
+})
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
@@ -98,6 +104,8 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+
 void SeedDatabase()
 {
     using (IServiceScope Scope = app.Services.CreateScope())
