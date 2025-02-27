@@ -41,7 +41,7 @@ namespace Template.Service
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _unitOfWork.Repository<Department>().Delete(x => x.Id == id);
         }
 
         public Task DeleteAsync(int id)
@@ -73,7 +73,9 @@ namespace Template.Service
 
         public void Update(int id, DepartmentDto departmentDto)
         {
-            throw new NotImplementedException();
+            Department department = _mapper.Map<Department>(departmentDto);
+            department.Id = id;
+            _unitOfWork.Repository<Department>().Update(department);
         }
 
         public Task UpdateAsync(int id, DepartmentDto departmentDto)
