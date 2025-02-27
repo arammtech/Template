@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Template.Domain.Identity;
 using Template.Repository.DbInitializer;
 using Template.Utilities.Identity;
+using Template.Service.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,12 +57,13 @@ builder.Services.AddSingleton(mapper);
 #endregion
 
 #region Custom Services
-builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddTransient<EmailService, EmailService>();
 #endregion
 
 #region Session Management
