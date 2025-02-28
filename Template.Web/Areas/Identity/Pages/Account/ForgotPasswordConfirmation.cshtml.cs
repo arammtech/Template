@@ -40,28 +40,23 @@ namespace Template.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            [RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
-            public string Digit1 { get; set; }
-
-            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            [RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
-            public string Digit2 { get; set; }
-
-            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            [RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
-            public string Digit3 { get; set; }
-
-            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            [RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
-            public string Digit4 { get; set; }
-
-            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            [RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
-            public string Digit5 { get; set; }
-
-            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            [RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
+            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit6 { get; set; }
+            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
+            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
+            public string Digit5 { get; set; }
+            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
+            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
+            public string Digit4 { get; set; }
+            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
+            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
+            public string Digit3 { get; set; }
+            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
+            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
+            public string Digit2 { get; set; }
+            [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
+            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
+            public string Digit1 { get; set; }
 
             public string Message { get; set; }
         }
@@ -112,6 +107,13 @@ namespace Template.Web.Areas.Identity.Pages.Account
 
             if (action == "verify")
             {
+                var codeDigits = new string[] { Input.Digit1, Input.Digit2, Input.Digit3, Input.Digit4, Input.Digit5, Input.Digit6 };
+                if (codeDigits.Any(digit => string.IsNullOrEmpty(digit)))
+                {
+                    ModelState.AddModelError("", "يجب إدخال جميع الأرقام الستة.");
+                    Input.Message = "تم إرسال رمز التحقق إلى بريدك الإلكتروني";
+                    return Page();
+                }
                 var storedCode = _cache.Get<string>(StoredDataPrefixes.VerificationCodeKey + Input.Email);
                 var enteredCode = $"{Input.Digit1}{Input.Digit2}{Input.Digit3}{Input.Digit4}{Input.Digit5}{Input.Digit6}";
 
@@ -136,6 +138,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
                 else
                 {
                     ModelState.AddModelError("", "رمز التحقق غير صحيح.");
+                    Input.Message = "تم إرسال رمز التحقق إلى بريدك الإلكتروني";
                     return Page();
                 }
             }

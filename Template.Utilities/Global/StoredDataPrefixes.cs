@@ -12,6 +12,10 @@ namespace Template.Utilities.Global
 
 
         // in Cashe Storage
-        public const string VerificationCodeKey = "VerificationCode_"; 
+        public const string VerificationCodeKey = "VerificationCode_";
+
+
+        // Local Storage
+        const string TIMER_KEY = "verification_timer"; 
     }
 }

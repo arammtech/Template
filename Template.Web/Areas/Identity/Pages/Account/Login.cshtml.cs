@@ -85,7 +85,6 @@ namespace Template.Web.Areas.Identity.Pages.Account
                     return Page();
                 }
 
-                TempData["error"] = "حدث خطأ أثناء استرجاع الكتاب";
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
