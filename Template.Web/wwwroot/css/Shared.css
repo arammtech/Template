@@ -40,7 +40,7 @@
     --bg-4: var(--color-4) !important;
     --bg-5: var(--color-5) !important;
     --bg-6: var(--color-6) !important;
-    --bg-shape: var(--color-4) !important;
+    --bg-shape: var(--gray) !important;
     --bg-bubble: var(--gray) !important;
     --text-1: var(--color-2) !important;
     --text-2: var(--color-3) !important;
