@@ -11,7 +11,9 @@
     @await RenderSectionAsync("Styles",required:false)
 </head>
 <body dir="rtl" class="dark">
-    <main class="page-height position-relative overflow-hidden f-ctr-ctr">
+    <div id="loading-spinner"></div> <!-- Spinner element -->
+
+    <main role="main" id="content" class="page-height position-relative overflow-hidden f-ctr-ctr" style="display: none;">
         <div class="bubble-top-right"></div>
         
         

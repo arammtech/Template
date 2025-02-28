@@ -141,6 +141,13 @@ body {
     }
 }
 
+button {
+    border: none;
+    background: none;
+    outline: none;
+    cursor: pointer;
+    color: currentColor;
+}
 a {
     cursor: pointer;
     color: currentColor;
@@ -670,3 +677,4 @@ textarea:focus-within {
         font-size: 3.2rem;
     }
 }
+
