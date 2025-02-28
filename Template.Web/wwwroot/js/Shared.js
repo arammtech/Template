@@ -1,4 +1,5 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿// Function to hide the spinner and show content after the page loads
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('loading-spinner').style.display = 'none';
+    document.getElementById('content').style.display = 'block';
+});

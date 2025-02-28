@@ -24,7 +24,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection2"));
 });
 
 
@@ -57,13 +57,11 @@ builder.Services.AddSingleton(mapper);
 #endregion
 
 #region Custom Services
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-builder.Services.AddTransient<EmailService, EmailService>();
 #endregion
 
 #region Session Management
@@ -80,13 +78,13 @@ var app = builder.Build();
 
 SeedDatabase();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+//// Configure the HTTP request pipeline.
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+//    app.UseHsts();
+//}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

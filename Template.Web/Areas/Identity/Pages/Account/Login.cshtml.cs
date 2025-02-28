@@ -15,11 +15,13 @@ namespace Template.Web.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -73,6 +75,17 @@ namespace Template.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                // For security, don't reveal if the user doesn't exist 
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "لا يوجد مستخدم مسجل بهذا البريد الإلكتروني.");
+
+                    ModelState.Remove("Input.Password");
+                    return Page();
+                }
+
+                TempData["error"] = "حدث خطأ أثناء استرجاع الكتاب";
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
@@ -98,7 +111,6 @@ namespace Template.Web.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, "فشل تسجيل الدخول. البريد الإلكتروني أو كلمة المرور غير صحيحة");
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }

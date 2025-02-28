@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Template.Utilities.Global.Session
+namespace Template.Utilities.Global
 {
     class SessionHelper
     {

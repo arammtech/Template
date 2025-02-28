@@ -18,8 +18,15 @@
             }
         }
 
+
+        public static int GetRandom(int min, int max) 
+        {
+            return new Random().Next(min, max);
+        }
+
+
         // Generic Filter
-        private static List<T> _FilterBooks<T>(List<T> collection, string filterProperty, string filterValue)
+        public static List<T> _FilterBooks<T>(List<T> collection, string filterProperty, string filterValue)
         {
             var propertyInfo = typeof(T).GetProperty(filterProperty);
             if (propertyInfo != null)

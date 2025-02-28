@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Template.Web</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Template.Web.styles.css" asp-append-version="true" />
+  
+    <partial name="_StyleLinksPartial"></partial>
+
 </head>
 <body>
     <header>
@@ -33,7 +34,11 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <div id="loading-spinner"></div> <!-- Spinner element -->
+
+        <main role="main" id="content" class="pb-3" style="display: none;">
+
+            <partial name="_NotificationsPartial" />
             @RenderBody()
         </main>
     </div>
@@ -43,8 +48,7 @@
             &copy; 2025 - Template.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <partial name="_ScriptsPartial"></partial>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
