@@ -41,34 +41,40 @@
                                    asp-area="Customer" asp-controller="Home" asp-action="Index">الرئيسية</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("Customer/Home/AboutUs")"
+                                <a class="nav-link @Html.IsActive("theme1")"
                                    asp-area="Customer" asp-controller="Home" asp-action="Privacy">theme1</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("Customer/Home/AboutUs")"
+                                <a class="nav-link @Html.IsActive("theme2")"
                                    asp-area="Customer" asp-controller="Home" asp-action="Privacy">theme2</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link @Html.IsActive("Customer/Home/AboutUs")"
-                                   asp-area="Customer" asp-controller="Home" asp-action="Privacy">عن المطورين</a>
+                                   asp-area="Customer" asp-controller="Home" asp-action="AboutUs">عن المطورين</a>
                             </li>
                            
                             <li class="nav-item dropdown">
-                                <a id="manage" class="nav-link dropdown-toggle pointer" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a id="manage"
+                                   class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
                                     المساعدة
                                 </a>
                                 <ul class="dropdown-menu p-2 text-end ">
                                     <li>
-                                        <a id="manage" class="dropdown-item nav-link " title="Manage">الأسئلة الشائعة</a>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
+                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>
                                     </li>
                                     <li>
-                                        <a id="manage" class="dropdown-item nav-link "  title="Manage">الأهداف</a>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Goals"
+                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Goals")" title="Manage">الأهداف</a>
                                     </li>
                                     <li>
-                                        <a id="manage" class="dropdown-item nav-link "  title="Manage">التواصل معنا</a>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="ContactUs"
+                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/ContactUs")" title="Manage">التواصل معنا</a>
                                     </li>
                                     <li>
-                                        <a id="manage" class="dropdown-item nav-link " title="Manage">الخصوصية والامان</a>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Privacy"
+                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/Privacy")" title="Manage">الخصوصية والامان</a>
                                     </li>
                                 </ul>
                             </li>
@@ -126,7 +132,7 @@
     </main>
 
 
-    <footer class="border-top footer text-muted m-0">
+    <footer class="footer m-0 border-none">
         <div class="waves">
             <div class="wave" id="wave1"></div>
             <div class="wave" id="wave2"></div>
@@ -174,9 +180,7 @@
                     </a>
                     </li>
                 <li id="instagram">
-                    <a href="https://www.instagram.com/arammtech/">
-                       I
-
+                   I
                     </a></li>
                 @* <li><a href="https://www.youtube.com/@arammtech">Y</a></li> *@
                 <li id="youtube">
@@ -217,7 +221,7 @@
                     <li><a href="">المساعدة</a></li>
                     <li><a href="">تسجيل الدخول</a></li>
                   </ul>
-            <ul>
+            <ul class="flex-column gap-0">
                 <li>
                     جميع الحقوق محفوظة لدى
                     <a class="tc-acc pointer hov-2" href="#"> Website</a>
@@ -228,6 +232,24 @@
             </ul>
         </div>
     </footer>
+
+    <!-- Help Button -->
+    <a id="helpButton"  asp-area="Customer" asp-controller="Home" asp-action="Help"  class="btn btn-icon btn-sm btn-1 hidden">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 16C15.87 16 19 12.87 19 9C19 5.13 15.87 2 12 2C8.13 2 5 5.13 5 9" stroke="#DFDCD5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 16V22" stroke="#DFDCD5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path opacity="0.4" d="M15 19H9" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+
+    </a>
+    <!-- Back to Top Button (placed here) -->
+    <button id="backToTop" class="btn btn-icon btn-sm btn-1 hidden">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.92 15.0499L13.4 8.52989C12.63 7.75989 11.37 7.75989 10.6 8.52989L4.08002 15.0499"
+                  stroke="#DFDCD5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </button>
+
     <partial name="_ScriptsPartial"></partial>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

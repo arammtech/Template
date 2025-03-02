@@ -23,9 +23,10 @@ namespace Template.Web.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user != null &&  User.Identity.IsAuthenticated)
             {
-                var user = await _userManager.GetUserAsync(User);
                 if (!(await _userManager.IsEmailConfirmedAsync(user)))
                     TempData["info"] = $"مرحبًا {user.UserName.Split('@')[0]} !الرجاء التحقق من بريدك الإلكتروني للتأكيد!";
                 else
@@ -35,8 +36,40 @@ namespace Template.Web.Areas.Customer.Controllers
 
             return View();
         }
+        public IActionResult Help()
+        {
+            // FAQ
+            // Goals
+            // Contact Us
+
+            return View();
+        }
+
+        public IActionResult FAQ()
+        {
+            return View();
+        }
+
+        public IActionResult Goals()
+        {
+            return View();
+        }
+
+        public IActionResult ContactUs() { 
+            return View();
+        }
+
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Terms()
         {
             return View();
         }
