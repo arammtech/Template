@@ -23,15 +23,14 @@ namespace Template.Web.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    var user = await _userManager.GetUserAsync(User);
-            //    if (!(await _userManager.IsEmailConfirmedAsync(user)))
-            //        TempData["info"] = $"مرحبًا {user.UserName.Split('@')[0]} !الرجاء التحقق من بريدك الإلكتروني للتأكيد!";
-            //    else
-            //        TempData["info"] = $"مرحبًا {user.UserName.Split('@')[0]}!";
-
-            //}
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                    TempData["info"] = $"مرحبًا {user.UserName.Split('@')[0]} !الرجاء التحقق من بريدك الإلكتروني للتأكيد!";
+                else
+                    TempData["info"] = $"مرحبًا {user.UserName.Split('@')[0]}!";
+            }
 
 
             return View();

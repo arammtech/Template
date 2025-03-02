@@ -1,18 +1,18 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Template.Utilities.Identity
 {
     public class EmailSender : IEmailSender
     {
+        // Should be encrypted Later
         private readonly string _smtpHost = "smtp.gmail.com";
         private readonly int _smtpPort = 587;
         private readonly string _smtpUser = "teamaramm@gmail.com";
         private readonly string _smtpPass = "iweq ccca vufw gbnb";
         private readonly string _fromEmail = "teamaramm@gmail.com";
-    
+
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             using (var mailMessage = new MailMessage())

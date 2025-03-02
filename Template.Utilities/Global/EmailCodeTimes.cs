@@ -8,7 +8,7 @@ namespace Template.Utilities.Global
 {
     class EmailCodeTimes
     {
-        public static int resendCodeTimeMins1 = 6;
+        public static int resendCodeTimeMins1 = 10;
         public static int resendCodeTimeMins2 = 30;
         public static int resendCodeTimeMins3 = 60;
     }
