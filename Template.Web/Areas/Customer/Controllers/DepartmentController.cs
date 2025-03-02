@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Template.Service.DTOs;
-using Template.Service.IService;
+using Template.Service.Interfaces;
 
 namespace Template.Web.Areas.Customer.Controllers
 {

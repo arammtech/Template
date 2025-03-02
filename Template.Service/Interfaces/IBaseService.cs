@@ -1,4 +1,4 @@
-﻿namespace Template.Service.IService
+﻿namespace Template.Service.Interfaces
 {
     public interface IBaseService
     {

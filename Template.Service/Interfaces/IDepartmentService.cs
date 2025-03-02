@@ -2,7 +2,7 @@
 using Template.Domain.Entities;
 using Template.Service.DTOs;
 
-namespace Template.Service.IService
+namespace Template.Service.Interfaces
 {
     public interface IDepartmentService : IBaseService
     {

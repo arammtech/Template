@@ -5,15 +5,14 @@ using Template.Domain.Common.IUnitOfWork;
 using Template.Repository.EntityFrameworkCore.Context;
 using Template.Repository.Repository;
 using Template.Repository.UnitOfWork;
-using Template.Service;
-using Template.Service.IService;
+using Template.Service.Interfaces;
 using Template.Service.Profiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Template.Domain.Identity;
 using Template.Repository.DbInitializer;
 using Template.Utilities.Identity;
-using Template.Service.Email;
+using Template.Service.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
