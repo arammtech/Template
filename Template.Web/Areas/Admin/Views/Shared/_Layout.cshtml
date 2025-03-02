@@ -1,0 +1,158 @@
+﻿@using BookStore.Utilties.HTMLHelpers
+@using Template.Utilities.Identity
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Template.Web</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+  
+    <partial name="_StyleLinksPartial"></partial>
+
+</head>
+<body dir="rtl" class="light">
+
+    <div id="dashboardOverlay">
+        <div class="overlay-content">
+            <div class="animated-shape"></div>
+            <h1>Welcome to Dashboard</h1>
+        </div>
+
+    </div>
+
+
+    <header>
+        <!-- navbar  fixed-top -->
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand m-0 tx-1" href="#">
+                    @* <img src="~/images/Logo-1.svg" alt="كتبي" /> *@
+                    ARAMM TECH | ارام تيك
+                </a>
+
+                <button class="navbar-toggler fs-6" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <svg width="30" height="30" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 17.0308H20M4 12.0308H20M4 7.03077H20" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+
+                <div class="offcanvas offcanvas-start w-40" tabindex="-1" id="offcanvasNav" aria-labelledby="offcanvasNavLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavLabel">القائمة</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav gap-5 me-5">
+                            <li class="nav-item">
+                                <a class="nav-link @Html.IsActive("Customer/Home/Index")"
+                                   aria-current="page"
+                                   asp-area="Customer" asp-controller="Home" asp-action="Index">الرئيسية</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @Html.IsActive("theme1")"
+                                   asp-area="Admin" asp-controller="Settings" asp-action="Index">settings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @Html.IsActive("theme1")"
+                                   asp-area="Admin" asp-controller="Help" asp-action="Index">Help</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @Html.IsActive("Customer/Home/AboutUs")"
+                                   asp-area="Customer" asp-controller="Home" asp-action="AboutUs">عن المطورين</a>
+                            </li>
+                           
+                            <li class="nav-item dropdown">
+                                <a id="manage"
+                                   class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    المساعدة
+                                </a>
+                                <ul class="dropdown-menu p-2 text-end ">
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
+                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>
+                                    </li>
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Goals"
+                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Goals")" title="Manage">الأهداف</a>
+                                    </li>
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="ContactUs"
+                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/ContactUs")" title="Manage">التواصل معنا</a>
+                                    </li>
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Privacy"
+                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/Privacy")" title="Manage">الخصوصية والامان</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                        <ul class="navbar-nav me-auto ">
+                            <li id="search-box" class="nav-item f-ctr-ctr me-5">
+                                <form class="form-input-box f-ctr-ctr" role="search">
+                                    <div class="input-box">
+                                        <input id="searchInput" placeholder="البحث" aria-label="Search">
+                                        <svg id="space" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11.5 21.5C16.7467 21.5 21 17.2467 21 12C21 6.75329 16.7467 2.5 11.5 2.5C6.25329 2.5 2 6.75329 2 12C2 17.2467 6.25329 21.5 11.5 21.5Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path opacity="0.4" d="M22 22.5L20 20.5" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                </form>
+                            </li>
+                            <li class="nav-item me-5">
+                                <button id="modeSwitch" class="nav-link">
+                                  
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+
+
+    </header>
+
+    <aside id="sidebar">
+        <h1>dfghjkdfghjkjhgfdfghjkjhgfdfghjkjhgfdfghjkjhgfdfghjkjhgfdfghjkjhgfjhgf</h1>
+        <h1>dfghjkjhgf</h1>
+        <h1>dfghjkjhgf</h1>
+        <h1>dfghjkjhgf</h1>
+        <h1>dfghjkjhgf</h1>
+        <h1>dfghjkjhgf</h1>
+        <h1>dfghjkjhgf</h1>
+    </aside>
+
+    <div id="loading-spinner"></div> <!-- Spinner element -->
+
+    <main role="main" id="content" class="page-height position-relative overflow-hidden f-ctr-ctr" style="display: none;">
+        <partial name="_NotificationsPartial" />
+        @RenderBody()
+        <a id="leaveDashboard" asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-lg btn-em fill">
+            Back
+        </a>
+        <div id="fullscreen-icon">🔲FullScreen</div>
+
+            <div id="toggle-button">☰</div>
+            <p>Main content here</p>
+    </main>
+
+
+
+    <!-- Back to Top Button (placed here) -->
+    @* <button id="backToTop" class="btn btn-icon btn-sm btn-1 hidden"> *@
+    @*     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> *@
+    @*         <path d="M19.92 15.0499L13.4 8.52989C12.63 7.75989 11.37 7.75989 10.6 8.52989L4.08002 15.0499" *@
+    @*               stroke="#DFDCD5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" /> *@
+    @*     </svg> *@
+    @* </button> *@
+
+    <partial name="_ScriptsPartial"></partial>
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
