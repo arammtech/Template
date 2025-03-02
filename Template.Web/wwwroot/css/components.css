@@ -419,3 +419,36 @@
     .divider-with-text span {
         margin: 0 1rem;
     }
+
+
+/*Spinner*/
+/* Center the loading spinner and make it very big */
+#loading-spinner {
+    display: block;
+    position: fixed;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 10px solid;
+    border-color: var(--accent) transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 9999; /* Ensure the spinner stays on top */
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/* Hide the content initially */
+#content {
+    display: none;
+}

@@ -8,30 +8,37 @@
             switch (time)
             {
                 case 1:
-                    return GlobalSettings.resendCodeTimeMins1;
+                    return EmailCodeTimes.resendCodeTimeMins1;
                 case 2:
-                    return GlobalSettings.resendCodeTimeMins2;
+                    return EmailCodeTimes.resendCodeTimeMins2;
                 case 3:
-                    return GlobalSettings.resendCodeTimeMins3;
+                    return EmailCodeTimes.resendCodeTimeMins3;
                 default:
                     return 15;
             }
         }
 
-        //    private List<BookListViewModel> _FilterBooks(List<BookListViewModel> books, string filterProperty, string filterValue)
-        //{
-        //    int? cartQuantityFromSession = _sessionService.GetCartQuantity();
 
-        //    var propertyInfo = typeof(BookListViewModel).GetProperty(filterProperty);
-        //    if (propertyInfo != null)
-        //    {
-        //        return books
-        //            .Where(b => propertyInfo.GetValue(b)?.ToString() == filterValue)
-        //            .ToList();
-        //    }
+        public static int GetRandom(int min, int max) 
+        {
+            return new Random().Next(min, max);
+        }
 
-        //    return books;
-        //}
+
+        // Generic Filter
+        public static List<T> _FilterBooks<T>(List<T> collection, string filterProperty, string filterValue)
+        {
+            var propertyInfo = typeof(T).GetProperty(filterProperty);
+            if (propertyInfo != null)
+            {
+                return collection.Where(item => propertyInfo.GetValue(item)?.ToString() == filterValue)
+                    .ToList();
+            }
+
+            return collection;
+        }
+
+           
             //public static string SetOrderStatus(byte Status)
             //{
             //    switch (Status)

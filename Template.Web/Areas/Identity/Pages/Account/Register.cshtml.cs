@@ -101,7 +101,18 @@ namespace Template.Web.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+                // For security, if the user already exist 
+                if (user != null)
+                {
+                    ModelState.AddModelError(string.Empty, "يوجد بالفعل مستخدم مسجل بهذا البريد الإلكتروني");
+
+                    return Page();
+                }
+                
+
+
+                user = CreateUser();
                 AssignCustomUserProperties(user);
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
