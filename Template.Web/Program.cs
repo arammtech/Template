@@ -13,6 +13,7 @@ using Template.Domain.Identity;
 using Template.Repository.DbInitializer;
 using Template.Utilities.Identity;
 using Template.Service.Implementations;
+using Template.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +57,9 @@ builder.Services.AddSingleton(mapper);
 #endregion
 
 #region Custom Services
+
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+//builder.Services.Configure<EmailSettings>(builder.Configuration.Get("EmailConfiguration"));
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

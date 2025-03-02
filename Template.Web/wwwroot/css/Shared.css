@@ -350,7 +350,6 @@ textarea:focus-within {
 
 .sec-height {
     min-height: calc(100vh - var(--nav-height));
-    margin-top: var(--nav-height);
 }
 
 .mb-footer {
@@ -630,22 +629,20 @@ textarea:focus-within {
 /* Responsive */
 
 @media (max-width: 768px) {
-    .sec-height {
-        min-height: calc(100vh - var(--nav-md));
-    }
-
     .big-text {
         font-size: 3.7rem;
     }
 }
 
 @media (max-width: 576px) {
-    .sec-height {
-        min-height: calc(100vh - var(--nav-sm));
-    }
-
     .big-text {
         font-size: 3.2rem;
     }
 }
 
+
+
+/* Display */
+.hidden {
+    display:none;
+}

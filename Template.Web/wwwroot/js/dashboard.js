@@ -1,12 +1,23 @@
-﻿// select #searchInput and track the enter key when pressed to show an alert (Not Implemented Yet)
-// and when click on #searchInput svg the same
+﻿document.addEventListener('DOMContentLoaded', function () {
 
+    // After 3.5 seconds, start the fade-out animation
+    setTimeout(() => {
+        const overlay = document.getElementById('dashboardOverlay');
+        overlay.style.animation = "fadeOutOverlay 0.5s forwards";
 
-document.addEventListener('DOMContentLoaded', function () {
+        // Remove the overlay from the DOM after the fade-out completes
+        setTimeout(() => {
+            if (overlay && overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, 500);
+    }, 3500);
+
 
     // Function to hide the spinner and show content after the page loads
     document.getElementById('loading-spinner').style.display = 'none';
     document.getElementById('content').style.display = 'block';
+
 
     // modeSwitch when click swich mode from body light, dark and replace icon (sum , moon)
     const theme = localStorage.getItem("theme");
@@ -54,53 +65,58 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Control the Welcome-Overelay Diaplay
+    const overlay = document.getElementById("dashboardOverlay");
+      const leaveBtn = document.getElementById("leaveDashboard");
+  
+      // Check if dashboardVisited flag exists and equals "1"
+      const visited = sessionStorage.getItem("dashboardVisited");
 
-    // Arrow up button
-    const backToTopBtn = document.getElementById("backToTop");
-    window.addEventListener("scroll", function () {
-        if (window.scrollY > window.innerHeight) {
-            backToTopBtn.classList.add("show");
-        } else {
-            backToTopBtn.classList.remove("show");
-        }
-    });
-    backToTopBtn.addEventListener("click", function () {
-        backToTopBtn.classList.add("rocket");
-
+      if (!visited || visited === "0") {
+        // Show overlay (it is in HTML so it will display)
         setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            setTimeout(() => {
-                backToTopBtn.classList.remove("rocket");
-            }, 1000);
-        }, 400);
-    });
-
-    // help button
-    const helpButton = document.getElementById("helpButton");
-    window.addEventListener("scroll", function () {
-        if (window.scrollY > window.innerHeight) {
-            helpButton.classList.add("show");
-        } else {
-            helpButton.classList.remove("show");
+          overlay.style.animation = "fadeOutOverlay 0.5s forwards";
+          // After fade-out, remove overlay from DOM
+          setTimeout(() => {
+            if (overlay && overlay.parentNode) {
+              overlay.parentNode.removeChild(overlay);
+            }
+          }, 500);
+        }, 3500);
+        // Set session flag so the animation won't appear again during this session
+        sessionStorage.setItem("dashboardVisited", "1");
+      } else {
+        // If the flag is already set, immediately remove/hide the overlay
+        if (overlay && overlay.parentNode) {
+          overlay.parentNode.removeChild(overlay);
         }
-    });
-    helpButton.addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent the default link behavior temporarily
-        helpButton.classList.add("rocket");
+      }
 
-        setTimeout(() => {
-            // Perform the navigation after the animation completes
-            window.location.href = helpButton.getAttribute("href");
-        }, 1000); // After animation (1 second), navigate to the link
-    });
+      // When the "Leave Dashboard" button is clicked, reset the flag
+      leaveBtn.addEventListener("click", function() {
+        sessionStorage.setItem("dashboardVisited", "0");
+      });
 
 
+    // FullScreen
+    const icon = document.getElementById('fullscreen-icon');
 
+    icon.onclick = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    };
 
+    // Toggle Sidebar
+    const toggleButton = document.getElementById('toggle-button');
+    const sidebar = document.getElementById('sidebar');
 
-
-
- });
-
-
+    toggleButton.onclick = () => {
+        sidebar.classList.toggle('hidden');
+    };
+});
 

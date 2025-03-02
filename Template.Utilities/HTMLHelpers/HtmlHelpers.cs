@@ -55,56 +55,5 @@ namespace BookStore.Utilties.HTMLHelpers
             return acceptedRoutes.Contains(currentRoute, StringComparer.OrdinalIgnoreCase) ? "active" : "";
         }
 
-        /// <summary>
-        /// Returns "active" if the current route’s area and controller match the specified area and controller.
-        /// </summary>
-        /// <param name="htmlHelper">The HTML helper instance that this method extends.</param>
-        /// <param name="expectedArea">
-        /// The expected area value. Pass an empty string or null if no area is expected.
-        /// </param>
-        /// <param name="expectedController">The expected controller value.</param>
-        /// <returns>
-        /// "active" if both the area and controller match; otherwise, an empty string.
-        /// </returns>
-        public static string IsActive(this IHtmlHelper htmlHelper, string expectedArea, string expectedController)
-        {
-            // Get current area and controller from the route data.
-            var routeData = htmlHelper.ViewContext.RouteData;
-            string currentArea = routeData.Values["area"]?.ToString() ?? "";
-            string currentController = routeData.Values["controller"]?.ToString() ?? "";
-
-            // Compare expected area and controller with the current ones (case-insensitive).
-            bool areaMatches = string.Equals(currentArea, expectedArea ?? "", StringComparison.OrdinalIgnoreCase);
-            bool controllerMatches = string.Equals(currentController, expectedController, StringComparison.OrdinalIgnoreCase);
-
-            return areaMatches && controllerMatches ? "active" : "";
-        }
-
-        ///// <summary>
-        ///// Determines whether the current page is active based on the route values.
-        ///// </summary>
-        ///// <param name="htmlHelper">The HTML helper instance that this method extends.</param>
-        ///// <returns>
-        ///// Returns the string "active" if the current controller and action match
-        ///// the target controller and action from the view's route data; otherwise, returns an empty string.
-        ///// </returns>
-        //public static string IsActive(this IHtmlHelper htmlHelper)
-        //{
-        //    // Get current route values
-        //    var routeData = htmlHelper.ViewContext.RouteData;
-        //    string currentArea = routeData.Values["area"]?.ToString() ?? "";
-        //    string currentController = routeData.Values["controller"]?.ToString() ?? "";
-
-        //    // Get the calling view's target area and controller from tag attributes
-        //    string targetArea = htmlHelper.ViewContext.HttpContext.Request.RouteValues["area"]?.ToString() ?? "";
-        //    string targetController = htmlHelper.ViewContext.HttpContext.Request.RouteValues["controller"]?.ToString() ?? "";
-
-        //    // Return "active" if both area and controller match
-        //    return (currentArea.Equals(targetArea, StringComparison.OrdinalIgnoreCase) &&
-        //            currentController.Equals(targetController, StringComparison.OrdinalIgnoreCase))
-        //            ? "active"
-        //            : "";
-        //}
-
     }
 }

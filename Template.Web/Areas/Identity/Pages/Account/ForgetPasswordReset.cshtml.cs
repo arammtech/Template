@@ -8,16 +8,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Template.Domain.Identity;
 
 namespace Template.Web.Areas.Identity.Pages.Account
 {
-    public class ResetPasswordModel : PageModel
+    public class ForgetPasswordResetModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ResetPasswordModel(UserManager<ApplicationUser> userManager)
+        public ForgetPasswordResetModel(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
@@ -32,15 +31,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
             [EmailAddress]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "كلمة المرور القديمة مطلوبة.")]
-            [StringLength(100, ErrorMessage = "يجب أن تكون {0} على الأقل {2} حرفًا وبحد أقصى {1} حرفًا.", MinimumLength = 6)]
-            [DataType(DataType.Password)]
-            [Compare("Password", ErrorMessage = "كلمة المرور وتأكيد كلمة المرور غير متطابقين.")]
-            [Display(Name = "كلمة المرور القديمة")]
-            public string OldPassword { get; set; }
-
             [Required(ErrorMessage = "كلمة المرور مطلوبة.")]
-            [StringLength(100, ErrorMessage = "يجب أن تكون {0} على الأقل {2} حرفًا وبحد أقصى {1} حرفًا.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "كلمة المرور")]
             public string Password { get; set; }
@@ -84,13 +75,8 @@ namespace Template.Web.Areas.Identity.Pages.Account
             }
 
             var user = await _userManager.FindByEmailAsync(Input.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
-            }
-
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
+
             if (result.Succeeded)
             {
                 return RedirectToPage("./ResetPasswordConfirmation");
@@ -100,6 +86,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+
             return Page();
         }
     }

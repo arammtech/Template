@@ -1,28 +1,32 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+#nullable disable
+
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Template.Domain.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Caching.Memory;
+using Template.Domain.Identity;
 using Template.Utilities.Global;
 using Template.Utilities.Identity;
 
 namespace Template.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
-    public class ForgotPasswordConfirmation : PageModel
+    public class ConfirmEmailWithCodeModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly IMemoryCache _cache; 
+        private readonly IMemoryCache _cache;
 
-        public ForgotPasswordConfirmation(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IMemoryCache cache)
+        public ConfirmEmailWithCodeModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, IMemoryCache cache)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -40,42 +44,35 @@ namespace Template.Web.Areas.Identity.Pages.Account
             public string Email { get; set; }
 
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit6 { get; set; }
+
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit5 { get; set; }
+
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit4 { get; set; }
+
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit3 { get; set; }
+
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit2 { get; set; }
+
             [Required(ErrorMessage = "يجب إدخال هذا الحقل.")]
-            //[RegularExpression(@"\d", ErrorMessage = "يجب أن يكون رقمًا.")]
             public string Digit1 { get; set; }
 
             public string Message { get; set; }
         }
 
 
-        public async Task<IActionResult> OnGetAsync(string email,string? message, bool fromBackButton = false)
+        public async Task<IActionResult> OnGetAsync(string email, string? message)
         {
-            if (fromBackButton)
-            {
-                //return RedirectToPage("/PreviousPage");
-                return Redirect(Request.Headers["Referer"].ToString()); // Redirect to previous page
-            }
-
             if (!string.IsNullOrEmpty(email))
             {
                 Input.Email = email;
 
                 string verificationCode = GlobalFunctions.GetRandom(100000, 999999).ToString();
-                
+
                 _cache.Set(StoredDataPrefixes.VerificationCodeKey + email, verificationCode, TimeSpan.FromMinutes(StoredDataPrefixes.VerificationCodeKeyTime));
 
                 await _emailSender.SendEmailAsync(
@@ -83,7 +80,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
                     "رمز التحقق من الحساب",
                     EmailTemplates.GetVerificationCodeEmailBody(verificationCode, StoredDataPrefixes.VerificationCodeKeyTime));
 
-                if(!string.IsNullOrEmpty(message))
+                if (!string.IsNullOrEmpty(message))
                     Input.Message = message;
                 else
                     Input.Message = "تم إرسال رمز التحقق إلى بريدك الإلكتروني";
@@ -133,20 +130,19 @@ namespace Template.Web.Areas.Identity.Pages.Account
                     // Remove the code from cache after successful verification
                     _cache.Remove(StoredDataPrefixes.VerificationCodeKey + Input.Email);
 
-                    // Generate an email reset token
-                    var codeToConfirm = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    codeToConfirm = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(codeToConfirm));
-
-                    // Email Confirmed
-                    codeToConfirm = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(codeToConfirm));
-                    var result = await _userManager.ConfirmEmailAsync(user, codeToConfirm);
 
                     // Generate a password reset token
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
+
+                    // Email Confirmed
+                    var codeToConfirm = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+                    var result = await _userManager.ConfirmEmailAsync(user, codeToConfirm);
+
+
                     // Redirect to Reset Password Page
-                    return RedirectToPage("/Account/ForgetPasswordReset", new { area = "Identity", code, email = Input.Email });
+                    return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code, email = Input.Email });
                 }
                 else
                 {
@@ -157,11 +153,10 @@ namespace Template.Web.Areas.Identity.Pages.Account
             }
             else if (action == "resend")
             {
-                return RedirectToPage("./ForgotPasswordConfirmation", new { email = Input.Email,message = " تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني" });
+                return RedirectToPage("./ConfirmEmailWithCode", new { email = Input.Email, message = " تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني" });
             }
 
             return Page();
         }
     }
-
 }

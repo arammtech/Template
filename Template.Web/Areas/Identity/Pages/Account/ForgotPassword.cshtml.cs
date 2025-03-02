@@ -48,18 +48,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
                     return Page(); 
                 }
                
-                // For security, don't reveal if the user is not confirmed
-                if (!(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    return RedirectToPage("./ForgotPasswordConfirmation", new { email = Input.Email });
-                }
-
-                // Generate a password reset token
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-                // Redirect to Reset Password Page
-                return RedirectToPage("/Account/ResetPassword", new { area = "Identity", code, email = Input.Email });
+                return RedirectToPage("./ForgotPasswordConfirmation", new { email = Input.Email });
             }
 
             return Page();

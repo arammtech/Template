@@ -1,0 +1,102 @@
+/* Full-screen overlay */
+#dashboardOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #141414; /* Dark background for contrast */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+}
+
+/* Overlay content styling */
+.overlay-content {
+    text-align: center;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    text-align:center;
+    flex-direction:column;
+}
+
+/* Animated shape (a circle with a gradient) */
+/* Animated shape (a circle with the logo image) */
+.animated-shape {
+    width: 250px;
+    height: 250px;
+    background-image: url("/imgs/DVLD-Logo.ico"); /* Update with your logo path */
+    background-size: contain; /* Use 'cover' if you want the image to fill the circle */
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    animation: shapeAnimation 3s ease-in-out forwards;
+}
+
+/* Shape animation: grow from nothing to full size */
+@keyframes shapeAnimation {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Welcome text styling and fade-in animation */
+.overlay-content h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    opacity: 0;
+    animation: textFadeIn 1.5s ease forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade-out animation for the overlay */
+@keyframes fadeOutOverlay {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+/* Aside Bar*/
+aside {
+    transition:.5s;
+}
+
+/*aside.open {
+    display: block;
+    margin-left: calc(-260px);
+}*/
