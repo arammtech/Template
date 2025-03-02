@@ -1,10 +1,15 @@
 ﻿using MailKit.Security;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using Org.BouncyCastle.Utilities.Net;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using Template.Domain.Entities;
+using Template.Domain.Global;
 using Template.Domain.Identity;
 using Template.Service.Global;
 using Template.Service.Interfaces;
@@ -21,35 +26,21 @@ namespace Template.Service.Implementations
             _userManager = userManger;
         }
 
-
         public async Task<string> GenerateToken(ApplicationUser user)
         {
-            if (user == null) { return ""; }
-
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var tokenRecord = new TokenRecord
-            {
-                Token = token,
-                UserId = user.Id,
-                //IPAddress = ipAddress,
-                ExpirationDate = DateTime.UtcNow.AddSeconds(59) // Token expires in 1 hour
-            };
-
-            return tokenRecord;
-            
+            if (user == null) { return null; }
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
         public async Task<string> GenerateLinkToVerifyTokenAsync(string token, int userId)
         {
+
             var encodedToken = WebUtility.UrlEncode(token);
-            // Fix the URL by removing the extra 'http://' part
-            return $"http://127.0.0.1:5500/index.html?userId={userId}&token={encodedToken}";
-            //return $"<a href='{verificationLink}'>here</a>";
+            return $"http://127.0.0.1:5500/index.html?userId={userId}&token={_ShortenToken(encodedToken)}";
         }
         public async Task<Result> SendEmailAsync(string recipient, string recipientName, string subject, string body, string senderName = "ARAMM")
         {
             try
             {
-                //body = "<html><body><p>Click the link below:</p><a href='https://www.example.com'>Visit Example</a></body></html>";
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress(senderName, _emailSettings.SenderEmail));
                 message.To.Add(new MailboxAddress(recipientName, recipient));
@@ -71,7 +62,7 @@ namespace Template.Service.Implementations
         }
         public async Task<Result> VerifyEmailAsync(int userId, string token)
         {
-
+            token = _DecodeShortToken(token);
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null) return new Result("User not found.", false);
 
@@ -84,7 +75,31 @@ namespace Template.Service.Implementations
 
         }
 
-        
+        private string _DecodeShortToken(string shortToken)
+        {
+            string paddedToken = shortToken
+                .Replace('-', '+')
+                .Replace('_', '/');
+
+            while (paddedToken.Length % 4 != 0)
+                paddedToken += "="; // Restore padding
+
+            var tokenBytes = Convert.FromBase64String(paddedToken);
+            return Encoding.UTF8.GetString(tokenBytes);
+        }
+
+        private string _ShortenToken(string token)
+        {
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            return Convert.ToBase64String(tokenBytes)
+                .Replace('+', '-')
+                .Replace('/', '_')
+                .TrimEnd('='); // Removes padding
+        }
+
+
+
+
     }
 
 }

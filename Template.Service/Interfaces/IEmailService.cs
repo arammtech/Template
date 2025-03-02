@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MailKit.Security;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using MimeKit;
+using Template.Domain.Global;
 using Template.Domain.Identity;
 using Template.Service.Global;
 

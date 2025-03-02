@@ -21,9 +21,7 @@ options.UseSqlServer(connectionString));
 
 //Register dependencies
 services.AddSingleton<IUnitOfWork, UnitOfWork>();
-    services.AddScoped<IDepartmentService, DepartmentService>();
 services.Configure<EmailSettings>(buider.GetSection("EmailConfiguration"));
-
 
 services.AddLogging();
 
@@ -41,7 +39,10 @@ services.AddScoped<IEmailService, EmailService>();
 ServiceProvider serviceProvider;
     serviceProvider = services.BuildServiceProvider();
 
-
+services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromSeconds(59); 
+});
 
 var emailService = serviceProvider.GetRequiredService<IEmailService>();
 ApplicationUser GenerateFakeUser()
@@ -69,7 +70,7 @@ ApplicationUser GenerateFakeUser()
         LastName = faker.Name.LastName()
     };
 }
-var user = GenerateFakeUser();  
+var user = GenerateFakeUser();
 var token = await emailService.GenerateToken(user);
 var link = await emailService.GenerateLinkToVerifyTokenAsync(token, user.Id);
 await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "test", $"<html><body><p>Click the link below:</p><a href='{link}'>Visit Example</a></body></html>", "Abdulaziz");
