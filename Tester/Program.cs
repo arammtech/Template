@@ -1,67 +1,75 @@
 ﻿//See https://aka.ms/new-console-template for more information
-using static System.Net.Mime.MediaTypeNames;
-using System.Security.Principal;
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Template.Repository.EntityFrameworkCore.Context;
 using Microsoft.EntityFrameworkCore;
 using Template.Domain.Common.IUnitOfWork;
 using Template.Repository.UnitOfWork;
-using Template.Service.IService;
-using Template.Service;
-using AutoMapper;
-using Template.Service.Profiles;
+using Template.Service.Interfaces;
 using Template.Domain.Entities;
-using Template.Service.DTOs;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-using Template.Service;
-using Template.Service.Email;
+using Template.Service.Implementations;
+using Template.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
+using Bogus;
 
 var services = new ServiceCollection();
-    string connectionString = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("ConnectionStrings:DefaultConnection").Value;
+var buider = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
+string connectionString = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("ConnectionStrings:DefaultConnection").Value;
 
-    #region AutoMapper
-    var mapperConfig = new MapperConfiguration(cfg =>
-    {
-        cfg.AddProfile(new MappingProfile());
-    });
+services.AddDbContext<AppDbContext>(options =>
+options.UseSqlServer(connectionString));
 
-    IMapper mapper = mapperConfig.CreateMapper();
-    services.AddSingleton(mapper);
-    #endregion
-
-    //Register dependencies
-    services.AddSingleton<IUnitOfWork, UnitOfWork>();
+//Register dependencies
+services.AddSingleton<IUnitOfWork, UnitOfWork>();
     services.AddScoped<IDepartmentService, DepartmentService>();
+services.Configure<EmailSettings>(buider.GetSection("EmailConfiguration"));
 
-    services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
-    // Set up Dependency Injection
 
-    ServiceProvider serviceProvider;
-    //Keep the service provider alive for the application's lifetime
+services.AddLogging();
+
+services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
+{
+    option.Password.RequiredLength = 4;
+    option.Password.RequireDigit = false;
+    option.Password.RequireNonAlphanumeric = false;
+    option.Password.RequireUppercase = false;
+}).AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+;
+services.AddScoped<IEmailService, EmailService>();
+
+ServiceProvider serviceProvider;
     serviceProvider = services.BuildServiceProvider();
 
-//    // Resolve and run the main form
-//    var department = serviceProvider.GetRequiredService<IDepartmentService>();
 
 
-//    DepartmentDto dto = new DepartmentDto()
-//    {
-//        //Name = "Ahmed"
-//    };
+var emailService = serviceProvider.GetRequiredService<IEmailService>();
+ApplicationUser GenerateFakeUser()
+{
+    var faker = new Faker();
 
-
-//department.Delete(1);
-//department.SaveChanges();
-//Console.WriteLine(dto.Name);
-
-var senderEmail = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("EmailConfiguration:Email").Value;
-var appPasswords = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("EmailConfiguration:GmailAppPassword").Value;
-var stmpServer = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("EmailConfiguration:SmtpServer").Value;
-
-EmailService eamil = new EmailService(senderEmail, appPasswords, stmpServer);
-
-await eamil.VerifyEmailAsync("bdalzyzalbrnawy47@gmail.com", "Congruat u have been a developer", "Hi me i want to test if it's work", "Abdulaziz");
+    return new ApplicationUser
+    {
+        Id = faker.Random.Int(1, 1000),
+        UserName = faker.Internet.UserName(),
+        NormalizedUserName = faker.Internet.UserName().ToUpper(),
+        Email = faker.Internet.Email(),
+        NormalizedEmail = faker.Internet.Email().ToUpper(),
+        EmailConfirmed = faker.Random.Bool(),
+        PasswordHash = faker.Internet.Password(),
+        SecurityStamp = faker.Random.Guid().ToString(),
+        ConcurrencyStamp = faker.Random.Guid().ToString(),
+        PhoneNumber = faker.Phone.PhoneNumber(),
+        PhoneNumberConfirmed = faker.Random.Bool(),
+        TwoFactorEnabled = faker.Random.Bool(),
+        LockoutEnd = faker.Random.Bool() ? DateTimeOffset.UtcNow.AddDays(7) : null,
+        LockoutEnabled = faker.Random.Bool(),
+        AccessFailedCount = faker.Random.Int(0, 5),
+        FirstName = faker.Name.FirstName(),
+        LastName = faker.Name.LastName()
+    };
+}
+var user = GenerateFakeUser();  
+var token = await emailService.GenerateToken(user);
+var link = await emailService.GenerateLinkToVerifyTokenAsync(token, user.Id);
+await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "test", $"<html><body><p>Click the link below:</p><a href='{link}'>Visit Example</a></body></html>", "Abdulaziz");

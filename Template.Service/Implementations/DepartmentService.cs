@@ -3,9 +3,9 @@ using System.Linq.Expressions;
 using Template.Domain.Common.IUnitOfWork;
 using Template.Domain.Entities;
 using Template.Service.DTOs;
-using Template.Service.IService;
+using Template.Service.Interfaces;
 
-namespace Template.Service
+namespace Template.Service.Implementations
 {
     public class DepartmentService : BaseService, IDepartmentService
     {
