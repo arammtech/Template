@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 using Template.Domain.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
 using Template.Utilities.Identity;
@@ -48,6 +50,13 @@ namespace Template.Repository.DbInitializer
                     if(result.Succeeded)
                     {
                         _userManager.AddToRoleAsync(user, AppUserRoles.RoleAdmin).GetAwaiter().GetResult();
+
+                        // Email Confirmed
+                        var codeToConfirm = _userManager.GenerateEmailConfirmationTokenAsync(user).GetAwaiter().GetResult();
+                        codeToConfirm = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(codeToConfirm));
+
+                        codeToConfirm = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(codeToConfirm));
+                         _userManager.ConfirmEmailAsync(user, codeToConfirm).GetAwaiter().GetResult();
                     }
                 }
             }
