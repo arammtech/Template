@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Template.Domain.Common.IRepository;
 using Template.Domain.Common.IUnitOfWork;
+using Template.Domain.Global;
 using Template.Repository.EntityFrameworkCore.Context;
 using Template.Repository.Repository;
 
@@ -14,93 +15,167 @@ namespace Template.Repository.UnitOfWork
 
         public UnitOfWork(AppDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _repositories = new Dictionary<Type, object>();
         }
 
         public IRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
-            if (!_repositories.TryGetValue(typeof(TEntity), out object? repository))
+            if (!_repositories.TryGetValue(typeof(TEntity), out var repository))
             {
                 repository = new Repository<TEntity>(_context);
-                _repositories.Add(typeof(TEntity), repository);
+                _repositories[typeof(TEntity)] = repository;
             }
 
             return (IRepository<TEntity>)repository;
         }
 
-        public void SaveChanges()
+        public Result SaveChanges()
         {
-            _context.SaveChanges();
+            try
+            {
+                var changes = _context.SaveChanges();
+                return changes > 0 ? Result.Success() : Result.Failure("No changes were made to the database.");
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"An error occurred while saving changes: {ex.Message}");
+            }
         }
 
-        public async Task SaveChangesAsync()
+        public async Task<Result> SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+                var changes = await _context.SaveChangesAsync();
+                return changes > 0 ? Result.Success() : Result.Failure("No changes were made to the database.");
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"An error occurred while saving changes: {ex.Message}");
+            }
         }
 
-        public void StartTransaction()
+        public Result StartTransaction()
         {
-            if (_currentTransaction != null)
-                throw new InvalidOperationException("A transaction is already in progress.");
+            try
+            {
+                if (_currentTransaction != null)
+                    return Result.Failure("A transaction is already in progress.");
 
-            _currentTransaction = _context.Database.BeginTransaction();
+                _currentTransaction = _context.Database.BeginTransaction();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"Failed to start a transaction: {ex.Message}");
+            }
         }
 
-        public async Task StartTransactionAsync()
+        public async Task<Result> StartTransactionAsync()
         {
-            if (_currentTransaction != null)
-                throw new InvalidOperationException("A transaction is already in progress.");
+            try
+            {
+                if (_currentTransaction != null)
+                    return Result.Failure("A transaction is already in progress.");
 
-            _currentTransaction = await _context.Database.BeginTransactionAsync();
+                _currentTransaction = await _context.Database.BeginTransactionAsync();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"Failed to start a transaction: {ex.Message}");
+            }
         }
 
-        public void Commit()
+        public Result Commit()
         {
-            if (_currentTransaction == null)
-                throw new InvalidOperationException("No active transaction to commit.");
+            try
+            {
+                if (_currentTransaction == null)
+                    return Result.Failure("No active transaction to commit.");
 
-            _context.SaveChanges();
-            _currentTransaction.Commit();
-            _currentTransaction.Dispose();
-            _currentTransaction = null;
+                _context.SaveChanges();
+                _currentTransaction.Commit();
+                CleanupTransaction();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"An error occurred during commit: {ex.Message}");
+            }
         }
 
-        public async Task CommitAsync()
+        public async Task<Result> CommitAsync()
         {
-            if (_currentTransaction == null)
-                throw new InvalidOperationException("No active transaction to commit.");
+            try
+            {
+                if (_currentTransaction == null)
+                    return Result.Failure("No active transaction to commit.");
 
-            await _context.SaveChangesAsync();
-            await _currentTransaction.CommitAsync();
-            await _currentTransaction.DisposeAsync();
-            _currentTransaction = null;
+                await _context.SaveChangesAsync();
+                await _currentTransaction.CommitAsync();
+                CleanupTransaction();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"An error occurred during commit: {ex.Message}");
+            }
         }
 
-        public void Rollback()
+        public Result Rollback()
         {
-            if (_currentTransaction == null)
-                throw new InvalidOperationException("No active transaction to roll back.");
+            try
+            {
+                if (_currentTransaction == null)
+                    return Result.Failure("No active transaction to roll back.");
 
-            _currentTransaction.Rollback();
-            _currentTransaction.Dispose();
-            _currentTransaction = null;
+                _currentTransaction.Rollback();
+                CleanupTransaction();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"An error occurred during rollback: {ex.Message}");
+            }
         }
 
-        public async Task RollbackAsync()
+        public async Task<Result> RollbackAsync()
         {
-            if (_currentTransaction == null)
-                throw new InvalidOperationException("No active transaction to roll back.");
+            try
+            {
+                if (_currentTransaction == null)
+                    return Result.Failure("No active transaction to roll back.");
 
-            await _currentTransaction.RollbackAsync();
-            await _currentTransaction.DisposeAsync();
+                await _currentTransaction.RollbackAsync();
+                CleanupTransaction();
+                return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"An error occurred during rollback: {ex.Message}");
+            }
+        }
+
+        private void CleanupTransaction()
+        {
+            _currentTransaction?.Dispose();
             _currentTransaction = null;
         }
 
         public void Dispose()
         {
-            _context.Dispose();
-            _currentTransaction?.Dispose();
+            try
+            {
+                _context.Dispose();
+                _currentTransaction?.Dispose();
+                //return Result.Success();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

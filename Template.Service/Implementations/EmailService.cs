@@ -11,7 +11,6 @@ using System.Text;
 using Template.Domain.Entities;
 using Template.Domain.Global;
 using Template.Domain.Identity;
-using Template.Service.Global;
 using Template.Service.Interfaces;
 
 namespace Template.Service.Implementations
@@ -55,23 +54,23 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
-                return new Result(ex.Message, false);
+                return Result.Failure(ex.Message);
             }
 
-            return new Result("Send Succefully", true);
+            return  Result.Success();
         }
         public async Task<Result> VerifyEmailAsync(int userId, string token)
         {
             token = _DecodeShortToken(token);
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null) return new Result("User not found.", false);
+            if (user == null) return  Result.Failure("User not found.");
 
             var result = await _userManager.ConfirmEmailAsync(user, token);
             
             if (result.Succeeded)
-                return new Result("Email Verfied", true);
+                return Result.Success();
 
-            return new Result("Email Not Verified", false);
+            return  Result.Failure("Email Not Verified");
 
         }
 
