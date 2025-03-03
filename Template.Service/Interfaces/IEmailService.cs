@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using MimeKit;
 using Template.Domain.Global;
 using Template.Domain.Identity;
-using Template.Service.Global;
 
 namespace Template.Service.Interfaces
 {
