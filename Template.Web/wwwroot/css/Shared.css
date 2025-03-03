@@ -122,7 +122,7 @@ html {
 body {
     position: relative;
     min-height: 100vh;
-    font-family: var(--main-font);
+    font-family: var(--main-font) !important;
     font-size: 1.6rem;
     background: var(--bg);
     overflow-x: hidden;
@@ -175,6 +175,10 @@ textarea:focus-within {
 
 form {
     margin-bottom:0 !important;
+}
+
+ol, ul {
+    padding: 0 !important;
 }
 
 /* modify Bootstrap*/

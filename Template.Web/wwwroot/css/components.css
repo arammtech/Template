@@ -341,6 +341,7 @@
  .dropdown-1 .dropdown-menu {
     background: var(--bg-nav) !important;
     color: var(--text-1) !important;
+    padding: 0 !important;
 }
        
 /* Default dropdown item styles */
