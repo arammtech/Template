@@ -31,7 +31,6 @@
                     @* <img src="~/images/Logo-1.svg" alt="كتبي" /> *@
                     ARAMM TECH | ارام تيك
                 </a>
-
                 <button class="navbar-toggler fs-6" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Toggle navigation">
                     <svg width="30" height="30" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 17.0308H20M4 12.0308H20M4 7.03077H20" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -44,25 +43,40 @@
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
-                        <ul class="navbar-nav gap-5 me-5">
+                        <ul class="navbar-nav gap-5  me-5">
                             <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("Customer/Home/Index")"
-                                   aria-current="page"
-                                   asp-area="Customer" asp-controller="Home" asp-action="Index">الرئيسية</a>
+                                <button id="toggle-button"
+                                        class="nav-link tc-acc">
+                                    ☰
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("theme1")"
-                                   asp-area="Admin" asp-controller="Settings" asp-action="Index">settings</a>
+                        </ul>
+                        <ul class="navbar-nav gap-5  me-auto">
+                            <li class="nav-item dropdown">
+                                <a id="manage"
+                                   class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    settings
+                                </a>
+                                <ul class="dropdown-menu p-2 text-end ">
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
+                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>
+                                    </li>
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Goals"
+                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Goals")" title="Manage">الأهداف</a>
+                                    </li>
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="ContactUs"
+                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/ContactUs")" title="Manage">التواصل معنا</a>
+                                    </li>
+                                    <li>
+                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Privacy"
+                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Privacy")" title="Manage">الخصوصية والامان</a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("theme1")"
-                                   asp-area="Admin" asp-controller="Help" asp-action="Index">Help</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("Customer/Home/AboutUs")"
-                                   asp-area="Customer" asp-controller="Home" asp-action="AboutUs">عن المطورين</a>
-                            </li>
-                           
                             <li class="nav-item dropdown">
                                 <a id="manage"
                                    class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
@@ -89,8 +103,6 @@
                                 </ul>
                             </li>
                             
-                        </ul>
-                        <ul class="navbar-nav me-auto ">
                             <li id="search-box" class="nav-item f-ctr-ctr me-5">
                                 <form class="form-input-box f-ctr-ctr" role="search">
                                     <div class="input-box">
@@ -104,10 +116,19 @@
                             </li>
                             <li class="nav-item me-5">
                                 <button id="modeSwitch" class="nav-link">
-                                  
                                 </button>
                             </li>
+                            <li id="fullscreen-icon" class="nav-item">
+                                <button class="nav-link"
+                                   aria-current="page"
+                                  >🔲</button>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @Html.IsActive("theme1")"
+                                   asp-area="Admin" asp-controller="Settings" asp-action="Index">image</a>
+                            </li>
                         </ul>
+
                     </div>
                 </div>
 
@@ -117,14 +138,23 @@
 
     </header>
 
-    <aside id="sidebar">
-        <h1>dfghjkdfghjkjhgfdfghjkjhgfdfghjkjhgfdfghjkjhgfdfghjkjhgfdfghjkjhgfjhgf</h1>
-        <h1>dfghjkjhgf</h1>
-        <h1>dfghjkjhgf</h1>
-        <h1>dfghjkjhgf</h1>
-        <h1>dfghjkjhgf</h1>
-        <h1>dfghjkjhgf</h1>
-        <h1>dfghjkjhgf</h1>
+    <aside class="sidebar">
+        <ul class="navbar-nav ">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Analytics</a></li>
+        </ul>
     </aside>
 
     <div id="loading-spinner"></div> <!-- Spinner element -->
@@ -135,12 +165,40 @@
         <a id="leaveDashboard" asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-lg btn-em fill">
             Back
         </a>
-        <div id="fullscreen-icon">🔲FullScreen</div>
-
-            <div id="toggle-button">☰</div>
+        <p>Main content here</p>
             <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+            <p>Main content here</p>
+        <p>Main content here</p>
+        <p>Main content here</p>
     </main>
-
 
 
     <!-- Back to Top Button (placed here) -->

@@ -1,4 +1,4 @@
-/* Full-screen overlay */
+﻿/* Full-screen overlay */
 #dashboardOverlay {
     position: fixed;
     top: 0;
@@ -100,3 +100,130 @@ aside {
     display: block;
     margin-left: calc(-260px);
 }*/
+
+
+/* General styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* Navbar styles */
+.navbar {
+    width: 100%;
+    height: 70px;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .navbar .logo {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .navbar .nav-links a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+    }
+
+        .navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+/* Sidebar styles */
+.sidebar {
+    direction: ltr; /* Reset direction inside sidebar */
+    text-align: right; /* Keep text aligned to the right */
+    width: 250px;
+    height: 100vh;
+    background-color: #333;
+    color: white;
+    padding-top: 20px;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    right: 0;
+    overflow-y: auto; /* Enable scrolling when needed */
+}
+
+    /* Fix inner content direction so text stays RTL */
+    .sidebar * {
+        direction: rtl;
+    }
+    .sidebar ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+        .sidebar ul li a {
+            color: white;
+            padding: 15px;
+            display: block;
+            text-decoration: none;
+        }
+
+            .sidebar ul li a:hover {
+                background-color: #444;
+            }
+
+/* Main content styles */
+#content {
+    margin-top:70px;
+    margin-right: 250px;
+    padding: 20px;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+}
+.sidebar.hidden ~ #content {
+    margin-right: 0;
+}
+
+
+
+/* Make the container flex for sidebar and content */
+main {
+/*    display: flex;*/
+/*    flex: 1;*/
+    overflow: hidden;
+}
+
+/* Sidebar scroll */
+
+
+/* Content scroll */
+#content {
+    /*flex-grow: 1;*/ /* Takes remaining space */
+    /*height: 100vh;*/ /* Full height */
+    overflow-y: auto; /* Enable scrolling */
+}
+
+
+    /* Optional: Hide scrollbar for a cleaner look */
+    .sidebar::-webkit-scrollbar,
+    #content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb,
+    #content::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 4px;
+    }
+
+    .sidebar::-webkit-scrollbar-track,
+    #content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }

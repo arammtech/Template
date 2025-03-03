@@ -108,11 +108,11 @@ html {
     /*1rem => 10px*/
     font-size: 62.5%;
     line-height: 1.5;
-/*    overflow-x: hidden;*/
+    overflow-x: hidden;
     scroll-behavior: smooth;
 }
 
-@media (max-width: var(--sm)) {
+@media (max-width: 576px) {
     html {
         font-size: 71.42%;
     }
@@ -134,7 +134,7 @@ body {
     -o-transition: background 500ms ease-in-out, color 1000ms ease-in-out;
 }
 
-@media (max-width: var(--sm)) {
+@media (max-width: 576px) {
     body {
         font-size: 1.4rem;
     }

@@ -113,10 +113,12 @@
 
     // Toggle Sidebar
     const toggleButton = document.getElementById('toggle-button');
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.querySelector('.sidebar');
 
     toggleButton.onclick = () => {
         sidebar.classList.toggle('hidden');
     };
+
+
 });
 
