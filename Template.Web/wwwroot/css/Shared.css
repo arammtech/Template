@@ -9,9 +9,9 @@
     --accent: #A27B5C;
     /*for gradient*/
     --accent-2: #D4A77C;
-    --error: red;
+    --error: #DB4B4E;
     --blue: #51b4bb;
-    --aramm: red;
+    --aramm: #DB4B4E;
     --bg-t: transparent;
     --bg-acc: var(--accent);
     --border-3: var(--accent) !important;
@@ -171,6 +171,10 @@ select:focus-within,
 textarea:focus-within {
     border: none;
     outline: none;
+}
+
+form {
+    margin-bottom:0 !important;
 }
 
 /* modify Bootstrap*/

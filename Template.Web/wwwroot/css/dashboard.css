@@ -29,13 +29,14 @@
 /* Animated shape (a circle with a gradient) */
 /* Animated shape (a circle with the logo image) */
 .animated-shape {
-    width: 250px;
-    height: 250px;
-    background-image: url("/imgs/DVLD-Logo.ico"); /* Update with your logo path */
+    width: 150px;
+    height: 150px;
+    background: var(--aramm) url("/icons/Aramm_tech.svg"); /* Update with your logo path */
     background-size: contain; /* Use 'cover' if you want the image to fill the circle */
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 50%;
+    padding: 5rem;
     margin-bottom: 20px;
     animation: shapeAnimation 3s ease-in-out forwards;
 }
@@ -118,37 +119,131 @@ body {
 
 /* Navbar styles */
 .navbar {
-    width: 100%;
-    height: 70px;
-    background-color: #333;
+    height: var(--nav-height);
+    background-color: var(--bg-1);
     color: white;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    white-space: nowrap;
+    box-shadow: var(--shadow-2);
+}
+.navbar .nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.navbar-nav.logo-container {
+    width: 232px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between !important;
+}
+.logo-container .logo a {
+    border-radius: var(--radius-2);
+    padding:.2rem;
+}
+.logo-container .logo img {
+    width: 50px;
+    height: 50px;
+    object-fit:cover;
 }
 
-    .navbar .logo {
-        font-size: 20px;
-        font-weight: bold;
+.navbar .nav-link {
+    color: var(--text-3) !important;
+}
+
+.navbar .nav-links a:hover {
+    text-decoration: underline;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: var(--text-2) !important;
+}
+
+.navbar-nav .nav-item:hover svg path {
+    stroke: var(--text-2);
+}
+.navbar .navbar-toggler {
+    transition: .25s;
+    -webkit-transition: .25s;
+    -moz-transition: .25s;
+    -ms-transition: .25s;
+    -o-transition: .25s;
+}
+
+.offcanvas-body {
+    background-color: var(--bg-1);
+}
+
+.offcanvas-header {
+    background: var(--bg);
+    color: var(--text-3);
+    display: flex;
+    justify-content: space-between !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.offcanvas .btn-close {
+    position: relative;
+    color: var(--text-3) !important;
+    margin: 0 !important;
+    margin-right: 0 !important;
+    border: 1px solid var(--border-1) !important;
+    background: var(--bg-5);
+    transition: .25s;
+}
+
+    .offcanvas .btn-close:after {
+        content: "x";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        background: rgb(0 0 0 / 0.36);
+        color: var(--text-1);
     }
 
-    .navbar .nav-links a {
-        color: white;
-        margin-left: 20px;
-        text-decoration: none;
+
+@media (max-width: 992px) {
+    .offcanvas {
+        justify-content: flex-start;
+        padding-right: 1rem !important;
     }
 
-        .navbar .nav-links a:hover {
-            text-decoration: underline;
+        .offcanvas ul.navbar-nav {
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            align-content: flex-start;
+            padding-right: 1rem !important;
+            column-gap: 1rem !important;
+            gap: 1rem !important;
+            margin-bottom: 1rem !important;
+            margin-right: 0 !important;
+        }
+            .navbar ul.navbar-nav.logo-container {
+                flex-direction: row !important;
+            }
+
+        .offcanvas .nav-item {
+            margin: 0 !important;
+            justify-content: flex-start !important;
+            align-content: flex-start;
         }
 
+    .nav-item#search-box {
+        display: none !important;
+    }
+}
 /* Sidebar styles */
 .sidebar {
     direction: ltr; /* Reset direction inside sidebar */
     text-align: right; /* Keep text aligned to the right */
     width: 250px;
     height: 100vh;
-    background-color: #333;
+    background-color: var(--bg-1);
     color: white;
     padding-top: 20px;
     position: fixed;
@@ -156,36 +251,37 @@ body {
     bottom: 0;
     right: 0;
     overflow-y: auto; /* Enable scrolling when needed */
+    border-left: 1px solid var(--color-3);
 }
 
-    /* Fix inner content direction so text stays RTL */
-    .sidebar * {
-        direction: rtl;
-    }
-    .sidebar ul {
-        list-style-type: none;
-        padding-left: 0;
-    }
+.sidebar * {
+    direction: rtl;
+}
+.sidebar ul {
+    list-style-type: none;
+    padding-left: 0;
+}
 
-        .sidebar ul li a {
-            color: white;
-            padding: 15px;
-            display: block;
-            text-decoration: none;
-        }
+.sidebar ul li a {
+    color: var(--text-3) !important;
+    padding: 15px;
+    display: block;
+    text-decoration: none;
+}
 
-            .sidebar ul li a:hover {
-                background-color: #444;
-            }
+body.light .sidebar ul li svg path {
+    stroke: var(--text-3) !important;
+}
 
 /* Main content styles */
 #content {
-    margin-top:70px;
+    margin-top: 70px;
     margin-right: 250px;
     padding: 20px;
     width: 100%;
     height: 100vh;
     overflow-y: auto;
+    background: var(--bg-3);
 }
 .sidebar.hidden ~ #content {
     margin-right: 0;

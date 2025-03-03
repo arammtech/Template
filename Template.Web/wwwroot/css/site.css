@@ -61,10 +61,15 @@
     stroke: var(--text-2);
 }
 
-body.light .navbar .form-input-box input {
+.logo-container .logo a {
+    border-radius: var(--radius-2);
+    padding: .2rem;
 }
-.navbar .form-input-box input {
-    border-color:red;
+
+.logo-container .logo img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 }
 
 .navbar .navbar-toggler {
@@ -73,11 +78,6 @@ body.light .navbar .form-input-box input {
     -moz-transition: .25s;
     -ms-transition: .25s;
     -o-transition: .25s;
-}
-
-.navbar .navbar-toggler svg:hover path,
-.navbar .navbar-toggler svg:focus path {
-/*        stroke: var(--second-color);*/
 }
 
 .navbar .navbar-toggler:focus {

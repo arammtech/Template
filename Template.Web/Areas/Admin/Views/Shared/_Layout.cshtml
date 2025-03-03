@@ -17,20 +17,28 @@
     <div id="dashboardOverlay">
         <div class="overlay-content">
             <div class="animated-shape"></div>
-            <h1>Welcome to Dashboard</h1>
+            <h1>اهلا بك في الداشبورد</h1>
         </div>
-
     </div>
 
 
     <header>
         <!-- navbar  fixed-top -->
         <nav class="navbar navbar-expand-lg fixed-top">
-            <div class="container">
-                <a class="navbar-brand m-0 tx-1" href="#">
-                    @* <img src="~/images/Logo-1.svg" alt="كتبي" /> *@
-                    ARAMM TECH | ارام تيك
-                </a>
+            <div class="container-fluid mx-3">
+                <ul class="navbar-nav logo-container f-btw-ctr">
+                    <li class="nav-item logo">
+                        <a class="navbar-brand m-0 tx-1 bg-aramm" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                            <img src="~/icons/Aramm_tech.svg" alt="logo" />
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button id="toggle-button"
+                                class="nav-link tc-acc">
+                            ☰
+                        </button>
+                    </li>
+                </ul>
                 <button class="navbar-toggler fs-6" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Toggle navigation">
                     <svg width="30" height="30" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 17.0308H20M4 12.0308H20M4 7.03077H20" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -43,67 +51,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
-                        <ul class="navbar-nav gap-5  me-5">
-                            <li class="nav-item">
-                                <button id="toggle-button"
-                                        class="nav-link tc-acc">
-                                    ☰
-                                </button>
-                            </li>
-                        </ul>
+                        
                         <ul class="navbar-nav gap-5  me-auto">
-                            <li class="nav-item dropdown">
-                                <a id="manage"
-                                   class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    settings
-                                </a>
-                                <ul class="dropdown-menu p-2 text-end ">
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
-                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>
-                                    </li>
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Goals"
-                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Goals")" title="Manage">الأهداف</a>
-                                    </li>
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="ContactUs"
-                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/ContactUs")" title="Manage">التواصل معنا</a>
-                                    </li>
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Privacy"
-                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Privacy")" title="Manage">الخصوصية والامان</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a id="manage"
-                                   class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
-                                    المساعدة
-                                </a>
-                                <ul class="dropdown-menu p-2 text-end ">
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
-                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>
-                                    </li>
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Goals"
-                                           class="dropdown-item nav-link @Html.IsActive("Customer/Home/Goals")" title="Manage">الأهداف</a>
-                                    </li>
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="ContactUs"
-                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/ContactUs")" title="Manage">التواصل معنا</a>
-                                    </li>
-                                    <li>
-                                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Privacy"
-                                            class="dropdown-item nav-link @Html.IsActive("Customer/Home/Privacy")" title="Manage">الخصوصية والامان</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            
-                            <li id="search-box" class="nav-item f-ctr-ctr me-5">
+                            <li id="search-box" class="nav-item">
                                 <form class="form-input-box f-ctr-ctr" role="search">
                                     <div class="input-box">
                                         <input id="searchInput" placeholder="البحث" aria-label="Search">
@@ -114,8 +64,8 @@
                                     </div>
                                 </form>
                             </li>
-                            <li class="nav-item me-5">
-                                <button id="modeSwitch" class="nav-link">
+                            <li class="nav-item">
+                                <button id="modeSwitch" class="nav-link btn btn-icon btn-sm btn-1">
                                 </button>
                             </li>
                             <li id="fullscreen-icon" class="nav-item">
@@ -140,19 +90,90 @@
 
     <aside class="sidebar">
         <ul class="navbar-nav ">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Settings</a></li>
+            <li class="nav-item">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link @Html.IsActive("Admin/Dashboard/Index")">
+                    <svg class="ms-2" width="24" height="24" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.26837 3.19556L3.32754 7.04556C2.50254 7.68723 1.83337 9.05306 1.83337 10.0889V16.8814C1.83337 19.0081 3.56587 20.7497 5.69254 20.7497H16.3075C18.4342 20.7497 20.1667 19.0081 20.1667 16.8906V10.2172C20.1667 9.10806 19.4242 7.68723 18.5167 7.05473L12.8517 3.08556C11.5684 2.18723 9.50587 2.23306 8.26837 3.19556Z" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M11 17.0831V14.3331" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    الرئيسية
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a id="manage" asp-area="Admin" asp-controller="User" asp-action="Index" 
+                   class="nav-link dropdown-toggle pointer @Html.IsActive("Admin","User")"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg class="ms-2" width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8.3966 9.96418C8.30493 9.95501 8.19493 9.95501 8.0941 9.96418C5.91243 9.89084 4.17993 8.10334 4.17993 5.90334C4.17993 3.65751 5.99493 1.83334 8.24993 1.83334C10.4958 1.83334 12.3199 3.65751 12.3199 5.90334C12.3108 8.10334 10.5783 9.89084 8.3966 9.96418Z" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M15.0425 3.66666C16.8208 3.66666 18.2508 5.10582 18.2508 6.87499C18.2508 8.60749 16.8758 10.0192 15.1617 10.0833C15.0883 10.0742 15.0058 10.0742 14.9233 10.0833" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M3.81341 13.3467C1.59507 14.8317 1.59507 17.2517 3.81341 18.7275C6.33424 20.4142 10.4684 20.4142 12.9892 18.7275C15.2076 17.2425 15.2076 14.8225 12.9892 13.3467C10.4776 11.6692 6.34341 11.6692 3.81341 13.3467Z" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M16.8118 18.3333C17.4718 18.1958 18.0951 17.93 18.6084 17.5358C20.0384 16.4633 20.0384 14.6942 18.6084 13.6217C18.1043 13.2367 17.4901 12.98 16.8393 12.8333" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    المستخدمين
+                </a>
+                <ul class="dropdown-menu p-2 text-end ">
+                    <li>
+                        <a id="manage" asp-area="Customer" asp-controller="User" asp-action="Index"
+                           class="dropdown-item nav-link @Html.IsActive("Admin/User/Index")" title="Manage">عرض الكل</a>
+                    </li>
+                    <li>
+                        <a id="manage" asp-area="Customer" asp-controller="User" asp-action="Add"
+                           class="dropdown-item nav-link @Html.IsActive("Admin/User/Add")" title="Manage">أضف مستخدم</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a id="manage"
+                   class="nav-link dropdown-toggle pointer @Html.IsActive("Admin","Settings")"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg class="ms-2" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.9999 20.1666C16.0416 20.1666 20.1666 16.0416 20.1666 11C20.1666 5.95831 16.0416 1.83331 10.9999 1.83331C5.95825 1.83331 1.83325 5.95831 1.83325 11C1.83325 16.0416 5.95825 20.1666 10.9999 20.1666Z" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M11 7.33331V11.9166" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M10.9949 14.6667H11.0031" stroke="#E5E5E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    الاعدادات
+                </a>
+                <ul class="dropdown-menu p-2 text-end ">
+                    <li>
+                        <a id="manage" asp-area="Customer" asp-controller="User" asp-action="Index"
+                           class="dropdown-item nav-link @Html.IsActive("Admin/Settings/Profile")" title="Manage">
+                            <svg class="ms-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 18.7023C18 15.6706 14.5 15 12 15C9.5 15 6 15.6706 6 18.7023M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM15 9C15 10.6569 13.6569 12 12 12C10.3431 12 9 10.6569 9 9C9 7.34315 10.3431 6 12 6C13.6569 6 15 7.34315 15 9Z" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            الملف الشخصي
+                       </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a id="manage"
+                   class="nav-link dropdown-toggle pointer @Html.IsActive("Admin","Settings")"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <svg class="ms-2" width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.9999 20.1666C16.0416 20.1666 20.1666 16.0416 20.1666 11C20.1666 5.95831 16.0416 1.83331 10.9999 1.83331C5.95825 1.83331 1.83325 5.95831 1.83325 11C1.83325 16.0416 5.95825 20.1666 10.9999 20.1666Z" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M11 7.33331V11.9166" stroke="#E5E5E5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M10.9949 14.6667H11.0031" stroke="#E5E5E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    المساعدة
+                </a>
+                <ul class="dropdown-menu p-2 text-end ">
+                    <li>
+                        <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="Index"
+                           class="dropdown-item nav-link " title="Manage">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g opacity="0.4">
+                                    <path d="M11.6797 14.62L14.2397 12.06L11.6797 9.5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M4 12.0596H14.17" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                </g>
+                                <path d="M12 4C16.42 4 20 7 20 12C20 17 16.42 20 12 20" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            الخروج
+                        </a>
+                    </li>
+          
+
+                </ul>
             <li><a href="#">Analytics</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Settings</a></li>
             <li><a href="#">Analytics</a></li>
         </ul>
     </aside>
@@ -201,13 +222,7 @@
     </main>
 
 
-    <!-- Back to Top Button (placed here) -->
-    @* <button id="backToTop" class="btn btn-icon btn-sm btn-1 hidden"> *@
-    @*     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> *@
-    @*         <path d="M19.92 15.0499L13.4 8.52989C12.63 7.75989 11.37 7.75989 10.6 8.52989L4.08002 15.0499" *@
-    @*               stroke="#DFDCD5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" /> *@
-    @*     </svg> *@
-    @* </button> *@
+   
 
     <partial name="_ScriptsPartial"></partial>
     <script src="~/js/dashboard.js" asp-append-version="true"></script>
