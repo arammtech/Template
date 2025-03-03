@@ -31,9 +31,17 @@ namespace Template.Web.Areas.Customer.Controllers
         {
             if (ModelState.IsValid)
             {
-                 _departmentService.Add(departmentDto);
-                 _departmentService.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                var result =  _departmentService.Add(departmentDto);
+                if(result.IsSuccess)
+                {
+                    TempData["success"] = "تم إضافة المنتج للسلة بنجاح!";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData["success"] = "لم يتم إضافة المنتج للسلة بنجاح !";
+                    ModelState.AddModelError("", result.ErrorMessage);
+                }
             }
             return View(departmentDto);
         }
