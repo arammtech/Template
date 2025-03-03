@@ -42,8 +42,11 @@
 
 .navbar .navbar-nav .nav-link {
     color: var(--text-1);
-
 }
+
+/*body.dark .navbar .navbar-nav .nav-link {
+    color: var(--text-1);
+}*/
 
 .nav-item {
     display:flex;

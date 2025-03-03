@@ -12,7 +12,7 @@
     <partial name="_StyleLinksPartial"></partial>
 
 </head>
-<body dir="rtl" class="light">
+<body dir="rtl" >
     <header>
         <!-- navbar  fixed-top -->
         <nav class="navbar navbar-expand-lg fixed-top">
@@ -54,14 +54,16 @@
                                 <a class="nav-link @Html.IsActive("Customer/Home/AboutUs")"
                                    asp-area="Customer" asp-controller="Home" asp-action="AboutUs">عن المطورين</a>
                             </li>
-                           
-                            <li class="nav-item dropdown">
+                            <li class="nav-item btn-group dropdown-1">
                                 <a id="manage"
-                                   class="nav-link dropdown-toggle pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                   class="nav-link pointer  @Html.IsActive("Customer/Home/Help")  @Html.IsActive("Customer/Home/FAQ")  @Html.IsActive("Customer/Home/Goals") @Html.IsActive("Customer/Home/ContactUs")  @Html.IsActive("Customer/Home/Privacy")"
+                                  >
                                     المساعدة
                                 </a>
-                                <ul class="dropdown-menu p-2 text-end ">
+                                <button type="button" class="dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu mx-3 my-2 text-end ">
                                     <li>
                                         <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
                                             class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>

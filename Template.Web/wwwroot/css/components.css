@@ -329,7 +329,36 @@
 
 
 
+/* Dropdowns */
+.dropdown-1 {
+    background: var(--bg-nav);
+    color: var(--text-1);
+}
+.dropdown-1 > button,
+.dropdown-1 > a {
+    background: transparent !important;
+}
+ .dropdown-1 .dropdown-menu {
+    background: var(--bg-nav) !important;
+    color: var(--text-1) !important;
+}
+       
+/* Default dropdown item styles */
+.dropdown-menu .dropdown-item {
+    background: var(--bg-nav) !important;
+    color: var(--text-1) !important;
+    padding: 1rem !important;
+    transition: all 0.3s ease-in-out;
+}
 
+
+
+/* Focus (when tabbing through menu items) */
+.dropdown-menu .dropdown-item:focus,
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:hover {
+    background: var(--bg-shape) !important;
+}
 
 
 /* Cards */
@@ -626,6 +655,16 @@ body.dark .wave-opacity-shape-up .shape-fill {
     -webkit-animation: animateWave_2 3s linear infinite;
 }
 
+/* Small Profile Image */
+.profile-img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+
 /* Animations */
 
 @keyframes gradientAnimation {
@@ -789,3 +828,4 @@ body.dark .wave-opacity-shape-up .shape-fill {
         opacity: 0.8;
     }
 }
+
