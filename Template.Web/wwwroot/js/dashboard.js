@@ -1,17 +1,19 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿//overlay.style.display="none";
 
-    // After 3.5 seconds, start the fade-out animation
-    setTimeout(() => {
-        const overlay = document.getElementById('dashboardOverlay');
-        overlay.style.animation = "fadeOutOverlay 0.5s forwards";
+document.addEventListener('DOMContentLoaded', function () {
 
-        // Remove the overlay from the DOM after the fade-out completes
-        setTimeout(() => {
-            if (overlay && overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-            }
-        }, 500);
-    }, 3500);
+    //// After 3.5 seconds, start the fade-out animation
+    //setTimeout(() => {
+    //    const overlay = document.getElementById('dashboardOverlay');
+    //    overlay.style.animation = "fadeOutOverlay 0.5s forwards";
+
+    //    // Remove the overlay from the DOM after the fade-out completes
+    //    setTimeout(() => {
+    //        if (overlay && overlay.parentNode) {
+    //            overlay.parentNode.removeChild(overlay);
+    //        }
+    //    }, 500);
+    //}, 3500);
 
 
     // Function to hide the spinner and show content after the page loads
