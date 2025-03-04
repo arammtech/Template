@@ -5,6 +5,7 @@ using System.Text;
 using Template.Domain.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
 using Template.Utilities.Identity;
+using Template.Utilities.SeedData;
 
 namespace Template.Repository.DbInitializer
 {
@@ -25,7 +26,7 @@ namespace Template.Repository.DbInitializer
         {
             try
             {
-                if(_context.Database.GetPendingMigrations().Any())
+                if (_context.Database.GetPendingMigrations().Any())
                 {
                     _context.Database.Migrate();
                 }
@@ -45,9 +46,9 @@ namespace Template.Repository.DbInitializer
                     user.UserName = "admin@aramm.com";
                     user.PasswordHash = "Aramm123@";
 
-                    var result =  _userManager.CreateAsync(user, "Aramm123@").GetAwaiter().GetResult();
+                    var result = _userManager.CreateAsync(user, "Aramm123@").GetAwaiter().GetResult();
 
-                    if(result.Succeeded)
+                    if (result.Succeeded)
                     {
                         _userManager.AddToRoleAsync(user, AppUserRoles.RoleAdmin).GetAwaiter().GetResult();
 
@@ -56,12 +57,21 @@ namespace Template.Repository.DbInitializer
                         codeToConfirm = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(codeToConfirm));
 
                         codeToConfirm = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(codeToConfirm));
+                        _userManager.ConfirmEmailAsync(user, codeToConfirm).GetAwaiter().GetResult();
+
                          _userManager.ConfirmEmailAsync(user, codeToConfirm).GetAwaiter().GetResult();
 
                         // Set Lockout Enabled to false
                         _userManager.SetLockoutEnabledAsync(user, false);
                     }
                 }
+
+                 if (!_context.Departments.Any())
+                {
+                    _context.Departments.AddRange(DepartmentData.LoadDepartments());
+                    _context.SaveChanges();
+                }
+                
             }
             catch (Exception ex)
             {
