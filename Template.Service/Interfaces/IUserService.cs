@@ -12,6 +12,5 @@ namespace Template.Service.Interfaces
         Task<Result> AddUserAsync(UserDto userDto);
         Task<Result> UpdateUserAsync(UserDto userDto);
         Task<Result> DeleteUserAsync(int userId);
-
     }
 }

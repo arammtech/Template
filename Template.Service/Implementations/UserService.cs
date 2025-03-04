@@ -6,6 +6,12 @@ using Template.Domain.Global;
 using Template.Domain.Identity;
 using Template.Service.DTOs.Admin;
 using Template.Service.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Template.Domain.Identity;
+using Template.Service.DTOs.Admin;
+using Template.Service.Interfaces;
+using static Template.Domain.Global.Result;
 
 public class UserService : IUserService
 {
@@ -254,5 +260,7 @@ public class UserService : IUserService
             // Log the exception (optional)
             return Result.Failure($"Failed to delete user: {ex.Message}");
         }
+
     }
+
 }

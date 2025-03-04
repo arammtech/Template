@@ -87,7 +87,7 @@
                               </button>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @Html.IsActive("theme1")"
+                                <a class="nav-link"
                                    asp-area="Admin" asp-controller="Settings" asp-action="Profile">
                                     <img src="/imgs/NewFolder/Mery.jpg" alt="User Profile" class="profile-img">
                                </a>
@@ -219,7 +219,7 @@
 
     <div id="loading-spinner"></div> <!-- Spinner element -->
 
-    <main role="main" id="content" class="page-height position-relative overflow-hidden f-ctr-ctr" style="display: none;">
+    <main role="main" id="content" class="sec-height position-relative overflow-hidden " style="display: none;">
         <partial name="_NotificationsPartial" />
         @RenderBody()
     </main>

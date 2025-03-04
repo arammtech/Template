@@ -10,5 +10,7 @@ namespace Template.Domain.Identity
 
         [MaxLength(50)]
         public string LastName { get; set; } = null!;
+
+        public string? ImagePath { get; set; }
     }
 }

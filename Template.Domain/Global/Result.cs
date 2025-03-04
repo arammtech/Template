@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Template.Domain.Global
 {
-    public class Result
+    public partial class Result
     {
         public bool IsSuccess { get; private set; } = false;
         public string ErrorMessage { get; private set; }

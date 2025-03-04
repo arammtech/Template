@@ -58,6 +58,11 @@ namespace Template.Repository.DbInitializer
 
                         codeToConfirm = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(codeToConfirm));
                         _userManager.ConfirmEmailAsync(user, codeToConfirm).GetAwaiter().GetResult();
+
+                         _userManager.ConfirmEmailAsync(user, codeToConfirm).GetAwaiter().GetResult();
+
+                        // Set Lockout Enabled to false
+                        _userManager.SetLockoutEnabledAsync(user, false);
                     }
                 }
 
@@ -66,6 +71,7 @@ namespace Template.Repository.DbInitializer
                     _context.Departments.AddRange(DepartmentData.LoadDepartments());
                     _context.SaveChanges();
                 }
+                
             }
             catch (Exception ex)
             {

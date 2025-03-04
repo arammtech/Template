@@ -11,6 +11,8 @@ using Template.Service.Implementations;
 using Template.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Bogus;
+using static Template.Service.Implementations.EmployeeService;
+using Template.Service.DTOs.Admin;
 
 var services = new ServiceCollection();
 var buider = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
@@ -21,7 +23,7 @@ options.UseSqlServer(connectionString));
 
 //Register dependencies
 services.AddSingleton<IUnitOfWork, UnitOfWork>();
-services.Configure<EmailSettings>(buider.GetSection("EmailConfiguration"));
+services.AddSingleton<IUserService, UserService>();
 
 services.AddLogging();
 
@@ -34,24 +36,17 @@ services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 }).AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 ;
-services.AddScoped<IEmailService, EmailService>();
 
 ServiceProvider serviceProvider;
     serviceProvider = services.BuildServiceProvider();
 
-services.Configure<DataProtectionTokenProviderOptions>(options =>
-{
-    options.TokenLifespan = TimeSpan.FromSeconds(59); 
-});
 
-var emailService = serviceProvider.GetRequiredService<IEmailService>();
 ApplicationUser GenerateFakeUser()
 {
     var faker = new Faker();
 
     return new ApplicationUser
     {
-        Id = faker.Random.Int(1, 1000),
         UserName = faker.Internet.UserName(),
         NormalizedUserName = faker.Internet.UserName().ToUpper(),
         Email = faker.Internet.Email(),
@@ -80,3 +75,4 @@ ApplicationUser GenerateFakeUser()
 //    UserDto user = result.Items[i];
 //    Console.WriteLine($"Id: {user.Id}, Name: {user.Name}");
 //}
+

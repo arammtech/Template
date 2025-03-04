@@ -12,11 +12,11 @@
     -moz-border-radius: .4rem !important;
     -ms-border-radius: .4rem !important;
     -o-border-radius: .4rem !important;
-    transition: transform 0.3s ease-in-out;
-    -webkit-transition: transform 0.3s ease-in-out;
-    -moz-transition: transform 0.3s ease-in-out;
-    -ms-transition: transform 0.3s ease-in-out;
-    -o-transition: transform 0.3s ease-in-out;
+    transition:  0.3s ease-in-out;
+    -webkit-transition:  0.3s ease-in-out;
+    -moz-transition:  0.3s ease-in-out;
+    -ms-transition:  0.3s ease-in-out;
+    -o-transition:  0.3s ease-in-out;
 }
 
     /* btn btn-lg btn-1      main fill*/
@@ -129,6 +129,14 @@
     background: var(--bg-3) !important;
     color: var(--text-1) !important;
 }
+body.dark .btn-3 {
+    background: var(--bg-2) !important;
+    color: var(--text-1) !important;
+}
+.btn-error {
+    background: var(--error) !important;
+    color: var(--text-1) !important;
+}
 
 .btn-acc {
     background: var(--gradient-acc) !important;
@@ -151,6 +159,16 @@
 
 /* Animation & Hover */
 /* jump & fill & rotate */
+
+.btn.jump {
+    transition: 0.3s ease-in-out;
+    -webkit-transition: 0.3s ease-in-out;
+    -moz-transition: 0.3s ease-in-out;
+    -ms-transition: 0.3s ease-in-out;
+    -o-transition: 0.3s ease-in-out;
+}
+
+
 .btn.jump:hover {
     transform: translateY(-5px);
     -webkit-transform: translateY(-5px);
@@ -243,7 +261,7 @@
     height: 100% !important;
     width: 100% !important;
     color: var(--text-3) !important;
-    background-color: var(--bg-t) !important;
+    background-color: var(--bg-t) ;
     font-size: 1.6rem !important;
     font-weight: 400;
     padding: 0 4rem !important;
@@ -334,32 +352,45 @@
     background: var(--bg-nav);
     color: var(--text-1);
 }
-.dropdown-1 > button,
-.dropdown-1 > a {
-    background: transparent !important;
+    .dropdown-1 > button,
+    .dropdown-1 > a {
+        background: transparent !important;
+    }
+    .dropdown-1 .dropdown-menu {
+        width: fit-content;
+        background: var(--bg-nav) !important;
+        color: var(--text-1) !important;
+        padding: 0 !important;
+        border-radius: var(--radius-2);
+    }
+
+.dropdown-menu[data-bs-popper] {
+    top: calc(120%) !important;
+    left: 50% !important;
+    transform:translateX(-50%);
+    margin-top: 0 !important;
 }
- .dropdown-1 .dropdown-menu {
-    background: var(--bg-nav) !important;
-    color: var(--text-1) !important;
-    padding: 0 !important;
-}
-       
-/* Default dropdown item styles */
+
+
 .dropdown-menu .dropdown-item {
     background: var(--bg-nav) !important;
     color: var(--text-1) !important;
     padding: 1rem !important;
     transition: all 0.3s ease-in-out;
+    font-size: 1.5rem !important;
+    display:flex;
+    justify-content:center;
+    align-content:center;
 }
 
 
 
 /* Focus (when tabbing through menu items) */
-.dropdown-menu .dropdown-item:focus,
-.dropdown-menu .dropdown-item.active,
-.dropdown-menu .dropdown-item:hover {
-    background: var(--bg-shape) !important;
-}
+    .dropdown-menu .dropdown-item:focus,
+    .dropdown-menu .dropdown-item.active,
+    .dropdown-menu .dropdown-item:hover {
+        background: var(--bg-shape) !important;
+    }
 
 
 /* Cards */
@@ -812,7 +843,7 @@ body.dark .wave-opacity-shape-up .shape-fill {
     }
 }
 
-/* Pulse animation to make the button "pulsate" to attract attention */
+/* Pulse animation to make the button "pulsate" to attract attention  userd: down page arrow*/
 @keyframes pulse {
     0% {
         transform: translateX(-50%) scale(1);
@@ -830,3 +861,45 @@ body.dark .wave-opacity-shape-up .shape-fill {
     }
 }
 
+
+/* Shape animation: grow from nothing to full size used: dashboard overlay welcoming*/
+@keyframes shapeAnimation {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Fade-in animation for the overlay used: dashboard overlay welcoming*/
+@keyframes textFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade-out animation for the overlay used: dashboard overlay welcoming*/
+@keyframes fadeOutOverlay {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
