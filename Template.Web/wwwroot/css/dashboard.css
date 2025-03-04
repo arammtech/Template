@@ -171,7 +171,9 @@ body {
     -ms-transition: .25s;
     -o-transition: .25s;
 }
-
+.offcanvas {
+    background: transparent !important;
+}
 .offcanvas-body {
     background-color: var(--bg-1);
 }
@@ -206,7 +208,9 @@ body {
         background: rgb(0 0 0 / 0.36);
         color: var(--text-1);
     }
-
+.nav-item#search-box input {
+    box-shadow: none !important;
+}
 
 @media (max-width: 992px) {
     .offcanvas {

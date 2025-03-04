@@ -6,6 +6,9 @@
     white-space: nowrap;
     height:var(--nav-height);
 }
+.offcanvas {
+    background: transparent !important;
+}
 .offcanvas-body {
     background: var(--bg-nav) !important;
 }
@@ -41,19 +44,21 @@
 
 
 .navbar .navbar-nav .nav-link {
-    color: var(--text-1);
+    color: var(--text-1) ;
 }
 
-/*body.dark .navbar .navbar-nav .nav-link {
+body.dark .navbar .navbar-nav svg path {
     color: var(--text-1);
-}*/
+}
 
 .nav-item {
     display:flex;
     align-items:center;
     justify-content:center;
 }
-
+body.dark .navbar-nav .nav-item svg path {
+    stroke: var(--text-2) !important;
+}
 .active,
 .navbar-nav .nav-item .nav-link:hover {
     color: var(--text-2) !important;
@@ -61,7 +66,7 @@
 
 .active:hover svg path,
 .navbar-nav .nav-item:hover svg path {
-    stroke: var(--text-2);
+    stroke: var(--text-2) !important;
 }
 
 .logo-container .logo a {
@@ -86,7 +91,9 @@
 .navbar .navbar-toggler:focus {
     box-shadow: none;
 }
-
+.nav-item#search-box input {
+    box-shadow: none !important;
+}
 
 @media (max-width: 992px) {
     .offcanvas {
@@ -115,16 +122,19 @@
         display: none !important;
     }
 }
-
-/*.shopping-card-box a::after {
-    content: attr(data-shopping-card-count);
+.shopping-card-box a {
+    position:relative;
+}
+.shopping-card-box a::after {
+    /*    content: attr(data-shopping-card-count);*/
+    content: "0";
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: -.3rem;
+    right:-.5rem;
     width: 15px;
     height: 15px;
-    background-color: var(--second-color);
-    color: var(--text-color);
+    background: var(--accent);
+    color: var(--text-3);
     font-size: .6rem;
     display: flex;
     justify-content: center;
@@ -134,11 +144,11 @@
 
 @media (max-width: 992px) {
     .shopping-card-box a::after {
-        top: 4px;
-        right: 4px;
+        top: -.3rem;
+        right: -.7rem;
     }
 }
-*/
+
 
 /* End Navbar */
 
