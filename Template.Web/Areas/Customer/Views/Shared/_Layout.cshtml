@@ -11,7 +11,7 @@
   
     <partial name="_StyleLinksPartial"></partial>
 
-    @* @RenderSection("Styles", false) *@
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body dir="rtl" >
     <header>
@@ -64,7 +64,7 @@
                                 <button type="button" class="dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="visually-hidden">Toggle Dropdown</span>
                                 </button>
-                                <ul class="dropdown-menu mx-3 my-2 text-end ">
+                                <ul class="dropdown-menu">
                                     <li>
                                         <a id="manage" asp-area="Customer" asp-controller="Home" asp-action="FAQ"
                                             class="dropdown-item nav-link @Html.IsActive("Customer/Home/FAQ")" title="Manage">الأسئلة الشائعة</a>

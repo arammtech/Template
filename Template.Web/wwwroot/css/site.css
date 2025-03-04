@@ -41,19 +41,21 @@
 
 
 .navbar .navbar-nav .nav-link {
-    color: var(--text-1);
+    color: var(--text-1) ;
 }
 
-/*body.dark .navbar .navbar-nav .nav-link {
+body.dark .navbar .navbar-nav svg path {
     color: var(--text-1);
-}*/
+}
 
 .nav-item {
     display:flex;
     align-items:center;
     justify-content:center;
 }
-
+body.dark .navbar-nav .nav-item svg path {
+    stroke: var(--text-2) !important;
+}
 .active,
 .navbar-nav .nav-item .nav-link:hover {
     color: var(--text-2) !important;
@@ -61,7 +63,7 @@
 
 .active:hover svg path,
 .navbar-nav .nav-item:hover svg path {
-    stroke: var(--text-2);
+    stroke: var(--text-2) !important;
 }
 
 .logo-container .logo a {
