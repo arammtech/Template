@@ -66,13 +66,4 @@ ApplicationUser GenerateFakeUser()
     };
 }
 
-//var userManager = serviceProvider.GetRequiredService<IUserService>();
-
-//var result = await userManager.GetUsersAsync(-1, 100);
-//var data = result.Items;
-//for (int i = 0; i < result.Items.Count; i++)
-//{
-//    UserDto user = result.Items[i];
-//    Console.WriteLine($"Id: {user.Id}, Name: {user.Name}");
-//}
-
+z

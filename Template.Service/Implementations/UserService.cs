@@ -118,7 +118,7 @@ public class UserService : IUserService
 
             if (result.Succeeded)
             {
-                var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
+                var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role[0]); // waiting for mohmmed
                 if (!roleResult.Succeeded)
                 {
                     return Result.Failure(roleResult.Errors.Select(e => e.Description).FirstOrDefault());
