@@ -1,4 +1,5 @@
 ﻿using Template.Domain.Common.IRepository;
+using Template.Domain.Global;
 
 namespace Template.Domain.Common.IUnitOfWork
 {
@@ -6,16 +7,16 @@ namespace Template.Domain.Common.IUnitOfWork
     {
         IRepository<TEntity> Repository<TEntity>() where TEntity : class;
 
-        Task SaveChangesAsync();
-        void SaveChanges();
+        Result SaveChanges();
+        Task<Result> SaveChangesAsync();
 
-        void StartTransaction();
-        Task StartTransactionAsync();
+        Result StartTransaction();
+        Task<Result> StartTransactionAsync();
 
-        void Commit();
-        Task CommitAsync();
+        Result Commit();
+        Task<Result> CommitAsync();
 
-        void Rollback();
-        Task RollbackAsync();
+        Result Rollback();
+        Task<Result> RollbackAsync();
     }
 }

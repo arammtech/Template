@@ -1,4 +1,5 @@
 ﻿using Template.Domain.Common.IUnitOfWork;
+using Template.Domain.Global;
 using Template.Service.Interfaces;
 
 namespace Template.Service.Implementations
@@ -12,14 +13,24 @@ namespace Template.Service.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public void SaveChanges()
+        public Result SaveChanges()
         {
-            _unitOfWork.SaveChanges();
+            try
+            {
+                return _unitOfWork.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure("");
+
+            }
         }
 
-        public async Task SaveChangesAsync()
+        public async Task<Result> SaveChangesAsync()
         {
-            await _unitOfWork.SaveChangesAsync();
+            return await _unitOfWork.SaveChangesAsync();
+
         }
     }
 }
