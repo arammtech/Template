@@ -59,9 +59,9 @@ body.dark {
     --bg-1: var(--color-6) !important;
     --bg-2: var(--color-5) !important;
     --bg-3: var(--color-4) !important;
-    --bg-4: var(--color-4) !important;
+    --bg-4: var(--color-3) !important;
     --bg-5: var(--color-3) !important;
-    --bg-6: var(--color-3) !important;
+    --bg-6: var(--color-2) !important;
     --bg-shape: var(--color-4) !important;
     --bg-nav: var( --color-4) !important;
     --footer-bg: var( --color-4) !important;
@@ -100,7 +100,7 @@ body.dark {
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box !important;
 }
 
 html {

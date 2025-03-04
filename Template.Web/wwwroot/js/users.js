@@ -1,24 +1,61 @@
-﻿//import '../lib/toastr.js/toastr.min.js';
+﻿////import '../lib/toastr.js/toastr.min.js';
 
 
 let dataTable;
 
 var $ = jQuery.noConflict();
 
-
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
     loadDataTable(
         'admin',
         'user',
-        null,null,
-        _getTableStructure(),
-        _mapTable
+        null, null
     );
+    const searchInput = document.getElementById('searchTable');
+    const noRecordsRow = document.getElementById('noRecordsRow');
+
+    function filterUsers() {
+        const filter = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+
+        // Select the rows dynamically (important!)
+        const rows = document.querySelectorAll("#listTable tbody .userRow");
+
+        rows.forEach(function (row) {
+            const name = row.cells[1].textContent.toLowerCase();
+            const email = row.cells[2].textContent.toLowerCase();
+
+            if (name.includes(filter) || email.includes(filter)) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // Show "No Records" message if all rows are hidden
+        noRecordsRow.style.display = visibleCount === 0 ? "" : "none";
+    }
+
+    // Listen for search input
+    searchInput.addEventListener("keyup", filterUsers);
+
+    // Optionally, apply filter on page load if there's an initial value
+    if (searchInput.value.trim() !== "") {
+        filterUsers();
+    }
+
+    // Dummy function for the Add User button
+    document.getElementById('addBtn').addEventListener('click', function () {
+        alert('إضافة مستخدم جديد');
+    });
+
+
+
 });
 
 
-//export function loadDataTable(area, controller, filterProperty, filter, columns, mapData) {
-     function loadDataTable(area, controller, filterProperty, filter, columns, mapData) {
+function loadDataTable(area, controller, filterProperty, filter) {
     let url = `/api/${area}/${controller}`;
     //let url = `/${area}/${controller}/GetAll`;
     if (filterProperty && filter) {
@@ -34,123 +71,75 @@ $(document).ready(function () {
         dataType: "json",
         success: function (response) {
             let items = response.data ? response.data : response;
-            let tabledata = items.map(item => mapData(item));
 
-            // If a DataTable instance already exists, destroy it before re-initializing
-            if ($.fn.DataTable.isDataTable('#tblGeneric')) {
-                $('#tblGeneric').DataTable().clear().destroy();
+
+            console.log(items);
+            // Clear table before adding new rows
+            $("#listTable tbody").empty();
+
+            if (items.length === 0) {
+                $("#noRecordsRow").show(); // Show "No Records" row
+            } else {
+                $("#noRecordsRow").hide(); // Hide "No Records" row
             }
 
-            let table = $('#tblGeneric').DataTable({
-                data: tabledata,
-                columns: columns,
-                autoWidth: false,
-                dom: 'lrtip',
-                pageLength: 5,
-                lengthChange: true,
-                lengthMenu: [
-                    [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, "All"]
-                ],
-                language: {
-                    search: "بحث:",
-                    lengthMenu: "عرض _MENU_ سجل لكل صفحة",
-                    info: "عرض _START_ إلى _END_ من _TOTAL_ سجل",
-                    infoEmpty: "لا توجد سجلات متاحة",
-                    infoFiltered: "(تمت التصفية من إجمالي _MAX_ سجل)",
-                    zeroRecords: "لم يتم العثور على سجلات",
-                },
+
+            items.forEach(user => {
+                let lockUnlockString = Boolean(user.isLocked) ? "فك القفل" : "قفل";
+                let buttonColor = Boolean(user.isLocked) ? "btn-error " : "btn-3";
+
+                let rowHtml = `
+    <tr class="userRow">
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.email}</td>
+        <td>${user.phone || "لا يوجد"}</td>
+        <td>${user.role || "N/A"}</td>
+        <td class="row-actions">
+            <a onclick="lockUnlock(${user.id})" class="action-btn btn btn-sm ${buttonColor} jump ">${lockUnlockString}</a>
+            <a class="action-btn btn btn-sm btn-2 jump ">تعديل الدور</a>
+            <a class="action-btn btn btn-sm btn-acc jump ">تفاصيل</a>
+        </td>
+    </tr>
+    `;
+
+                $("#listTable tbody").append(rowHtml);
             });
-
-            //$('.table-search-box input').on('keyup', function () {
-            //    table.search($(this).val()).draw();
-            //});
-
-            //$('#add-button').on('click', function () {
-            //    window.location.href = `/Admin/${controller}/Create`;
-            //});
 
         },
         error: function (xhr, status, error) {
-            console.error("Error retrieving data:", error);
-            Swal.fire("Error", "خطأ في استرجاع البيانات", "error");
+            console.error("AJAX Error:", status, error, xhr.responseText);
+            Swal.fire("Error", `خطأ في استرجاع البيانات: ${xhr.responseText}`, "error");
         }
     });
 
 };
 
-
-function _getTableStructure() {
-    return [
-        { data: 'name', 'width': '20%', data: 'name' },
-        { data: 'email', 'width': '30%', data: 'email' },
-        { data: 'phone', 'width': '15%', data: 'phone' },
-        { data: 'role', 'width': '15%', data: 'role' },
-        {
-            title: 'action',
-            data: 'id',
-            orderable: false,
-            render: function (data) {
-                let lockUnlockString = "Lock";
-                let lockUnlockIcon = "lock";
-                let buttonColor = "success";
-
-                console.log(data);
-
-                if (data.isLocked) {
-                    lockUnlockString = "Unlock";
-                    lockUnlockIcon = "unlock";
-                    buttonColor = "danger";
-                }
-
-                return `
-
-                        <div class="btn-group" role="group">
-                            <a onclick="lockUnlock(${data.id})" class="btn btn-${buttonColor} mx-2" style="width: 100px">
-                                <i class="bi bi-${lockUnlockIcon}-fill"></i> ${lockUnlockString}
-                            </a>
-                            <a href="/admin/user/roleManagement?userId=${data.id}" class="btn btn-warning">
-                                <i class="bi bi-pencil-square"></i> Permissions
-                            </a>
-                        </div>`;
-
-            },
-            'width': '20%',
-            orderable: false
-        }
-    ];
-}
-
-function _mapTable(item) {
-    return {
-        name: item.name,
-        email: item.email,
-        phone: item.phone,
-        role: item.role,
-        id: item.id
-    };
-}
-
-
-
-
 function lockUnlock(userId) {
     $.ajax({
         type: 'POST',
-        url: '/Admin/User/LockUnlock',
-        data: JSON.stringify(userId),
-        contentType: 'application/json',
+        url: `/api/admin/user/LockUnLock?userId=${userId}`, // Note the explicit route segment
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
         success: function (data) {
             if (data.success) {
-                dataTable.ajax.reload();
+                console.log("Success:", data.message);
                 toastr.success(data.message);
+
+                    $("#listTable tbody").empty(); // Clear table before reloading
+                    loadDataTable('admin', 'user', null, null); // Reload data
+
+            } else {
+                console.log("Error:", data.message);
             }
-            else {
-                toastr.error(data.message);
-            }
+        },
+        error: function (xhr, status, error) {
+            console.log("AJAX Error:", xhr.responseText);
+            toastr.error("An error occurred.");
         }
     });
 }
+
 
 
 
