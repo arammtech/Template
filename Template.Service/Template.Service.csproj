@@ -15,10 +15,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Template.Domain\Template.Domain.csproj" />
+    <ProjectReference Include="..\Template.Utilities\Template.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="DTOs\Customer\" />
+    <Folder Include="Global\" />
   </ItemGroup>
 
 </Project>
