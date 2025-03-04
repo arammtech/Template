@@ -70,7 +70,13 @@ ApplicationUser GenerateFakeUser()
         LastName = faker.Name.LastName()
     };
 }
-var user = GenerateFakeUser();
-var token = await emailService.GenerateToken(user);
-var link = await emailService.GenerateLinkToVerifyTokenAsync(token, user.Id);
-await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "test", $"<html><body><p>Click the link below:</p><a href='{link}'>Visit Example</a></body></html>", "Abdulaziz");
+
+//var userManager = serviceProvider.GetRequiredService<IUserService>();
+
+//var result = await userManager.GetUsersAsync(-1, 100);
+//var data = result.Items;
+//for (int i = 0; i < result.Items.Count; i++)
+//{
+//    UserDto user = result.Items[i];
+//    Console.WriteLine($"Id: {user.Id}, Name: {user.Name}");
+//}
