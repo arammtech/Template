@@ -94,7 +94,7 @@ function loadDataTable(area, controller, filterProperty, filter) {
         <td>${user.name}</td>
         <td>${user.email}</td>
         <td>${user.phone || "لا يوجد"}</td>
-        <td>${user.role || "N/A"}</td>
+        <td>${Array.isArray(user.role) ? user.role.join('/') : user.role || "N/A"}</td>
         <td class="row-actions">
             <a onclick="lockUnlock(${user.id})" class="action-btn btn btn-sm ${buttonColor} jump ">${lockUnlockString}</a>
             <a class="action-btn btn btn-sm btn-2 jump ">تعديل الدور</a>
