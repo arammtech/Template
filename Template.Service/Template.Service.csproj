@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Template.Domain\Template.Domain.csproj" />
+    <ProjectReference Include="..\Template.Repository\Template.Repository.csproj" />
     <ProjectReference Include="..\Template.Utilities\Template.Utilities.csproj" />
   </ItemGroup>
 

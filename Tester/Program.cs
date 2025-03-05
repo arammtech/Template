@@ -66,4 +66,3 @@ ApplicationUser GenerateFakeUser()
     };
 }
 
-z

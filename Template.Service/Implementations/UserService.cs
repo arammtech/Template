@@ -44,7 +44,7 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-        public async Task<IEnumerable<UserDto>> GetUsersAsync(int page, int pageSize, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null)
+        public async Task<IEnumerable<UserDto>> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -76,6 +76,18 @@ namespace Template.Service.Implementations
                              select user;
             }
 
+            if (isLocked.HasValue)
+            {
+                if (isLocked.Value)
+                {
+                    usersQuery = usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow);
+                }
+                else
+                {
+                    usersQuery = usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
+                }
+            }
+
             var paginatedUsers = await usersQuery
                 .OrderBy(u => u.Id)
                 .Skip((page - 1) * pageSize)
@@ -92,6 +104,7 @@ namespace Template.Service.Implementations
 
             return userDtos;
         }
+
 
         public async Task<UserDto?> GetUserByIdAsync(int userId)
         {
@@ -115,7 +128,7 @@ namespace Template.Service.Implementations
             }
         }
 
-        public async Task<UserDto?> GetAdminUserAsync(int userId, string username)
+        public async Task<UserDto?> GetAdminUserAsync(int userId)
         {
             try
             {
