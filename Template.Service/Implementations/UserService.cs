@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Linq;
 using Template.Domain.Common.IUnitOfWork;
 using Template.Domain.Global;
 using Template.Domain.Identity;
 using Template.Service.DTOs.Admin;
 using Template.Service.Interfaces;
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Template.Domain.Identity;
-using Template.Service.DTOs.Admin;
-using Template.Service.Interfaces;
-using static Template.Domain.Global.Result;
+using Template.Service.Mapper;
+using Template.Utilities.Identity;
+using Template.Repository.EntityFrameworkCore.Context;
 
 namespace Template.Service.Implementations
 {
@@ -20,16 +19,18 @@ namespace Template.Service.Implementations
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private Dictionary<string, List<ApplicationUser>> _roleUserDictionary;
+        private readonly IMapper _mapper;
+        private readonly AppDbContext _context;
 
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper)
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, AppDbContext context, IUnitOfWork unitOfWork,IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _roleUserDictionary = new Dictionary<string, List<ApplicationUser>>();
+            _mapper = mapper;
+            _context = context;
             Task.Run(() => BuildRoleUserDictionary()).Wait();
         }
 
@@ -43,30 +44,53 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-
-        public async Task<IEnumerable<UserDto>> GetUsersAsync(int page, int pageSize, string? role = null)
+        public async Task<IEnumerable<UserDto>> GetUsersAsync(int page, int pageSize, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null)
         {
             if (page < 1 || pageSize < 1)
             {
                 return new List<UserDto>();
             }
 
-            if (!_roleUserDictionary.ContainsKey(role))
+            var usersQuery = _userManager.Users.AsQueryable();
+
+            if (filter != null)
             {
-                await BuildRoleUserDictionary();
+                usersQuery = usersQuery.Where(filter);
             }
 
-            var users = _roleUserDictionary.ContainsKey(role)
-                ? _roleUserDictionary[role]
-                : new List<ApplicationUser>();
+            if (!string.IsNullOrEmpty(role))
+            {
+                var roleId = await _roleManager.Roles
+                    .Where(r => r.Name == role)
+                    .Select(r => r.Id)
+                    .FirstOrDefaultAsync();
 
-            var paginatedUsers = users
+                if (roleId == null)
+                {
+                    return new List<UserDto>();
+                }
+
+                usersQuery = from user in usersQuery
+                             join userRole in _context.UserRoles on user.Id equals userRole.UserId
+                             where userRole.RoleId == roleId
+                             select user;
+            }
+
+            var paginatedUsers = await usersQuery
                 .OrderBy(u => u.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(user => _mapper.Map<UserDto>(user));
+                .ToListAsync();
 
-            return paginatedUsers;
+            var userDtos = new List<UserDto>();
+            foreach (var user in paginatedUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                var userDto = await UserDTOsMapper.ToUserDto(user, Task.FromResult(roles));
+                userDtos.Add(userDto);
+            }
+
+            return userDtos;
         }
 
         public async Task<UserDto?> GetUserByIdAsync(int userId)
@@ -75,7 +99,14 @@ namespace Template.Service.Implementations
             {
                 var user = await _userManager.FindByIdAsync(userId.ToString());
 
-                return user != null ? _mapper.Map<UserDto>(user) : null;
+                if (user == null)
+                {
+                    return null;
+                }
+
+                var roleNames = await _userManager.GetRolesAsync(user);
+
+                return await UserDTOsMapper.ToUserDto(user, Task.FromResult(roleNames));
             }
             catch (Exception ex)
             {
@@ -95,9 +126,15 @@ namespace Template.Service.Implementations
                 }
 
                 var adminUsers = await _userManager.GetUsersInRoleAsync(adminRole.Name);
+
                 var adminUser = adminUsers.SingleOrDefault(x => x.Id == userId);
 
-                return adminUser != null ? _mapper.Map<UserDto>(adminUser) : null;
+                if (adminUser == null)
+                {
+                    return null;
+                }
+
+                return await UserDTOsMapper.ToUserDto(adminUser, _userManager.GetRolesAsync(adminUser));
             }
             catch (Exception ex)
             {
@@ -105,44 +142,124 @@ namespace Template.Service.Implementations
                 return null;
             }
         }
-
         public async Task<Result> AddUserAsync(UserDto userDto)
         {
-            if (userDto == null || string.IsNullOrWhiteSpace(userDto.Name) || string.IsNullOrWhiteSpace(userDto.Email))
+            if (userDto == null)
             {
-                return Result.Failure("Invalid user data");
+                return Result.Failure("بيانات المستخدم غير صحيحة");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.FirstName))
+            {
+                return Result.Failure("الاسم الأول مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.LastName))
+            {
+                return Result.Failure("اسم العائلة مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.Email))
+            {
+                return Result.Failure("البريد الإلكتروني مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.UserName))
+            {
+                return Result.Failure("اسم المستخدم مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.Phone))
+            {
+                return Result.Failure("رقم الهاتف مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.Password))
+            {
+                return Result.Failure("كلمة المرور مطلوبة");
+            }
+
+            if (userDto.Role == null || !userDto.Role.Any())
+            {
+                return Result.Failure("الدور مطلوب");
+            }
+
+            var transactionResult = await _unitOfWork.StartTransactionAsync();
+            if (!transactionResult.IsSuccess)
+            {
+                return transactionResult;
             }
 
             try
             {
-                var user = _mapper.Map<ApplicationUser>(userDto);
-                var result = await _userManager.CreateAsync(user, "DefaultPassword123!"); // Use a default or temporary password
+                var user = UserDTOsMapper.ToApplicationUser(userDto);
+
+                var result = await _userManager.CreateAsync(user, user.PasswordHash);
 
                 if (result.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role);
+                    var roleResult = await _userManager.AddToRoleAsync(user, userDto.Role.FirstOrDefault());
                     if (!roleResult.Succeeded)
                     {
+                        await _unitOfWork.RollbackAsync();
                         return Result.Failure(roleResult.Errors.Select(e => e.Description).FirstOrDefault());
+                    }
+
+                    var commitResult = await _unitOfWork.CommitAsync();
+                    if (!commitResult.IsSuccess)
+                    {
+                        await _unitOfWork.RollbackAsync();
+                        return commitResult;
                     }
 
                     return Result.Success();
                 }
 
+                await _unitOfWork.RollbackAsync();
                 return Result.Failure(result.Errors.Select(e => e.Description).FirstOrDefault());
             }
             catch (Exception ex)
             {
-                // Log the exception (optional)
-                return Result.Failure($"Failed to add user: {ex.Message}");
+                await _unitOfWork.RollbackAsync();
+                return Result.Failure($"فشل في إضافة المستخدم: {ex.Message}");
             }
         }
 
         public async Task<Result> UpdateUserAsync(UserDto userDto)
         {
-            if (userDto == null || userDto.Id <= 0)
+            if (userDto == null)
             {
-                return Result.Failure("Invalid user data");
+                return Result.Failure("بيانات المستخدم غير صحيحة");
+            }
+
+            if (userDto.Id <= 0)
+            {
+                return Result.Failure("معرف المستخدم غير صحيح");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.FirstName))
+            {
+                return Result.Failure("الاسم الأول مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.LastName))
+            {
+                return Result.Failure("اسم العائلة مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.Email))
+            {
+                return Result.Failure("البريد الإلكتروني مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.UserName))
+            {
+                return Result.Failure("اسم المستخدم مطلوب");
+            }
+
+            if (string.IsNullOrWhiteSpace(userDto.Phone))
+            {
+                return Result.Failure("رقم الهاتف مطلوب");
             }
 
             try
@@ -151,10 +268,18 @@ namespace Template.Service.Implementations
 
                 if (user == null)
                 {
-                    return Result.Failure("User not found");
+                    return Result.Failure("المستخدم غير موجود");
                 }
 
-                _mapper.Map(userDto, user);
+                // Perform business logic/validation here
+
+                user.FirstName = userDto.FirstName;
+                user.LastName = userDto.LastName;
+                user.Email = userDto.Email;
+                user.UserName = userDto.UserName;
+                user.PhoneNumber = userDto.Phone;
+                user.ImagePath = userDto.ImagePath;
+
                 var result = await _userManager.UpdateAsync(user);
 
                 return result.Succeeded ? Result.Success() : Result.Failure(result.Errors.Select(e => e.Description).FirstOrDefault());
@@ -162,9 +287,10 @@ namespace Template.Service.Implementations
             catch (Exception ex)
             {
                 // Log the exception (optional)
-                return Result.Failure($"Failed to update user: {ex.Message}");
+                return Result.Failure($"فشل في تحديث المستخدم: {ex.Message}");
             }
         }
+
 
         public async Task<Result> LockUserAsync(int userId)
         {
@@ -175,6 +301,13 @@ namespace Template.Service.Implementations
                 if (user == null)
                 {
                     return Result.Failure("User not found");
+                }
+
+                var isAdmin = await _userManager.GetRolesAsync(user);
+
+                if(isAdmin.Contains(AppUserRoles.RoleAdmin))
+                {
+                    return Result.Failure("لا تستطيع ان تنفذ هذه العملية على الادمن");
                 }
 
                 user.LockoutEnd = DateTimeOffset.UtcNow.AddYears(100); // Lockout indefinitely
@@ -262,8 +395,6 @@ namespace Template.Service.Implementations
                 // Log the exception (optional)
                 return Result.Failure($"Failed to delete user: {ex.Message}");
             }
-
         }
-
     }
 }
