@@ -10,7 +10,7 @@ namespace Template.Service.Interfaces
     {
         //  Task<PaginatedResult<UserDto>> GetUsersAsync(int page, int pageSize, string role);
 
-        Task<IEnumerable<UserDto>> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null);
+        Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null);
         Task<UserDto?> GetUserByIdAsync(int userId);
         Task<Result> AddUserAsync(UserDto userDto);
         Task<Result> UpdateUserAsync(UserDto userDto);
