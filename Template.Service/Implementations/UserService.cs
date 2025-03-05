@@ -44,11 +44,11 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-        public async Task<IEnumerable<UserDto>> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
+       public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
         {
             if (page < 1 || pageSize < 1)
             {
-                return new List<UserDto>();
+                return (new List<UserDto>(), 0);
             }
 
             var usersQuery = _userManager.Users.AsQueryable();
@@ -67,7 +67,7 @@ namespace Template.Service.Implementations
 
                 if (roleId == null)
                 {
-                    return new List<UserDto>();
+                    return (new List<UserDto>(), 0);
                 }
 
                 usersQuery = from user in usersQuery
@@ -88,6 +88,8 @@ namespace Template.Service.Implementations
                 }
             }
 
+            var totalRecords = await usersQuery.CountAsync();
+
             var paginatedUsers = await usersQuery
                 .OrderBy(u => u.Id)
                 .Skip((page - 1) * pageSize)
@@ -102,9 +104,8 @@ namespace Template.Service.Implementations
                 userDtos.Add(userDto);
             }
 
-            return userDtos;
+            return (userDtos, totalRecords);
         }
-
 
         public async Task<UserDto?> GetUserByIdAsync(int userId)
         {
