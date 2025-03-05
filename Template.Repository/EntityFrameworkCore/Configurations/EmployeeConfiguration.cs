@@ -20,5 +20,6 @@ namespace Template.Repository.EntityFrameworkCore.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }

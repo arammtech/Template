@@ -192,9 +192,8 @@ namespace Template.Service.Implementations
 
             try
             {
-                var user = UserDTOsMapper.ToApplicationUser(userDto);
-
-                var result = await _userManager.CreateAsync(user, user.PasswordHash);
+                var user = _mapper.Map<ApplicationUser>(userDto);
+                var result = await _userManager.CreateAsync(user, "DefaultPassword123!"); // Use a default or temporary password
 
                 if (result.Succeeded)
                 {
