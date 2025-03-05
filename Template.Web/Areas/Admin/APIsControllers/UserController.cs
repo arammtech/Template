@@ -56,9 +56,7 @@ namespace Template.Web.Areas.Admin.APIsControllers
             }
         }
 
-        
-
-
+    
         [HttpPost("LockUnLock")]
         public async Task<IActionResult> LockUnLock([FromQuery] int userId)
         {

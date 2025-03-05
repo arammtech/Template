@@ -25,10 +25,5 @@ namespace Template.Web.Areas.Admin.Controllers
         {
             return View();
         }
-
-        #region API Calls
-       
-        #endregion
-
     }
 }
