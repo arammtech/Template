@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AspNetCoreGeneratedDocument;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -57,10 +58,10 @@ namespace Template.Web.Areas.Admin.Controllers
                 UserDto user = await _userService.GetUserByIdAsync(id);
 
                 ChangeUserRoleDto changeUserRoleDto = new();
-                changeUserRoleDto.userId = user.Id;
+                changeUserRoleDto.Id = user.Id;
                 changeUserRoleDto.oldRole = string.Join(", ", user.Role);
-                changeUserRoleDto.newRole = string.Join(", ", user.Role);
                 changeUserRoleDto.Roles = _roleManager.Roles.ToList();
+                //changeUserRoleDto.Roles = (await _userService.GetAllRolesAsync()).ToList();
 
                 return View(changeUserRoleDto);
             }
@@ -76,11 +77,18 @@ namespace Template.Web.Areas.Admin.Controllers
         {
             try
             {
-                UserDto user = await _userService.GetUserByIdAsync(id);
+                var result = await _userService.ChangeUserRoleAsync(id, changeUserRoleDto.oldRole, changeUserRoleDto.newRole);
 
-                
+                if(result.IsSuccess)
+                {
+                    return RedirectToAction("index");
 
-                return RedirectToAction("index");
+                }
+                else
+                {
+                    return View(changeUserRoleDto);
+                }
+
             }
             catch
             {

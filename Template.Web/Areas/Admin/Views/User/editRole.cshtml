@@ -1,14 +1,17 @@
-﻿@model ChangeUserRoleDto
+﻿@using Template.Service.DTOs.Admin
+@using Template.Web.Areas.Admin.ViewModels
+@model ChangeUserRoleDto
 @{
     ViewData["Title"] = "editRole";
 
-    SelectList roles = new SelectList(Model.Roles, "Id", "Name");
+    SelectList roles = new SelectList(Model.Roles, "Name", "Name");
 }
-@using Template.Service.DTOs.Admin
-@using Template.Web.Areas.Admin.ViewModels
+
 
 <section id="profile">
     <form class="container" method="post" asp-area="admin" asp-controller="user" asp-action="editRole">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="oldRole" />
         <div class="row  p-4">
             <div class="col p-4 round-2 row gap-5 ">
                 <div class="col-12">
@@ -33,7 +36,7 @@
                             </svg>
                             <div class="form-input-box f-ctr-ctr" role="search" style="margin-bottom: 0 !important;">
                                 <div class="input-box">
-                                    <select asp-for="Id" asp-items="roles" class="form-select border-0 shadow">
+                                    <select asp-for="newRole" asp-items="roles" class="form-select border-0 shadow">
                                         <option selected disabled value="">Select Role</option>
                                     </select>
                                 </div>

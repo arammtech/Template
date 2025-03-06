@@ -15,6 +15,7 @@ using Template.Utilities.Identity;
 using static System.Reflection.Metadata.BlobBuilder;
 using AutoMapper;
 using Template.Domain.Common.IUnitOfWork;
+using Template.Domain.Global;
 
 namespace Template.Web.Areas.Admin.APIsControllers
 {
@@ -44,6 +45,7 @@ namespace Template.Web.Areas.Admin.APIsControllers
         public async Task<IActionResult> GetAll([FromQuery]int page, [FromQuery]int rowsPerPage, [FromQuery] string? filterProperty, [FromQuery] string? filter)
         {
             List<UserDto> lstUsers = [];
+            (IEnumerable<UserDto> Users, int TotalRecords) result ;
             int usersCount = 0;
             bool? isLocked = null;
             string? role = null;
@@ -56,23 +58,26 @@ namespace Template.Web.Areas.Admin.APIsControllers
                     if (filterProperty == "role")
                     {
                         role = filter;
-                        lstUsers = (await _userService.GetUsersAsync(page, rowsPerPage, role)).ToList();
-                        usersCount = await GetUsersCountAsync(role);
+                        result = (await _userService.GetUsersAsync(page, rowsPerPage, role));
+                        lstUsers = result.Users.ToList();
+                        usersCount = result.TotalRecords;
 
                     }
                     else if (filterProperty == "isLocked")
                     {
                         isLocked = filter.ToLower() == "true";
-                        lstUsers = (await _userService.GetUsersAsync(page, rowsPerPage, null, null, isLocked)).ToList();
-                        usersCount = await GetUsersCountAsync( null, null, isLocked);
+                        result = (await _userService.GetUsersAsync(page, rowsPerPage, null, null, isLocked));
+                        lstUsers = result.Users.ToList();
+                        usersCount = result.TotalRecords;
 
                     }
 
                     return Ok(new { success = true, data = lstUsers, totalUsers = usersCount });
                 }
 
-                lstUsers = (await _userService.GetUsersAsync(page, rowsPerPage)).ToList();
-                usersCount = _userManager.Users.Count();
+                result = await _userService.GetUsersAsync(page, rowsPerPage);
+                lstUsers = result.Users.ToList();
+                usersCount = result.TotalRecords;
 
 
                 return Ok(new { success = true, data = lstUsers, totalUsers = usersCount });
