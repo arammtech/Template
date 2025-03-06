@@ -25,5 +25,7 @@ namespace Template.Service.Interfaces
         Task<Result> LockUserAsync(int userId);
 
         Task<UserDto?> GetAdminUserAsync(int userId);
+
+        Task<List<ApplicationRole>?> GetAllApplicationRolesAsync();
     }
 }

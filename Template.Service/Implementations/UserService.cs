@@ -406,6 +406,12 @@ namespace Template.Service.Implementations
             var roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
             return roles;
         }
+        public async Task<List<ApplicationRole>?> GetAllApplicationRolesAsync()
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            return roles;
+        }
+
         public async Task<Result> DeleteUserAsync(int userId)
         {
             try
