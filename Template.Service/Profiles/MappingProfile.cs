@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Template.Domain.Entities;
+using Template.Domain.Identity;
 using Template.Service.DTOs;
+using Template.Service.DTOs.Admin;
 
 namespace Template.Service.Profiles
 {
@@ -10,6 +12,8 @@ namespace Template.Service.Profiles
         {
             CreateMap<Department, DepartmentDto>().ReverseMap();
             CreateMap<Employee, EmployeeDto>().ReverseMap();
+
+
         }
     }
 }

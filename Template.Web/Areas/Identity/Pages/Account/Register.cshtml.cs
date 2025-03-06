@@ -128,6 +128,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, AppUserRoles.RoleCustomer);
 
                     var userId = await _userManager.GetUserIdAsync(user);
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
@@ -135,8 +136,6 @@ namespace Template.Web.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
-
-                    EmailTemplates.GetEmailVerificationEmailBody(callbackUrl);
 
                     await _emailSender.SendEmailAsync(Input.Email, "التحقق من البريد الإلكتروني", EmailTemplates.GetEmailVerificationEmailBody(callbackUrl));
 
@@ -167,6 +166,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
             user.UserName = Input.Email;
             user.PasswordHash = Input.Password;
         }
+
         private ApplicationUser CreateUser()
         {
             try
