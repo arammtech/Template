@@ -11,6 +11,8 @@ using Template.Service.Implementations;
 using Template.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Bogus;
+using Template.Service.EmailService;
+using Template.Utilities.Identity;
 
 var services = new ServiceCollection();
 var buider = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
@@ -34,17 +36,29 @@ services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 }).AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 ;
-services.AddScoped<IEmailService, EmailService>();
+services.AddScoped<EmailService>();
+services.AddScoped<IEmailVerificationService, EmailVerificationService>();
+services.AddTransient<ITokenService, TokenService>();
+services.AddTransient<MailKitEmailSender>();
+services.AddTransient<SmtpEmailSender>();
+// Assign Defualt Startegy 
+services.AddTransient<IEmailSenderStrategy>(provider =>
+        provider.GetRequiredService<SmtpEmailSender>()
+    );
+
+
 
 ServiceProvider serviceProvider;
-    serviceProvider = services.BuildServiceProvider();
+serviceProvider = services.BuildServiceProvider();
 
 services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
-    options.TokenLifespan = TimeSpan.FromSeconds(59); 
+    options.TokenLifespan = TimeSpan.FromSeconds(59);
 });
 
-var emailService = serviceProvider.GetRequiredService<IEmailService>();
+Console.WriteLine("Email Sender Defualt : Smtp");
+
+var emailService = serviceProvider.GetRequiredService<EmailService>();
 ApplicationUser GenerateFakeUser()
 {
     var faker = new Faker();
@@ -70,7 +84,30 @@ ApplicationUser GenerateFakeUser()
         LastName = faker.Name.LastName()
     };
 }
+
 var user = GenerateFakeUser();
-var token = await emailService.GenerateToken(user);
-var link = await emailService.GenerateLinkToVerifyTokenAsync(token, user.Id);
-await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "test", $"<html><body><p>Click the link below:</p><a href='{link}'>Visit Example</a></body></html>", "Abdulaziz");
+
+var tokenService = serviceProvider.GetRequiredService<ITokenService>();
+var token = await tokenService.GenerateToken(user);
+
+var emailVerify = serviceProvider.GetRequiredService<IEmailVerificationService>();
+var verfiyLink = emailVerify.GenerateLinkToVerifyTokenAsync(token, user.Id);
+
+var result = await emailService.SendEmailAsync("redaessa27@gmail.com", "RedaEssa", "Verification Email", EmailTemplates.GetEmailVerificationEmailBody(verfiyLink));
+if (result.IsSuccess)
+   Console.WriteLine("Email sent successfully!");
+
+//Thread.Sleep(3000);
+
+//Console.WriteLine("Switch Email Sender to : Mailkit");
+
+//emailService.SwitchEmailSenderStrategy(serviceProvider.GetRequiredService<MailKitEmailSender>());
+
+//result = await emailService.SendEmailAsync("redaessa27@gmail.com", "RedaEssa", "Verification Email", EmailTemplates.GetEmailVerificationEmailBody(verfiyLink));
+//if (result.IsSuccess)
+//    Console.WriteLine("Email sent successfully!");
+
+
+////var token = await emailService.GenerateToken(user);
+//var link = await emailService.GenerateLinkToVerifyTokenAsync(token, user.Id);
+//await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "test", $"<html><body><p>Click the link below:</p><a href='{link}'>Visit Example</a></body></html>", "Abdulaziz");
