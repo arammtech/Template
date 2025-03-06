@@ -13,11 +13,12 @@ using Microsoft.AspNetCore.Identity;
 using Bogus;
 using static Template.Service.Implementations.EmployeeService;
 using Template.Service.DTOs.Admin;
+using Template.Service.EmailService;
+using Template.Utilities.Identity;
 
 var services = new ServiceCollection();
 var buider = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
 string connectionString = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("ConnectionStrings:DefaultConnection").Value;
-
 services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(connectionString));
 
@@ -25,6 +26,7 @@ options.UseSqlServer(connectionString));
 services.AddSingleton<IUnitOfWork, UnitOfWork>();
 services.AddSingleton<IUserService, UserService>();
 
+services.Configure<EmailSettings>(buider.GetSection("EmailConfiguration"));
 services.AddLogging();
 
 services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
@@ -43,7 +45,7 @@ services.AddTransient<MailKitEmailSender>();
 services.AddTransient<SmtpEmailSender>();
 // Assign Defualt Startegy 
 services.AddTransient<IEmailSenderStrategy>(provider =>
-        provider.GetRequiredService<SmtpEmailSender>()
+        provider.GetRequiredService<MailKitEmailSender>()
     );
 
 
@@ -56,7 +58,7 @@ services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromSeconds(59);
 });
 
-Console.WriteLine("Email Sender Defualt : Smtp");
+Console.WriteLine("Email Sender Defualt : Mailkit");
 
 var emailService = serviceProvider.GetRequiredService<EmailService>();
 ApplicationUser GenerateFakeUser()
@@ -65,6 +67,7 @@ ApplicationUser GenerateFakeUser()
 
     return new ApplicationUser
     {
+        Id = faker.Random.Int(0, int.MaxValue),
         UserName = faker.Internet.UserName(),
         NormalizedUserName = faker.Internet.UserName().ToUpper(),
         Email = faker.Internet.Email(),
@@ -92,7 +95,7 @@ var token = await tokenService.GenerateToken(user);
 var emailVerify = serviceProvider.GetRequiredService<IEmailVerificationService>();
 var verfiyLink = emailVerify.GenerateLinkToVerifyTokenAsync(token, user.Id);
 
-var result = await emailService.SendEmailAsync("redaessa27@gmail.com", "RedaEssa", "Verification Email", EmailTemplates.GetEmailVerificationEmailBody(verfiyLink));
+var result = await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "Verification Email", EmailTemplates.GetEmailVerificationEmailBody(verfiyLink));
 if (result.IsSuccess)
    Console.WriteLine("Email sent successfully!");
 
