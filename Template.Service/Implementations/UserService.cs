@@ -358,36 +358,54 @@ namespace Template.Service.Implementations
             }
         }
 
-        public async Task<Result> EditUserRoleAsync(int userId, string newRole)
+        public async Task<Result> ChangeUserRoleAsync(int userId, string oldRole, string newRole)
         {
+            var transactionResult = await _unitOfWork.StartTransactionAsync();
+            if (!transactionResult.IsSuccess)
+            {
+                return Result.Failure(transactionResult.ErrorMessage);
+            }
+
             try
             {
                 var user = await _userManager.FindByIdAsync(userId.ToString());
 
                 if (user == null)
                 {
+                    await _unitOfWork.RollbackAsync();
                     return Result.Failure("User not found");
                 }
 
-                var currentRoles = await _userManager.GetRolesAsync(user);
-                var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-
+                var removeResult = await _userManager.RemoveFromRoleAsync(user, oldRole);
                 if (!removeResult.Succeeded)
                 {
+                    await _unitOfWork.RollbackAsync();
                     return Result.Failure(removeResult.Errors.Select(e => e.Description).FirstOrDefault());
                 }
 
                 var addResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addResult.Succeeded)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return Result.Failure(addResult.Errors.Select(e => e.Description).FirstOrDefault());
+                }
 
-                return addResult.Succeeded ? Result.Success() : Result.Failure(addResult.Errors.Select(e => e.Description).FirstOrDefault());
+                var commitResult = await _unitOfWork.CommitAsync();
+                return commitResult.IsSuccess ? Result.Success() : Result.Failure(commitResult.ErrorMessage);
             }
             catch (Exception ex)
             {
+                await _unitOfWork.RollbackAsync();
                 // Log the exception (optional)
-                return Result.Failure($"Failed to edit user role: {ex.Message}");
+                return Result.Failure($"Failed to change user role: {ex.Message}");
             }
         }
 
+        public async Task<List<string>> GetAllRolesAsync()
+        {
+            var roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+            return roles;
+        }
         public async Task<Result> DeleteUserAsync(int userId)
         {
             try

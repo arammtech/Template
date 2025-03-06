@@ -15,5 +15,13 @@ namespace Template.Service.Interfaces
         Task<Result> AddUserAsync(UserDto userDto);
         Task<Result> UpdateUserAsync(UserDto userDto);
         Task<Result> DeleteUserAsync(int userId);
+
+        Task<Result> ChangeUserRoleAsync(int userId, string oldRole, string newRole);
+
+        Task<Result> UnlockUserAsync(int userId);
+
+        Task<Result> LockUserAsync(int userId);
+
+        Task<List<string>> GetAllRolesAsync();
     }
 }
