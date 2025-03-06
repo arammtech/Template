@@ -34,7 +34,7 @@
 .animated-shape {
     width: 150px;
     height: 150px;
-    background: var(--aramm) url("/icons/Aramm_tech.svg"); 
+    background: var(--aramm) url("/imgs/TeamARAMM/Aramm_tech.svg"); 
     background-size: contain; 
     background-position: center;
     background-repeat: no-repeat;
@@ -200,7 +200,7 @@ body {
     top: 6rem;
     bottom: 0;
     right: 0;
-    overflow-y: auto; /* Enable scrolling when needed */
+    overflow-y: auto !important; /* Enable scrolling when needed */
     border-left: 1px solid var(--color-3);
     display: flex;
     flex-direction: column;
@@ -236,14 +236,15 @@ body.light .sidebar ul li svg path {
     display: none;
 }
 
-/* Main content styles */
-#content {
+/* Main content */
+main#content {
+    background: inherit;
     margin-top: var( --nav-height);
     margin-right: var(--side-height);
     padding: 2rem;
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: auto !important;
     background: var(--bg-3);
     transition: 0.5s ease-in-out;
 }
@@ -254,6 +255,14 @@ body.dark #content {
     margin-right: 0;
 }
 
+section {
+    position: relative;
+}
+
+    section .container {
+        position: relative;
+        z-index: 2;
+    }
 
 /* Scrollbars */
 .sidebar::-webkit-scrollbar,
@@ -273,41 +282,40 @@ body.dark #content {
 
 
 /* List Table*/
-
-.dashboard-table {
+#listTable {
     width: 100%;
     border-collapse: collapse;
     box-shadow: var(--shadow-1);
 }
 
-    .dashboard-table thead tr {
+    #listTable thead tr {
         background: var(--bg-4);
         color: var(--text-1);
         text-align: center;
     }
 
-body.dark .dashboard-table thead tr {
+body.dark #listTable thead tr {
     background: var(--bg-1);
     color: var(--text-2);
 }
-    .dashboard-table th,
-    .dashboard-table td {
-        padding: 1.2rem 1.5rem;
-        border: 1px solid var(--border-1);
-        text-align: center;
-    }
+#listTable th,
+#listTable td {
+    padding: 1.2rem 1.5rem;
+    border: 1px solid var(--border-1);
+    text-align: center;
+}
 
-.dashboard-table tbody tr {
+#listTable tbody tr {
     background: var(--bg-1);
     transition: opacity 0.3s;
     color: var(--text-3);
 }
 
-body.dark .dashboard-table tbody tr {
+body.dark #listTable tbody tr {
     background: var(--bg-3) !important;
     color: var(--text-3);
 }
-.dashboard-table tbody tr:hover {
+#listTable tbody tr:hover {
     opacity: .9;
 }
 
@@ -317,40 +325,37 @@ body.dark .dashboard-table tbody tr {
     gap:2rem;
 }
 
-.action-btn {
-}
 
 /* Pagination */
-
 .pagination {
     justify-content: center;
     margin-bottom:0 !important;
     gap: .5rem;
 }
 
-    .pagination .page-item {
-        text-align: center;
-        border-radius: var(--radius-2);
-        box-shadow: var(--shadow-1);
-    }
+.pagination .page-item {
+    text-align: center;
+    border-radius: var(--radius-2);
+    box-shadow: var(--shadow-1);
+}
      
-        .pagination .page-item .page-link {
-            padding: 1.2rem 1.5rem !important;
-            border: 1px solid var(--border-1) !important;
-            border-radius: var(--radius-2);
-            background: var(--bg-1);
-            color: var(--text-3);
-            font-size: 1.6rem;
-            transition: opacity 0.3s;
-        }
-        .pagination .page-item .page-link:hover {
-            opacity:.8;
-        }
-        .pagination .page-item.active .page-link {
-            background: var(--bg-4) !important;
-            color: var(--accent) !important;
-            font-weight: bold;
-        }
+.pagination .page-item .page-link {
+    padding: 1.2rem 1.5rem !important;
+    border: 1px solid var(--border-1) !important;
+    border-radius: var(--radius-2);
+    background: var(--bg-1);
+    color: var(--text-3);
+    font-size: 1.6rem;
+    transition: opacity 0.3s;
+}
+.pagination .page-item .page-link:hover {
+    opacity:.8;
+}
+.pagination .page-item.active .page-link {
+    background: var(--bg-4) !important;
+    color: var(--accent) !important;
+    font-weight: bold;
+}
 body.dark .pagination .page-item.active .page-link {
     background: var(--bg-3) !important;
 }
@@ -379,14 +384,132 @@ body.dark .pagination .page-item.disabled .page-link {
     cursor: pointer;
 }
 
-    /* Change background when dropdown is open (works in modern browsers) */
-    #rowsPerPageSelect:focus {
-        outline: none;
-    }
+/* Change background when dropdown is open (works in modern browsers) */
+#rowsPerPageSelect:focus {
+    outline: none;
+}
 
-    /* Style the dropdown options */
-    #rowsPerPageSelect option {
-        color: var(--text-3);
-    }
+/* Style the dropdown options */
+#rowsPerPageSelect option {
+    color: var(--text-3);
+}
 
 /* Users */
+/* [1] Add */
+/* [2] Edit Role */
+/* [3] Details */
+
+
+/* Settings */
+/* [1] Profile */
+section#profile {
+    background: var(--bg-1);
+}
+
+body.dark section#profile {
+    background: var(--bg-3);
+}
+
+
+.card {
+    position: relative;
+    height: 62rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: var(--radius-2);
+    background: var(--gray);
+    font-size: 1.6rem;
+    color: var(--text-3);
+}
+
+body.dark .card {
+    background: var(--bg-2);
+}
+
+.card__img {
+    height: 192px;
+    width: 100%;
+    background: var(--aramm);
+}
+
+
+.card__avatar {
+    position: absolute;
+    width: 12rem;
+    height: 12rem;
+    background: var(--aramm);
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: calc(20% );
+    border:5px solid var(--bg-1);
+}
+
+.card__title {
+    margin-top: 9rem;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--aramm);
+}
+
+.card__subtitle {
+    margin-top: 1rem;
+    font-weight: 400;
+    font-size: 15px;
+}
+.card__discription {
+    align-items: center;
+    margin-top: 1rem;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 2rem;
+}
+
+.card__button {
+    position:relative;
+    bottom:-35%;
+}
+
+.social-icons {
+    margin-top: 3rem;
+    position: relative;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0;
+}
+
+.social-icons li {
+    display: inline;
+    transition: .5s;
+    -webkit-transition: .5s;
+    -moz-transition: .5s;
+    -ms-transition: .5s;
+    -o-transition: .5s;
+}
+
+    .social-icons li a{
+        color: var(--text-1);
+        text-decoration: none;
+    }
+
+    .social-icons li:hover{
+        color: var(--text-2);
+        transform: translateY(-5px);
+        -webkit-transform: translateY(-5px);
+        -moz-transform: translateY(-5px);
+        -ms-transform: translateY(-5px);
+        -o-transform: translateY(-5px);
+    }
+
+/* info */
+    body.dark .info-box {
+        background: var(--bg-2);
+    }
+
+
