@@ -130,15 +130,21 @@
     color: var(--text-1) !important;
 }
 body.dark .btn-3 {
-    background: var(--bg-2) !important;
     color: var(--text-1) !important;
 }
 .btn-error {
     background: var(--error) !important;
     color: var(--text-1) !important;
 }
+body.dark .btn-error {
+    color: var(--text-3) !important;
+}
 
 .btn-acc {
+    background: var(--gradient-acc) !important;
+    color: var(--text-1) !important;
+}
+.btn-em {
     background: var(--gradient-acc) !important;
     color: var(--text-1) !important;
 }
@@ -212,6 +218,7 @@ body.dark .btn-3 {
         -o-transition: transform 0.4s ease;
     }
 
+
     .btn-em.fill:hover {
         color: var(--text-1) !important;
     }
@@ -264,7 +271,8 @@ body.dark .btn-3 {
 
 .input-box input,
 .input-box select,
-.input-box textarea{
+.input-box textarea,
+.input-box .input-shape{
     height: 100% !important;
     width: 100% !important;
     color: var(--text-3) !important;
@@ -356,11 +364,29 @@ body.dark .btn-3 {
 
 
 
-/* Dropdowns */
-.dropdown-1 {
-    background: var(--bg-nav);
-    color: var(--text-1);
+/* info-box */
+.info-box {
+    height: 6rem;
+    display: flex;
+    align-items: center !important;
+    column-gap: 4rem;
+    background: var(--bg-shape);
+    color: var(--text-3);
+    padding: 0 2rem !important;
+    border-radius: var(--radius-2);
 }
+.info-box .info-label {
+    width:10rem;
+}
+    .info-box .info-value {
+    }
+
+
+    /* Dropdowns */
+    .dropdown-1 {
+        background: var(--bg-nav);
+        color: var(--text-1);
+    }
     .dropdown-1 > button,
     .dropdown-1 > a {
         background: transparent !important;

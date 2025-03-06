@@ -2,10 +2,11 @@
     ViewData["Title"] = "User List";
 }
 
-<div class="container">
-    <div class="row gap-5">
-        <!-- Control Row: Search Bar and Add User Button -->
+<section id="table">
+    <div class="container">
         <div class="row gap-5">
+            <!-- Control Row: Search Bar and Add User Button -->
+            <div class="row gap-5">
                 <div class="col form-input-box f-ctr-ctr" role="search" style="margin-bottom: 0 !important;">
                     <div class="input-box">
                         <input id="searchTable" class="bg-1" placeholder="ابحث بالاسم أو البريد الإلكتروني..." aria-label="Search">
@@ -18,68 +19,69 @@
                 <div class="col-3">
                     <a id="addBtn" class="btn btn-input btn-sm btn-1 jump" asp-area="Admin" asp-controller="User" asp-action="Add">إضافة مستخدم جديد</a>
                 </div>
-        </div>
+            </div>
 
-        <div class="row gap-5">
-            <div class="col form-input-box f-ctr-ctr" role="search" style="margin-bottom: 0 !important;">
-                <div class="input-box">
-                    <select id="rowsPerPageSelect" class="bg-1">
-                        <option value="5" selected>5</option>
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="1000000">الكل</option> <!-- A very large number for "All" -->
-                    </select>
+            <div class="row gap-5">
+                <div class="col form-input-box f-ctr-ctr" role="search" style="margin-bottom: 0 !important;">
+                    <div class="input-box">
+                        <select id="rowsPerPageSelect" class="bg-1">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="1000000">الكل</option> 
+                        </select>
+                    </div>
+                </div>
+                <div class="col-1">
+                    <button class="filterButton btn btn-input btn-sm hov-zoom-in  btn-active ">الكل</button>
+                </div>
+                <div class="col-1">
+                    <button class="filterButton btn btn-input btn-sm hov-zoom-in">عملاء</button>
+                </div>
+                <div class="col-1">
+                    <button class="filterButton btn btn-input btn-sm hov-zoom-in">ادمن</button>
+                </div>
+                <div class="col-1">
+                    <button class="filterButton btn btn-input btn-sm hov-zoom-in">مقفول</button>
+                </div>
+                <div class="col-1">
+                    <button class="filterButton btn btn-input btn-sm hov-zoom-in">غير مقفول</button>
                 </div>
             </div>
-                <div class="col-1">
-                <button class="filterButton btn btn-input btn-sm hov-zoom-in  btn-active ">الكل</button>
-                </div>
-               <div class="col-1">
-                <button class="filterButton btn btn-input btn-sm hov-zoom-in">عملاء</button>
-                </div>
-                <div class="col-1">
-                <button class="filterButton btn btn-input btn-sm hov-zoom-in">ادمن</button>
-                </div>
-                <div class="col-1">
-                <button class="filterButton btn btn-input btn-sm hov-zoom-in">مقفول</button>
-                </div>
-                <div class="col-1">
-                <button class="filterButton btn btn-input btn-sm hov-zoom-in">غير مقفول</button>
-                </div>
+            <div class="row">
+                <!-- Dashboard Table -->
+                <table  id="listTable">
+                    <thead>
+                        <tr>
+                            <th>رقم المعرف</th>
+                            <th>الاسم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>رقم الهاتف</th>
+                            <th>الدور</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- Row to show when no records match -->
+                        <tr id="noRecordsRow" style="display: none;">
+                            <td colspan="6" style="text-align: center;">لا يوجد سجلات</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        <div class="row">
-            <!-- Dashboard Table -->
-            <table class="dashboard-table" id="listTable">
-                <thead>
-                    <tr>
-                        <th>رقم المعرف</th>
-                        <th>الاسم</th>
-                        <th>البريد الإلكتروني</th>
-                        <th>رقم الهاتف</th>
-                        <th>الدور</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                    <!-- Row to show when no records match -->
-                    <tr id="noRecordsRow" style="display: none;">
-                        <td colspan="6" style="text-align: center;">لا يوجد سجلات</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row f-ctr-ctr">
+                <nav aria-label="Page navigation">
+                    <div id="pagination">
+                    </div>
+                </nav>
+            </div>
+
         </div>
-
-        <div class="row f-ctr-ctr">
-            <nav aria-label="Page navigation">
-                <div id="pagination">
-
-                </div>
-            </nav>
-        </div>
-
     </div>
-</div>
+
+</section>
 
 
 

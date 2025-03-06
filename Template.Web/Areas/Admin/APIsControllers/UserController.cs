@@ -178,6 +178,30 @@ namespace Template.Web.Areas.Admin.APIsControllers
         }
 
 
+        [HttpDelete]
+        public async Task<IActionResult> Delete( int id)
+        {
+            if (id <= 0)
+                return BadRequest(new { success = false, message = $"({id}) is an invalid Id" });
+
+            try
+            {
+               var result = await _userService.DeleteUserAsync(id);
+                if(result.IsSuccess)
+                {
+                    return Ok(new { success = true, message = "User deleted successfully!" });
+                }
+                else
+                {
+                    return StatusCode(500, new { success = false, message = "An error occurred while deleting the user." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "An error occurred while deleting the user." });
+            }
+        }
+
 
 
     }

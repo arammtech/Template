@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const filter = searchInput.value.toLowerCase();
         let visibleCount = 0;
 
-        // Select the rows dynamically (important!)
+        // Select the rows dynamically 
         const rows = document.querySelectorAll("#listTable tbody .userRow");
 
         rows.forEach(function (row) {
@@ -53,12 +53,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        totalUsers = visibleCount;
-        // Update pagination
-        updatePagination();
-
         // Show "No Records" message if all rows are hidden
         noRecordsRow.style.display = visibleCount === 0 ? "" : "none";
+
+        // Update pagination
+        totalUsers = visibleCount;
+        updatePagination();
     }
 
     // Listen for search input
@@ -131,8 +131,8 @@ function loadDataTable(area, controller, page,rowsPerPage,filterProperty, filter
         <td>${Array.isArray(user.role) ? user.role.join('/') : user.role || "N/A"}</td>
         <td class="row-actions">
             <a onclick="lockUnlock(${user.id})" class="action-btn btn btn-sm ${buttonColor} jump ">${lockUnlockString}</a>
-            <a class="action-btn btn btn-sm btn-2 jump ">تعديل الدور</a>
-            <a class="action-btn btn btn-sm btn-acc jump ">تفاصيل</a>
+            <a href="/admin/user/editRole/${user.id}" class="action-btn btn btn-sm btn-2 jump ">تعديل الدور</a>
+            <a href="/admin/user/details/${user.id}" class="action-btn btn btn-sm btn-acc jump ">تفاصيل</a>
         </td>
     </tr>
     `;
