@@ -24,7 +24,7 @@ namespace Template.Service.Implementations
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
 
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, AppDbContext context, IUnitOfWork unitOfWork,IMapper mapper)
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -45,7 +45,7 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-       public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
+        public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -163,50 +163,38 @@ namespace Template.Service.Implementations
             {
                 return Result.Failure("بيانات المستخدم غير صحيحة");
             }
-
-            if (string.IsNullOrWhiteSpace(userDto.FirstName))
+            if (userDto == null)
             {
-                return Result.Failure("الاسم الأول مطلوب");
+                return Result.Failure("بيانات المستخدم غير صحيحة");
             }
 
-            if (string.IsNullOrWhiteSpace(userDto.LastName))
+            var requiredFields = new Dictionary<string, string>
             {
-                return Result.Failure("اسم العائلة مطلوب");
-            }
+                { userDto.FirstName, "الاسم الأول مطلوب" },
+                { userDto.LastName, "اسم العائلة مطلوب" },
+                { userDto.Email, "البريد الإلكتروني مطلوب" },
+                { userDto.Phone, "رقم الهاتف مطلوب" },
+                { userDto.Password, "كلمة المرور مطلوبة" }
+            };
 
-            if (string.IsNullOrWhiteSpace(userDto.Email))
+            foreach (var field in requiredFields)
             {
-                return Result.Failure("البريد الإلكتروني مطلوب");
+                if (string.IsNullOrWhiteSpace(field.Key))
+                {
+                    return Result.Failure(field.Value);
+                }
             }
-
-            if (string.IsNullOrWhiteSpace(userDto.UserName))
-            {
-                return Result.Failure("اسم المستخدم مطلوب");
-            }
-
-            if (string.IsNullOrWhiteSpace(userDto.Phone))
-            {
-                return Result.Failure("رقم الهاتف مطلوب");
-            }
-
-            if (string.IsNullOrWhiteSpace(userDto.Password))
-            {
-                return Result.Failure("كلمة المرور مطلوبة");
-            }
-
-            if (userDto.Role == null || !userDto.Role.Any())
-            {
-                return Result.Failure("الدور مطلوب");
-            }
-
+            string errorMsg;
             var transactionResult = await _unitOfWork.StartTransactionAsync();
             if (!transactionResult.IsSuccess)
             {
+                errorMsg = transactionResult.ErrorMessage;
                 return transactionResult;
             }
 
             try
             {
+
                 var user = _mapper.Map<ApplicationUser>(userDto);
                 var result = await _userManager.CreateAsync(user, "DefaultPassword123!"); // Use a default or temporary password
 
@@ -216,13 +204,16 @@ namespace Template.Service.Implementations
                     if (!roleResult.Succeeded)
                     {
                         await _unitOfWork.RollbackAsync();
-                        return Result.Failure(roleResult.Errors.Select(e => e.Description).FirstOrDefault());
+                        errorMsg = roleResult.Errors.Select(e => e.Description).FirstOrDefault();
+
+                        return Result.Failure("حدث خطا اثناء اضافة يوزر");
                     }
 
                     var commitResult = await _unitOfWork.CommitAsync();
                     if (!commitResult.IsSuccess)
                     {
                         await _unitOfWork.RollbackAsync();
+                        errorMsg = commitResult.ErrorMessage;
                         return commitResult;
                     }
 
@@ -230,12 +221,13 @@ namespace Template.Service.Implementations
                 }
 
                 await _unitOfWork.RollbackAsync();
-                return Result.Failure(result.Errors.Select(e => e.Description).FirstOrDefault());
+                errorMsg = result.Errors.Select(e => e.Description).FirstOrDefault();
+                return Result.Failure($"فشل في إضافة المستخدم: ");
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-                return Result.Failure($"فشل في إضافة المستخدم: {ex.Message}");
+                return Result.Failure($"فشل في إضافة المستخدم: ");
             }
         }
 
@@ -319,7 +311,7 @@ namespace Template.Service.Implementations
 
                 var isAdmin = await _userManager.GetRolesAsync(user);
 
-                if(isAdmin.Contains(AppUserRoles.RoleAdmin))
+                if (isAdmin.Contains(AppUserRoles.RoleAdmin))
                 {
                     return Result.Failure("لا تستطيع ان تنفذ هذه العملية على الادمن");
                 }
