@@ -3,6 +3,7 @@ using Template.Service.DTOs.Admin;
 using Template.Domain.Global;
 using System.Linq.Expressions;
 using Template.Domain.Identity;
+using Template.Web.Areas.Admin.ViewModels;
 
 namespace Template.Service.Interfaces
 {
@@ -19,6 +20,10 @@ namespace Template.Service.Interfaces
         Task<List<string>> GetAllRolesAsync();
 
         Task<Result> ChangeUserRoleAsync(int userId, string oldRole, string newRole);
+
+        Task<ChangeUserRoleDto?> ChangeUserRoleAndReturnDtoAsync(int userId, string oldRole, string newRole);
+
+        Task<List<ApplicationRole>> GetUserRolesAsync(int userId);
 
         Task<Result> UnlockUserAsync(int userId);
 

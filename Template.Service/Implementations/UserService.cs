@@ -11,6 +11,7 @@ using Template.Service.Interfaces;
 using Template.Service.Mapper;
 using Template.Utilities.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
+using Template.Web.Areas.Admin.ViewModels;
 
 namespace Template.Service.Implementations
 {
@@ -360,6 +361,8 @@ namespace Template.Service.Implementations
 
         public async Task<Result> ChangeUserRoleAsync(int userId, string oldRole, string newRole)
         {
+            if (userId <= 0 || oldRole == newRole) return Result.Failure("Some Thing Erroe in parameter");
+
             var transactionResult = await _unitOfWork.StartTransactionAsync();
             if (!transactionResult.IsSuccess)
             {
@@ -400,6 +403,87 @@ namespace Template.Service.Implementations
                 return Result.Failure($"Failed to change user role: {ex.Message}");
             }
         }
+
+
+        public async Task<List<ApplicationRole>> GetUserRolesAsync(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var roleNames = await _userManager.GetRolesAsync(user);
+
+            var roles = await _roleManager.Roles.Where(r => roleNames.Contains(r.Name)).ToListAsync();
+
+            return roles;
+        }
+
+
+
+        public async Task<ChangeUserRoleDto?> ChangeUserRoleAndReturnDtoAsync(int userId, string oldRole, string newRole)
+        {
+            if (userId <= 0 || oldRole == newRole) return null;
+
+            var transactionResult = await _unitOfWork.StartTransactionAsync();
+            if (!transactionResult.IsSuccess)
+            {
+                return null;
+            }
+
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+
+                if (user == null)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return null;
+                }
+
+                var removeResult = await _userManager.RemoveFromRoleAsync(user, oldRole);
+                if (!removeResult.Succeeded)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return null;
+                }
+
+                var addResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addResult.Succeeded)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return null;
+                }
+
+                var commitResult = await _unitOfWork.CommitAsync();
+                if (!commitResult.IsSuccess)
+                {
+                    return null;
+                }
+
+                var roles = await GetUserRolesAsync(userId);
+
+                return new ChangeUserRoleDto
+                {
+                    Id = userId,
+                    oldRole = oldRole,
+                    newRole = newRole,
+                    Roles = roles
+                };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                // Log the exception (optional)
+                throw new Exception($"Failed to change user role: {ex.Message}");
+
+            }
+            return null;
+
+        }
+
 
         public async Task<List<string>> GetAllRolesAsync()
         {
