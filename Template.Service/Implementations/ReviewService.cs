@@ -8,10 +8,11 @@ namespace Template.Service.Implementations
     public class ReviewService : BaseService, IReviewService
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public ReviewService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        private ILog _logger;
+        public ReviewService(IUnitOfWork unitOfWork, ILog logger) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _logger = logger;
         }
 
 
@@ -39,6 +40,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to add review asynchronously: {ex.Message}");
             }
         }
@@ -60,6 +62,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to update review asynchronously: {ex.Message}");
             }
         }
@@ -81,6 +84,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to delete review asynchronously: {ex.Message}");
             }
         }

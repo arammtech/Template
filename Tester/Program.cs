@@ -23,7 +23,7 @@ options.UseSqlServer(connectionString));
 
 //Register dependencies
 services.AddSingleton<IUnitOfWork, UnitOfWork>();
-services.AddSingleton<IUserService, UserService>();
+services.AddSingleton<ILog, LogService>();
 
 services.AddLogging();
 
@@ -66,4 +66,6 @@ ApplicationUser GenerateFakeUser()
     };
 }
 
-z
+var logger = serviceProvider.GetRequiredService<ILog>();
+
+logger.Log(new Exception(), System.Diagnostics.EventLogEntryType.Error);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using Template.Domain.Common.IUnitOfWork;
 using Template.Domain.Entities;
@@ -12,11 +13,13 @@ namespace Template.Service.Implementations
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private ILog _logger;
 
-        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
+        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper, ILog logger) : base(unitOfWork)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _logger = logger;
         }
 
         public DepartmentDto? Get(Expression<Func<Department, bool>> filter)
@@ -62,6 +65,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to add department: {ex.Message}");
             }
         }
@@ -86,6 +90,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to add department asynchronously: {ex.Message}");
             }
         }
@@ -113,6 +118,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to add departments: {ex.Message}");
             }
         }
@@ -140,6 +146,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to add departments asynchronously: {ex.Message}");
             }
         }
@@ -169,6 +176,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to update department: {ex.Message}");
             }
         }
@@ -198,6 +206,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to update department asynchronously: {ex.Message}");
             }
         }
@@ -218,6 +227,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to delete department: {ex.Message}");
             }
         }
@@ -237,6 +247,7 @@ namespace Template.Service.Implementations
             }
             catch (Exception ex)
             {
+                _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
                 return Result.Failure($"Failed to delete department asynchronously: {ex.Message}");
             }
         }

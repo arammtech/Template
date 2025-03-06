@@ -6,12 +6,6 @@ using Template.Domain.Global;
 using Template.Domain.Identity;
 using Template.Service.DTOs.Admin;
 using Template.Service.Interfaces;
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Template.Domain.Identity;
-using Template.Service.DTOs.Admin;
-using Template.Service.Interfaces;
-using static Template.Domain.Global.Result;
 
 public class UserService : IUserService
 {
@@ -19,14 +13,16 @@ public class UserService : IUserService
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private ILog _logger;
     private Dictionary<string, List<ApplicationUser>> _roleUserDictionary;
 
-    public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper)
+    public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, IUnitOfWork unitOfWork, IMapper mapper, ILog logger)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _logger = logger;
         _roleUserDictionary = new Dictionary<string, List<ApplicationUser>>();
         Task.Run(() => BuildRoleUserDictionary()).Wait();
     }
@@ -77,7 +73,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return null;
         }
     }
@@ -99,7 +95,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return null;
         }
     }
@@ -131,7 +127,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return Result.Failure($"Failed to add user: {ex.Message}");
         }
     }
@@ -159,7 +155,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return Result.Failure($"Failed to update user: {ex.Message}");
         }
     }
@@ -182,7 +178,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return Result.Failure($"Failed to lock user: {ex.Message}");
         }
     }
@@ -205,7 +201,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return Result.Failure($"Failed to unlock user: {ex.Message}");
         }
     }
@@ -235,7 +231,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return Result.Failure($"Failed to edit user role: {ex.Message}");
         }
     }
@@ -257,7 +253,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            // Log the exception (optional)
+            _logger.Log(ex, System.Diagnostics.EventLogEntryType.Error);
             return Result.Failure($"Failed to delete user: {ex.Message}");
         }
 
