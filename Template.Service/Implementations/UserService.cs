@@ -32,7 +32,6 @@ namespace Template.Service.Implementations
             _roleUserDictionary = new Dictionary<string, List<ApplicationUser>>();
             _mapper = mapper;
             _context = context;
-            Task.Run(() => BuildRoleUserDictionary()).Wait();
         }
 
         private async Task BuildRoleUserDictionary()
@@ -77,16 +76,14 @@ namespace Template.Service.Implementations
                              select user;
             }
 
+            // Check if isLocked parameter has a value
             if (isLocked.HasValue)
             {
-                if (isLocked.Value)
-                {
-                    usersQuery = usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow);
-                }
-                else
-                {
-                    usersQuery = usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
-                }
+                // If isLocked.Value is true, select users who are currently locked out
+                usersQuery = isLocked.Value
+                    ? usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow)
+                    // If isLocked.Value is false, select users who are not currently locked out
+                    : usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
             }
 
             var totalRecords = await usersQuery.CountAsync();
@@ -95,17 +92,23 @@ namespace Template.Service.Implementations
                 .OrderBy(u => u.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Select(user => new UserDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneNumber,
+                    IsLocked = isLocked.HasValue ? isLocked.Value : false,
+                    Role = (from userRole in _context.UserRoles
+                            join role in _context.Roles on userRole.RoleId equals role.Id
+                            where userRole.UserId == user.Id
+                            select role.Name).ToList()
+                })
                 .ToListAsync();
 
-            var userDtos = new List<UserDto>();
-            foreach (var user in paginatedUsers)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                var userDto = await UserDTOsMapper.ToUserDto(user, Task.FromResult(roles));
-                userDtos.Add(userDto);
-            }
-
-            return (userDtos, totalRecords);
+            return (paginatedUsers, totalRecords);
         }
 
         public async Task<UserDto?> GetUserByIdAsync(int userId)
