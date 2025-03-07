@@ -402,6 +402,9 @@ body.dark .pagination .page-item.disabled .page-link {
 
 /* Settings */
 /* [1] Profile */
+section#table {
+    background: transparent !important;
+}
 section {
     background: var(--bg-1);
 }

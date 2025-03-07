@@ -89,52 +89,7 @@ namespace Template.Web.Areas.Admin.APIsControllers
             }
         }
 
-        // move this feature to the same method => make it return list and count or in a similar way
-        private async Task<int> GetUsersCountAsync(string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
-        {
-            var usersQuery = _userManager.Users.AsQueryable();
-
-            if (filter != null)
-            {
-                usersQuery = usersQuery.Where(filter);
-            }
-
-            if (!string.IsNullOrEmpty(role))
-            {
-                var roleId = await _roleManager.Roles
-                    .Where(r => r.Name == role)
-                    .Select(r => r.Id)
-                    .FirstOrDefaultAsync();
-
-                if (roleId == null)
-                {
-                    return 0;
-                }
-
-                usersQuery = from user in usersQuery
-                             join userRole in _context.UserRoles on user.Id equals userRole.UserId
-                             where userRole.RoleId == roleId
-                             select user;
-            }
-
-            if (isLocked.HasValue)
-            {
-                if (isLocked.Value)
-                {
-                    usersQuery = usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow);
-                }
-                else
-                {
-                    usersQuery = usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
-                }
-            }
-
-            var userCount = usersQuery.Count();
-
-            return userCount;
-        }
-
-
+  
 
 
 
