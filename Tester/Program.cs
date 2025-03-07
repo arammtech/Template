@@ -24,7 +24,7 @@ options.UseSqlServer(connectionString));
 
 //Register dependencies
 services.AddSingleton<IUnitOfWork, UnitOfWork>();
-services.AddSingleton<IUserService, UserService>();
+services.AddSingleton<ILog, LogService>();
 
 services.Configure<EmailSettings>(buider.GetSection("EmailConfiguration"));
 services.AddLogging();
@@ -87,29 +87,4 @@ ApplicationUser GenerateFakeUser()
     };
 }
 
-var user = GenerateFakeUser();
-
-var tokenService = serviceProvider.GetRequiredService<ITokenService>();
-var token = await tokenService.GenerateToken(user);
-
-var emailVerify = serviceProvider.GetRequiredService<IEmailVerificationService>();
-var verfiyLink = emailVerify.GenerateLinkToVerifyTokenAsync(token, user.Id);
-
-var result = await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "Verification Email", EmailTemplates.GetEmailVerificationEmailBody(verfiyLink));
-if (result.IsSuccess)
-   Console.WriteLine("Email sent successfully!");
-
-//Thread.Sleep(3000);
-
-//Console.WriteLine("Switch Email Sender to : Mailkit");
-
-//emailService.SwitchEmailSenderStrategy(serviceProvider.GetRequiredService<MailKitEmailSender>());
-
-//result = await emailService.SendEmailAsync("redaessa27@gmail.com", "RedaEssa", "Verification Email", EmailTemplates.GetEmailVerificationEmailBody(verfiyLink));
-//if (result.IsSuccess)
-//    Console.WriteLine("Email sent successfully!");
-
-
-////var token = await emailService.GenerateToken(user);
-//var link = await emailService.GenerateLinkToVerifyTokenAsync(token, user.Id);
-//await emailService.SendEmailAsync("bdalzyzalbrnawy47@gmail.com", "Abdulaziz", "test", $"<html><body><p>Click the link below:</p><a href='{link}'>Visit Example</a></body></html>", "Abdulaziz");
+z
