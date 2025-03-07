@@ -402,11 +402,11 @@ body.dark .pagination .page-item.disabled .page-link {
 
 /* Settings */
 /* [1] Profile */
-section#profile {
+section {
     background: var(--bg-1);
 }
 
-body.dark section#profile {
+body.dark section {
     background: var(--bg-3);
 }
 
@@ -472,7 +472,7 @@ body.dark .card {
     bottom:-35%;
 }
 
-.social-icons {
+.card .social-icons {
     margin-top: 3rem;
     position: relative;
     list-style: none;
@@ -484,7 +484,7 @@ body.dark .card {
     padding: 0;
 }
 
-.social-icons li {
+.card .social-icons li {
     display: inline;
     transition: .5s;
     -webkit-transition: .5s;
@@ -493,12 +493,12 @@ body.dark .card {
     -o-transition: .5s;
 }
 
-    .social-icons li a{
+    .card .social-icons li a {
         color: var(--text-1);
         text-decoration: none;
     }
 
-    .social-icons li:hover{
+    .card .social-icons li:hover {
         color: var(--text-2);
         transform: translateY(-5px);
         -webkit-transform: translateY(-5px);

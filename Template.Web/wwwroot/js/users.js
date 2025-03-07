@@ -77,13 +77,21 @@ document.addEventListener("DOMContentLoaded", function () {
         page = 1; // Reset to first page
         loadDataTable('admin', 'user', page, rowsPerPage, filterProperty, filter);
     });
-
-
-    // Dummy function for the Add User button
-    document.getElementById('addBtn').addEventListener('click', function () {
-        alert('إضافة مستخدم جديد');
+    // Attach event listener to handle pagination clicks
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("pagination-btn")) {
+            let newPage = parseInt(event.target.getAttribute("data-page"), 10);
+            changePage(newPage);
+        }
     });
 
+    // lock unlock buttons
+    document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("lockUnlockBtn")) {
+            let userId = event.target.getAttribute("data-user-id");
+            lockUnlock(userId);
+        }
+    });
 
 
 });
@@ -120,7 +128,7 @@ function loadDataTable(area, controller, page,rowsPerPage,filterProperty, filter
 
             items.forEach(user => {
                 let lockUnlockString = Boolean(user.isLocked) ? "فك القفل" : "قفل";
-                let buttonColor = Boolean(user.isLocked) ? "btn-error " : "btn-3";
+                let buttonColor = Boolean(user.isLocked) ? "btn-error " : "btn-em";
 
                 let rowHtml = `
     <tr class="userRow">
@@ -130,7 +138,7 @@ function loadDataTable(area, controller, page,rowsPerPage,filterProperty, filter
         <td>${user.phone || "لا يوجد"}</td>
         <td>${Array.isArray(user.role) ? user.role.join('/') : user.role || "N/A"}</td>
         <td class="row-actions">
-            <a onclick="lockUnlock(${user.id})" class="action-btn btn btn-sm ${buttonColor} jump ">${lockUnlockString}</a>
+                    <a href="#" class="action-btn btn btn-sm ${buttonColor} jump lockUnlockBtn" data-user-id="${user.id}">${lockUnlockString}</a>
             <a href="/admin/user/editRole/${user.id}" class="action-btn btn btn-sm btn-2 jump ">تعديل الدور</a>
             <a href="/admin/user/details/${user.id}" class="action-btn btn btn-sm btn-acc jump ">تفاصيل</a>
         </td>
@@ -152,7 +160,6 @@ function loadDataTable(area, controller, page,rowsPerPage,filterProperty, filter
 
 };
 
-
 function updatePagination() {
     let totalPages = Math.ceil(totalUsers / rowsPerPage);
     let paginationHTML = `<ul class="pagination">`;
@@ -161,15 +168,15 @@ function updatePagination() {
     if (page === 1) {
         paginationHTML += `<li class="page-item disabled"><a class="page-link">Previous</a></li>`;
     } else {
-        paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${page - 1})">Previous</a></li>`;
+        paginationHTML += `<li class="page-item"><a class="page-link pagination-btn" data-page="${page - 1}">Previous</a></li>`;
     }
 
     // Page Numbers
     for (let i = 1; i <= totalPages; i++) {
         if (i === page) {
-            paginationHTML += `<li class="page-item active"><a class="page-link" href="#">${i}</a></li>`;
+            paginationHTML += `<li class="page-item active"><a class="page-link">${i}</a></li>`;
         } else {
-            paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${i})">${i}</a></li>`;
+            paginationHTML += `<li class="page-item"><a class="page-link pagination-btn" data-page="${i}">${i}</a></li>`;
         }
     }
 
@@ -177,7 +184,7 @@ function updatePagination() {
     if (page === totalPages) {
         paginationHTML += `<li class="page-item disabled"><a class="page-link">Next</a></li>`;
     } else {
-        paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${page + 1})">Next</a></li>`;
+        paginationHTML += `<li class="page-item"><a class="page-link pagination-btn" data-page="${page + 1}">Next</a></li>`;
     }
 
     paginationHTML += `</ul>`;
@@ -224,7 +231,6 @@ function applyFilter(filterValue) {
 }
 
 
-
 function lockUnlock(userId) {
     $.ajax({
         type: 'POST',
@@ -236,9 +242,8 @@ function lockUnlock(userId) {
                 console.log("Success:", data.message);
                 toastr.success(data.message);
 
-                    $("#listTable tbody").empty(); // Clear table before reloading
+                $("#listTable tbody").empty(); // Clear table before reloading
                 loadDataTable('admin', 'user', page, rowsPerPage, filterProperty, filter); // Reload data
-
             } else {
                 console.log("Error:", data.message);
             }
@@ -248,9 +253,10 @@ function lockUnlock(userId) {
             toastr.error("An error occurred.");
         }
     });
-}
+};
 
 
 
+console.log("Available functions:", { changePage, lockUnlock });
 
 

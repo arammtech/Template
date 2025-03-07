@@ -1,7 +1,6 @@
-﻿@using Template.Service.DTOs.Admin
-@model UserDto
+﻿@model UserDto
 @{
-    ViewData["Title"] = "Admin Profile";
+    ViewData["Title"] = "User Profile";
 }
 
 
@@ -21,7 +20,6 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#DB4B4E" width="24px" height="24px">
                                     <path d="M22,12c0-5.521-4.479-10-10-10S2,6.479,2,12c0,5,3.657,9.127,8.438,9.877v-6.987H8.078v-2.89h2.36V10.5c0-2.324,1.374-3.606,3.483-3.606c1.008,0,2.064,0.182,2.064,0.182v2.255h-1.163c-1.146,0-1.504,0.713-1.504,1.444v1.736h2.56l-0.409,2.89h-2.151v6.987C18.343,21.127,22,17,22,12z" />
                                 </svg>
-
                             </a>
                         </li>
                         <li id="github">
@@ -29,7 +27,6 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#DB4B4E" width="24px" height="24px">
                                     <path d="M12,0.297c-6.627,0-12,5.373-12,12c0,5.302,3.438,9.8,8.205,11.387c0.6,0.113,0.82-0.258,0.82-0.577c0-0.285-0.01-1.04-0.015-2.04c-3.338,0.725-4.042-1.416-4.042-1.416c-0.546-1.385-1.333-1.754-1.333-1.754c-1.091-0.745,0.083-0.729,0.083-0.729c1.205,0.085,1.838,1.238,1.838,1.238c1.07,1.835,2.809,1.305,3.495,0.997c0.107-0.775,0.418-1.305,0.76-1.605c-2.665-0.305-5.467-1.333-5.467-5.932c0-1.31,0.467-2.381,1.236-3.221c-0.124-0.305-0.535-1.532,0.116-3.193c0,0,1.009-0.322,3.301,1.23c0.957-0.266,1.983-0.399,3.003-0.404c1.02,0.005,2.047,0.138,3.006,0.404c2.29-1.552,3.297-1.23,3.297-1.23c0.653,1.661,0.242,2.888,0.118,3.193c0.772,0.84,1.235,1.911,1.235,3.221c0,4.61-2.807,5.624-5.479,5.921c0.43,0.371,0.823,1.102,0.823,2.222c0,1.606-0.015,2.898-0.015,3.293c0,0.32,0.217,0.694,0.825,0.576C20.565,22.092,24,17.593,24,12.297C24,5.67,18.627,0.297,12,0.297z" />
                                 </svg>
-
                             </a>
                         </li>
                         <li id="linkedin">
@@ -37,7 +34,6 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#DB4B4E" width="24px" height="24px">
                                     <path d="M4.983,3.5C4.983,4.604,4.134,5.5,3,5.5S1.017,4.604,1.017,3.5C1.017,2.396,1.866,1.5,3,1.5S4.983,2.396,4.983,3.5zM0.846,7.158h4.31v13.685h-4.31V7.158zM9.131,7.158h4.139v1.873h0.059c0.577-1.092,1.991-2.24,4.099-2.24c4.382,0,5.191,2.851,5.191,6.559v7.493h-4.311v-6.644c0-1.584-0.03-3.619-2.205-3.619c-2.213,0-2.554,1.727-2.554,3.51v6.753h-4.309V7.158z" />
                                 </svg>
-
                             </a>
                         </li>
                         <li id="instagram">
@@ -70,98 +66,126 @@
                 
                 </div>
             </div>
-            <div class="col-8 p-4 round-2">
-                    <div class="tab-pane row gap-5 fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
-                        <div class="col-12">
-                            <div class="row gap-4">
-                                <div class="info-box col">
-                                <div class="info-label">الاسم الاول</div>
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <div class="info-value">@Model.FirstName</div>
-                                </div>
-                                <div class="info-box col">
-                                <div class="info-label">الاسم الأخير</div>
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    <div class="info-value">@Model.LastName</div>
-                                </div>
-                            </div>
+            <div class="col-8 p-4 round-2 row gap-5 ">
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="info-box col">
+                            <div class="info-label">رقم المعرف</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@Model.Id</div>
                         </div>
-                    <div class="col-12">
-                        <div class="row gap-4">
-                            <div class="info-box col">
-                                <div class="info-label">اسم المستخدم</div>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="info-value" >@Model.UserName</div>
-                            </div>
-                            <div class="info-box col">
-                                <div class="info-label">البريد الإلكتروني</div>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="info-value" >@Model.Email</div>
-                            </div>
+                        <div class="info-box col">
+                            <div class="info-label">الدور</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@(string.Join(", ", Model.Role))</div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row gap-4">
-                            <div class="info-box col">
-                                <div class="info-label">رقم الهاتف</div>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="info-value">@(string.IsNullOrEmpty(Model.Phone) ? "لايوجد" : Model.Phone)</div>
-                            </div>
-                            <div class="info-box col">
-                                <div class="info-label">حالة الحساب</div>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="info-value">@(Model.IsLocked ? "مقفول" : "غير مقفول")</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row gap-4">
-                            <div class="info-box col">
-                                <div class="info-label">الدور</div>
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="info-value">@(string.Join(", ", Model.Role))</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="row gap-4">
-                            <div class="col">
-                                <button id="lockUser" class="btn btn-input btn-lg btn-2 jump">lock</button>
-                            </div>
-                            <div class="col">
-                                <button id="deleteUser" class="btn btn-input btn-lg btn-error jump">delete</button>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
                     </div>
                 </div>
+
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="info-box col">
+                            <div class="info-label">الاسم الاول</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@Model.FirstName</div>
+                        </div>
+                        <div class="info-box col">
+                            <div class="info-label">الاسم الأخير</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@Model.LastName</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="info-box col">
+                            <div class="info-label">اسم المستخدم</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@Model.UserName</div>
+                        </div>
+                        <div class="info-box col">
+                            <div class="info-label">البريد الإلكتروني</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@Model.Email</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="info-box col">
+                            <div class="info-label">رقم الهاتف</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@(string.IsNullOrEmpty(Model.Phone) ? "لايوجد" : Model.Phone)</div>
+                        </div>
+                        <div class="info-box col">
+                            <div class="info-label">حالة الحساب</div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="info-value">@(Convert.ToBoolean(Model.IsLocked) ? "مقفول" : "غير مقفول")</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="col">
+                            @if (Convert.ToBoolean(Model.IsLocked))
+                            {
+                                <button data-id="@Model.Id" id="lockUser" class="btn btn-input btn-lg btn-em jump">فك القفل</button>
+                            }
+                            else
+                            {
+                                <button data-id="@Model.Id" id="lockUser" class="btn btn-input btn-lg btn-1 jump">قفل</button>
+                            }
+                        </div>
+                        <div class="col">
+                            <button data-id="@Model.Id" id="deleteUser" class="btn btn-input btn-lg btn-error jump">حذف الحساب</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="row f-end-ctr">
+                        <div class="col-4">
+                            <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-2 jump">الرجوع</a>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
        </div>
     </div>
 </section>
+
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="~/js/user-profile.js"></script>
+
+}

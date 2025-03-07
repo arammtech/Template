@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Customer\APIsControllers\" />
     <Folder Include="wwwroot\css\customer\" />
     <Folder Include="wwwroot\css\admin\" />
     <Folder Include="wwwroot\icons\" />
