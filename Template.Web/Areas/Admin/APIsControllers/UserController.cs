@@ -3,10 +3,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Linq;
 using Template.Domain.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
+using Template.Service.DTOs.Admin;
+using Template.Service.Implementations;
+using Template.Service.Interfaces;
+using Template.Service.Mapper;
 using Template.Utilities.Identity;
 using static System.Reflection.Metadata.BlobBuilder;
+using AutoMapper;
+using Template.Domain.Common.IUnitOfWork;
+using Template.Domain.Global;
 
 namespace Template.Web.Areas.Admin.APIsControllers
 {
@@ -18,36 +27,60 @@ namespace Template.Web.Areas.Admin.APIsControllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AppDbContext _context;
+        private readonly IUserService _userService;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public UserController(UserManager<ApplicationUser> userManager, AppDbContext context)
+      
+        public UserController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, AppDbContext context, IUserService userService)
         {
             _userManager = userManager;
+            _userService = userService;
+            _roleManager = roleManager;
             _context = context;
+
         }
 
-
+        //C:\Users\meryk\AppData\Local\SourceServer\13a535b10cec5cb2768d6ab5c80731f49d6b54dc56d6977252e531ad338caf07\Template.Web\Areas\Admin\APIsControllers\UserController.cs
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? filterProperty, [FromQuery] string? filter)
+        public async Task<IActionResult> GetAll([FromQuery]int page, [FromQuery]int rowsPerPage, [FromQuery] string? filterProperty, [FromQuery] string? filter)
         {
+            List<UserDto> lstUsers = [];
+            (IEnumerable<UserDto> Users, int TotalRecords) result ;
+            int usersCount = 0;
+            bool? isLocked = null;
+            string? role = null;
+
             try
             {
-                var lstUsers = _context.ApplicationUsers.Select(user => new
+                // apply filter
+                if (!(string.IsNullOrEmpty(filterProperty) && string.IsNullOrEmpty(filter)))
                 {
-                    user.Id,
-                    Name = user.FirstName + user.LastName,
-                    user.Email,
-                    Phone = user.PhoneNumber,
-                    Role = (from ur in _context.UserRoles
-                            join r in _context.Roles on ur.RoleId equals r.Id
-                            where ur.UserId == user.Id
-                            select r.Name).FirstOrDefault(),
-                    // Compare using UtcDateTime to ensure proper UTC comparison
-                    IsLocked = user.LockoutEnd != null &&  user.LockoutEnd > DateTime.Now
-                }).ToList();
+                    if (filterProperty == "role")
+                    {
+                        role = filter;
+                        result = (await _userService.GetUsersAsync(page, rowsPerPage, role));
+                        lstUsers = result.Users.ToList();
+                        usersCount = result.TotalRecords;
 
-                // (Optional) Apply filtering if needed
+                    }
+                    else if (filterProperty == "isLocked")
+                    {
+                        isLocked = filter.ToLower() == "true";
+                        result = (await _userService.GetUsersAsync(page, rowsPerPage, null, null, isLocked));
+                        lstUsers = result.Users.ToList();
+                        usersCount = result.TotalRecords;
 
-                return Ok(new { success = true, data = lstUsers });
+                    }
+
+                    return Ok(new { success = true, data = lstUsers, totalUsers = usersCount });
+                }
+
+                result = await _userService.GetUsersAsync(page, rowsPerPage);
+                lstUsers = result.Users.ToList();
+                usersCount = result.TotalRecords;
+
+
+                return Ok(new { success = true, data = lstUsers, totalUsers = usersCount });
             }
             catch (Exception ex)
             {
@@ -56,7 +89,54 @@ namespace Template.Web.Areas.Admin.APIsControllers
             }
         }
 
-        
+        // move this feature to the same method => make it return list and count or in a similar way
+        private async Task<int> GetUsersCountAsync(string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
+        {
+            var usersQuery = _userManager.Users.AsQueryable();
+
+            if (filter != null)
+            {
+                usersQuery = usersQuery.Where(filter);
+            }
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                var roleId = await _roleManager.Roles
+                    .Where(r => r.Name == role)
+                    .Select(r => r.Id)
+                    .FirstOrDefaultAsync();
+
+                if (roleId == null)
+                {
+                    return 0;
+                }
+
+                usersQuery = from user in usersQuery
+                             join userRole in _context.UserRoles on user.Id equals userRole.UserId
+                             where userRole.RoleId == roleId
+                             select user;
+            }
+
+            if (isLocked.HasValue)
+            {
+                if (isLocked.Value)
+                {
+                    usersQuery = usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow);
+                }
+                else
+                {
+                    usersQuery = usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
+                }
+            }
+
+            var userCount = usersQuery.Count();
+
+            return userCount;
+        }
+
+
+
+
 
 
         [HttpPost("LockUnLock")]
@@ -103,7 +183,45 @@ namespace Template.Web.Areas.Admin.APIsControllers
         }
 
 
+        [HttpDelete]
+        public async Task<IActionResult> Delete( int id)
+        {
+            if (id <= 0)
+                return BadRequest(new { success = false, message = $"({id}) is an invalid Id" });
+
+            try
+            {
+               var result = await _userService.DeleteUserAsync(id);
+                if(result.IsSuccess)
+                {
+                    return Ok(new { success = true, message = "User deleted successfully!" });
+                }
+                else
+                {
+                    return StatusCode(500, new { success = false, message = "An error occurred while deleting the user." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "An error occurred while deleting the user." });
+            }
+        }
+
 
 
     }
 }
+
+//var lstUsers = _context.ApplicationUsers.Select(user => new
+//{
+//    user.Id,
+//    Name = user.FirstName + user.LastName,
+//    user.Email,
+//    Phone = user.PhoneNumber,
+//    Role = (from ur in _context.UserRoles
+//            join r in _context.Roles on ur.RoleId equals r.Id
+//            where ur.UserId == user.Id
+//            select r.Name).FirstOrDefault(),
+//    // Compare using UtcDateTime to ensure proper UTC comparison
+//    IsLocked = user.LockoutEnd != null &&  user.LockoutEnd > DateTime.Now
+//}).ToList();

@@ -10,10 +10,11 @@ namespace Template.Domain.Entities
 {
     public class EmailSettings
     {
-        public string SmtpServer { get; set; }
+        public string SmtpServer { get; set; } = null!;
         public int SmtpPort { get; set; }
-        public string SenderEmail { get; set; }
-        public string AppPassword { get; set; }
+        public string SenderEmail { get; set; } = null!;
+        public string AppPassword { get; set; } = null!;
+        public string? SenderName { get; set; }
         
     }
 }

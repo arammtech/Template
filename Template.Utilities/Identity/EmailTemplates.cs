@@ -86,6 +86,7 @@ namespace Template.Utilities.Identity
 
         public static string GetEmailVerificationEmailBody(string callbackUrl)
         {
+
             return $@"
     <!DOCTYPE html>
     <html lang='ar'>
@@ -94,7 +95,7 @@ namespace Template.Utilities.Identity
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <style>
             body {{
-                font-family: Arial, sans-serif;
+                font-family: 'Arial', sans-serif;
                 background-color: #f4f4f4;
                 margin: 0;
                 padding: 0;
@@ -108,44 +109,59 @@ namespace Template.Utilities.Identity
                 overflow: hidden;
             }}
             .header {{
-                background-color: #007bff;
+                background-color: #db4b4e;
                 color: #ffffff;
-                padding: 20px;
+                padding: 25px;
                 text-align: center;
+                font-size: 24px;
+                font-weight: bold;
             }}
             .content {{
-                padding: 20px;
-                text-align: right; /* Align text to the right for Arabic */
+                padding: 25px;
+                text-align: right;
+                font-size: 18px;
+                line-height: 1.6;
+            }}
+            .button-container {{
+                text-align: center; /* توسيط الزر */
+                margin: 20px 0;
             }}
             .button {{
                 display: inline-block;
-                font-size: 18px;
+                font-size: 20px;
                 font-weight: bold;
-                color: #ffffff;
-                background-color: #007bff;
-                padding: 10px 20px;
+                color: #db4b4e !important; /* لون الخط */
+                background-color: #ffffff;
+                padding: 12px 25px;
+                border: 2px solid #db4b4e;
                 border-radius: 5px;
-                text-decoration: none;
-                margin: 20px 0;
+                text-decoration: none; /* إزالة التسطير */
+            }}
+            .button:hover {{
+                background-color: #db4b4e;
+                color: #ffffff !important;
+                transition: 0.3s;
             }}
             .footer {{
-                padding: 10px;
+                padding: 15px;
                 text-align: center;
-                font-size: 12px;
-                color: #999999;
-                background-color: #f9f9f9;
+                font-size: 14px;
+                color: #ffffff;
+                background-color: #db4b4e;
             }}
         </style>
     </head>
     <body>
         <div class='container'>
             <div class='header'>
-                <h1>تفعيل حسابك</h1>
+                تفعيل حسابك
             </div>
             <div class='content'>
                 <p>مرحبًا،</p>
                 <p>شكرًا لتسجيلك معنا. يرجى النقر على الزر أدناه لتفعيل حسابك:</p>
-                <a href='{HtmlEncoder.Default.Encode(callbackUrl)}' class='button'>تفعيل الحساب</a>
+                <div class='button-container'>
+                    <a href='{HtmlEncoder.Default.Encode(callbackUrl)}' class='button'>تفعيل الحساب</a>
+                </div>
                 <p>إذا لم تكن قد طلبت هذا، يرجى تجاهل هذه الرسالة.</p>
                 <p>شكرًا لك!</p>
             </div>
@@ -155,7 +171,10 @@ namespace Template.Utilities.Identity
         </div>
     </body>
     </html>
-    ";
+";
+
+
+
         }
 
     }

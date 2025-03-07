@@ -26,7 +26,7 @@
 
 
         // Generic Filter
-        public static List<T> _FilterBooks<T>(List<T> collection, string filterProperty, string filterValue)
+        public static List<T> _Filter<T>(List<T> collection, string filterProperty, string filterValue)
         {
             var propertyInfo = typeof(T).GetProperty(filterProperty);
             if (propertyInfo != null)

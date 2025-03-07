@@ -64,6 +64,25 @@ namespace Template.Repository.DbInitializer
                         // Set Lockout Enabled to false
                         _userManager.SetLockoutEnabledAsync(user, false);
                     }
+
+                    var users = UserData.LoadUsers();
+
+                    foreach (var (userr, role) in users)
+                    {
+                        var result2 = _userManager.CreateAsync(userr, "DefaultPassword123!").GetAwaiter().GetResult();
+
+                        if (result.Succeeded)
+                        {
+                            _userManager.AddToRoleAsync(userr, role).GetAwaiter().GetResult();
+
+                            // Email Confirmed
+                            var codeToConfirm = _userManager.GenerateEmailConfirmationTokenAsync(userr).GetAwaiter().GetResult();
+                            codeToConfirm = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(codeToConfirm));
+
+                            codeToConfirm = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(codeToConfirm));
+                            _userManager.ConfirmEmailAsync(userr, codeToConfirm).GetAwaiter().GetResult();
+                        }
+                    }
                 }
 
                  if (!_context.Departments.Any())

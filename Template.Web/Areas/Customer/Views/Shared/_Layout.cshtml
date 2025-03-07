@@ -11,6 +11,8 @@
   
     <partial name="_StyleLinksPartial"></partial>
 
+    <link rel="stylesheet" href="~/css/notification2.css" asp-append-version="true" />
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body dir="rtl" >
@@ -21,13 +23,13 @@
                 <ul class="navbar-nav logo-container">
                     <li class="nav-item logo">
                         <a class="navbar-brand  bg-aramm" asp-area="Customer" asp-controller="Home" asp-action="Index">
-                            <img src="~/icons/Aramm_tech.svg" alt="logo" />
+                            <img src="~/imgs/TeamARAMM/Aramm_tech.svg" alt="logo" />
                         </a>
                     </li>
                 </ul>
                 <button class="navbar-toggler fs-6" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav" aria-controls="offcanvasNav" aria-expanded="false" aria-label="Toggle navigation">
                     <svg width="30" height="30" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 17.0308H20M4 12.0308H20M4 7.03077H20" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M4 17.0308H20M4 12.0308H20M4 7.03077H20" stroke="#DB4B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
 
@@ -97,8 +99,8 @@
                                     <div class="input-box">
                                         <input id="searchInput" placeholder="البحث" aria-label="Search">
                                         <svg id="space" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M11.5 21.5C16.7467 21.5 21 17.2467 21 12C21 6.75329 16.7467 2.5 11.5 2.5C6.25329 2.5 2 6.75329 2 12C2 17.2467 6.25329 21.5 11.5 21.5Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path opacity="0.4" d="M22 22.5L20 20.5" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M11.5 21.5C16.7467 21.5 21 17.2467 21 12C21 6.75329 16.7467 2.5 11.5 2.5C6.25329 2.5 2 6.75329 2 12C2 17.2467 6.25329 21.5 11.5 21.5Z" stroke="#DB4B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path opacity="0.4" d="M22 22.5L20 20.5" stroke="#DB4B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                     </div>
                                 </form>
@@ -106,10 +108,10 @@
                             <li class="nav-item shopping-card-box me-5">
                                 <a class="nav-link @Html.IsActive("Customer/Cart/Index")" asp-area="Customer" asp-action="Index" asp-controller="Cart">
                                     <svg class="pointer" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2 2.5H3.74001C4.82001 2.5 5.67 3.43 5.58 4.5L4.75 14.46C4.61 16.09 5.89999 17.49 7.53999 17.49H18.19C19.63 17.49 20.89 16.31 21 14.88L21.54 7.38C21.66 5.72 20.4 4.37 18.73 4.37H5.82001" stroke="#E5E5E5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M16.25 22.5C16.9404 22.5 17.5 21.9404 17.5 21.25C17.5 20.5596 16.9404 20 16.25 20C15.5596 20 15 20.5596 15 21.25C15 21.9404 15.5596 22.5 16.25 22.5Z" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M8.25 22.5C8.94036 22.5 9.5 21.9404 9.5 21.25C9.5 20.5596 8.94036 20 8.25 20C7.55964 20 7 20.5596 7 21.25C7 21.9404 7.55964 22.5 8.25 22.5Z" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M9 8.5H21" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2 2.5H3.74001C4.82001 2.5 5.67 3.43 5.58 4.5L4.75 14.46C4.61 16.09 5.89999 17.49 7.53999 17.49H18.19C19.63 17.49 20.89 16.31 21 14.88L21.54 7.38C21.66 5.72 20.4 4.37 18.73 4.37H5.82001" stroke="#DB4B4E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path opacity="0.4" d="M16.25 22.5C16.9404 22.5 17.5 21.9404 17.5 21.25C17.5 20.5596 16.9404 20 16.25 20C15.5596 20 15 20.5596 15 21.25C15 21.9404 15.5596 22.5 16.25 22.5Z" stroke="#DB4B4E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path opacity="0.4" d="M8.25 22.5C8.94036 22.5 9.5 21.9404 9.5 21.25C9.5 20.5596 8.94036 20 8.25 20C7.55964 20 7 20.5596 7 21.25C7 21.9404 7.55964 22.5 8.25 22.5Z" stroke="#DB4B4E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path opacity="0.4" d="M9 8.5H21" stroke="#DB4B4E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </a>
                                  @* @await Component.InvokeAsync("ShoppingCartQuantity")  *@
@@ -134,6 +136,7 @@
     <div id="loading-spinner"></div> <!-- Spinner element -->
 
     <main role="main" id="content" class="page-height position-relative overflow-hidden f-ctr-ctr" style="display: none;">
+        <div class="notifications"></div>
         <partial name="_NotificationsPartial" />
         @RenderBody()
     </main>
@@ -243,9 +246,9 @@
     <!-- Help Button -->
     <a id="helpButton"  asp-area="Customer" asp-controller="Home" asp-action="Help"  class="btn btn-icon btn-sm btn-1 hidden">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 16C15.87 16 19 12.87 19 9C19 5.13 15.87 2 12 2C8.13 2 5 5.13 5 9" stroke="#DFDCD5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M12 16V22" stroke="#DFDCD5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <path opacity="0.4" d="M15 19H9" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 16C15.87 16 19 12.87 19 9C19 5.13 15.87 2 12 2C8.13 2 5 5.13 5 9" stroke="#DB4B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 16V22" stroke="#DB4B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path opacity="0.4" d="M15 19H9" stroke="#DB4B4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
 
     </a>
@@ -253,12 +256,15 @@
     <button id="backToTop" class="btn btn-icon btn-sm btn-1 hidden">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19.92 15.0499L13.4 8.52989C12.63 7.75989 11.37 7.75989 10.6 8.52989L4.08002 15.0499"
-                  stroke="#DFDCD5" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                  stroke="#DB4B4E" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
     </button>
 
     <partial name="_ScriptsPartial"></partial>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Include notification.js as a module -->
+    <script type="module" src="~/js/notifications2.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
