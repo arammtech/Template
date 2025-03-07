@@ -444,9 +444,6 @@ body.dark .btn-error {
     color: var(--text-3);
 }
 
-body.dark .card {
-    background: var(--bg-2);
-}
 
 .card__img {
     height: 192px;
@@ -529,10 +526,7 @@ body.dark .card {
             -o-transform: translateY(-5px);
         }
 
-/* info */
-body.dark .info-box {
-    background: var(--bg-2);
-}
+
 
 
 

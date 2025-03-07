@@ -9,7 +9,8 @@
 
 
 
-    <partial name="_StatusMessage" for="StatusMessage" />
+<!--
+<partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
     <div class="col-md-6">
         <form id="profile-form" method="post">
@@ -19,7 +20,7 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.Phone" class="form-control" placeholder="Please enter your phone number."/>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
@@ -28,9 +29,7 @@
     </div>
 </div>
 
-
-
-
+-->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

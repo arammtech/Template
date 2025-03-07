@@ -330,40 +330,6 @@ section .container {
 }
 
 
-
-
-/* Smooth transition to make the button bounce when in view */
-/*#downArrowButton.visible {
-    animation: bounce 1s ease-out forwards;
-}*/
-
-/* Bounce animation to give a subtle bounce effect */
-/*@keyframes bounce {
-    0% {
-        transform: translateY(0) scale(1);
-    }
-
-    25% {
-        transform: translateY(-10px) scale(1.1);
-    }
-
-    50% {
-        transform: translateY(0) scale(1);
-    }
-
-    75% {
-        transform: translateY(-5px) scale(1.05);
-    }
-
-    100% {
-        transform: translateY(0) scale(1);
-    }
-}*/
-
-
-
-
-
 /* End HomePage /Home/Index */
 
 /* Start About Us page */
@@ -374,3 +340,11 @@ section .container {
 
 /* Start Privacy page */
 /* End Privacy page */
+
+/* User Profile */
+body.dark .card {
+    background: var(--bg-3);
+}
+body.dark .info-box {
+    background: var(--bg-3);
+}

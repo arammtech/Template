@@ -7,6 +7,7 @@ using Template.Service.Interfaces;
 
 namespace Template.Web.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,6 +29,7 @@ namespace Template.Web.Areas.Customer.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> Profile()
         {
             try
@@ -62,7 +64,7 @@ namespace Template.Web.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> editProfile(int id, UserDto user)
+        public async Task<IActionResult> editProfile(int Id, UserDto user, IFormFile userImage)
         {
             try
             {
