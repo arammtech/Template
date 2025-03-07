@@ -11,6 +11,7 @@ using Template.Service.Interfaces;
 using Template.Service.Mapper;
 using Template.Utilities.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
+using Template.Web.Areas.Admin.ViewModels;
 
 namespace Template.Service.Implementations
 {
@@ -23,7 +24,7 @@ namespace Template.Service.Implementations
         private readonly IMapper _mapper;
         private readonly AppDbContext _context;
 
-        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, AppDbContext context, IUnitOfWork unitOfWork,IMapper mapper)
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, AppDbContext context, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -31,7 +32,6 @@ namespace Template.Service.Implementations
             _roleUserDictionary = new Dictionary<string, List<ApplicationUser>>();
             _mapper = mapper;
             _context = context;
-            Task.Run(() => BuildRoleUserDictionary()).Wait();
         }
 
         private async Task BuildRoleUserDictionary()
@@ -44,7 +44,7 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-       public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
+        public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -76,16 +76,14 @@ namespace Template.Service.Implementations
                              select user;
             }
 
+            // Check if isLocked parameter has a value
             if (isLocked.HasValue)
             {
-                if (isLocked.Value)
-                {
-                    usersQuery = usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow);
-                }
-                else
-                {
-                    usersQuery = usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
-                }
+                // If isLocked.Value is true, select users who are currently locked out
+                usersQuery = isLocked.Value
+                    ? usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow)
+                    // If isLocked.Value is false, select users who are not currently locked out
+                    : usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
             }
 
             var totalRecords = await usersQuery.CountAsync();
@@ -94,17 +92,23 @@ namespace Template.Service.Implementations
                 .OrderBy(u => u.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Select(user => new UserDto
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Phone = user.PhoneNumber,
+                    IsLocked = isLocked.HasValue ? isLocked.Value : false,
+                    Role = (from userRole in _context.UserRoles
+                            join role in _context.Roles on userRole.RoleId equals role.Id
+                            where userRole.UserId == user.Id
+                            select role.Name).ToList()
+                })
                 .ToListAsync();
 
-            var userDtos = new List<UserDto>();
-            foreach (var user in paginatedUsers)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                var userDto = await UserDTOsMapper.ToUserDto(user, Task.FromResult(roles));
-                userDtos.Add(userDto);
-            }
-
-            return (userDtos, totalRecords);
+            return (paginatedUsers, totalRecords);
         }
 
         public async Task<UserDto?> GetUserByIdAsync(int userId)
@@ -162,52 +166,40 @@ namespace Template.Service.Implementations
             {
                 return Result.Failure("بيانات المستخدم غير صحيحة");
             }
-
-            if (string.IsNullOrWhiteSpace(userDto.FirstName))
+            if (userDto == null)
             {
-                return Result.Failure("الاسم الأول مطلوب");
+                return Result.Failure("بيانات المستخدم غير صحيحة");
             }
 
-            if (string.IsNullOrWhiteSpace(userDto.LastName))
+            var requiredFields = new Dictionary<string, string>
             {
-                return Result.Failure("اسم العائلة مطلوب");
-            }
+                { userDto.FirstName, "الاسم الأول مطلوب" },
+                { userDto.LastName, "اسم العائلة مطلوب" },
+                { userDto.Email, "البريد الإلكتروني مطلوب" },
+                { userDto.Phone, "رقم الهاتف مطلوب" },
+                { userDto.Password, "كلمة المرور مطلوبة" }
+            };
 
-            if (string.IsNullOrWhiteSpace(userDto.Email))
+            foreach (var field in requiredFields)
             {
-                return Result.Failure("البريد الإلكتروني مطلوب");
+                if (string.IsNullOrWhiteSpace(field.Key))
+                {
+                    return Result.Failure(field.Value);
+                }
             }
-
-            if (string.IsNullOrWhiteSpace(userDto.UserName))
-            {
-                return Result.Failure("اسم المستخدم مطلوب");
-            }
-
-            if (string.IsNullOrWhiteSpace(userDto.Phone))
-            {
-                return Result.Failure("رقم الهاتف مطلوب");
-            }
-
-            if (string.IsNullOrWhiteSpace(userDto.Password))
-            {
-                return Result.Failure("كلمة المرور مطلوبة");
-            }
-
-            if (userDto.Role == null || !userDto.Role.Any())
-            {
-                return Result.Failure("الدور مطلوب");
-            }
-
+            string errorMsg;
             var transactionResult = await _unitOfWork.StartTransactionAsync();
             if (!transactionResult.IsSuccess)
             {
+                errorMsg = transactionResult.ErrorMessage;
                 return transactionResult;
             }
 
             try
             {
-                var user = _mapper.Map<ApplicationUser>(userDto);
-                var result = await _userManager.CreateAsync(user, "DefaultPassword123!"); // Use a default or temporary password
+
+                var user = UserDTOsMapper.ToApplicationUser(userDto);
+                var result = await _userManager.CreateAsync(user, user.PasswordHash); // Use a default or temporary password
 
                 if (result.Succeeded)
                 {
@@ -215,13 +207,16 @@ namespace Template.Service.Implementations
                     if (!roleResult.Succeeded)
                     {
                         await _unitOfWork.RollbackAsync();
-                        return Result.Failure(roleResult.Errors.Select(e => e.Description).FirstOrDefault());
+                        errorMsg = roleResult.Errors.Select(e => e.Description).FirstOrDefault();
+
+                        return Result.Failure("حدث خطا اثناء اضافة يوزر");
                     }
 
                     var commitResult = await _unitOfWork.CommitAsync();
                     if (!commitResult.IsSuccess)
                     {
                         await _unitOfWork.RollbackAsync();
+                        errorMsg = commitResult.ErrorMessage;
                         return commitResult;
                     }
 
@@ -229,12 +224,13 @@ namespace Template.Service.Implementations
                 }
 
                 await _unitOfWork.RollbackAsync();
-                return Result.Failure(result.Errors.Select(e => e.Description).FirstOrDefault());
+                errorMsg = result.Errors.Select(e => e.Description).FirstOrDefault();
+                return Result.Failure($"فشل في إضافة المستخدم: ");
             }
             catch (Exception ex)
             {
                 await _unitOfWork.RollbackAsync();
-                return Result.Failure($"فشل في إضافة المستخدم: {ex.Message}");
+                return Result.Failure($"فشل في إضافة المستخدم: ");
             }
         }
 
@@ -318,7 +314,7 @@ namespace Template.Service.Implementations
 
                 var isAdmin = await _userManager.GetRolesAsync(user);
 
-                if(isAdmin.Contains(AppUserRoles.RoleAdmin))
+                if (isAdmin.Contains(AppUserRoles.RoleAdmin))
                 {
                     return Result.Failure("لا تستطيع ان تنفذ هذه العملية على الادمن");
                 }
@@ -360,6 +356,8 @@ namespace Template.Service.Implementations
 
         public async Task<Result> ChangeUserRoleAsync(int userId, string oldRole, string newRole)
         {
+            if (userId <= 0 || oldRole == newRole) return Result.Failure("Some Thing Erroe in parameter");
+
             var transactionResult = await _unitOfWork.StartTransactionAsync();
             if (!transactionResult.IsSuccess)
             {
@@ -400,6 +398,87 @@ namespace Template.Service.Implementations
                 return Result.Failure($"Failed to change user role: {ex.Message}");
             }
         }
+
+
+        public async Task<List<ApplicationRole>> GetUserRolesAsync(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var roleNames = await _userManager.GetRolesAsync(user);
+
+            var roles = await _roleManager.Roles.Where(r => roleNames.Contains(r.Name)).ToListAsync();
+
+            return roles;
+        }
+
+
+
+        public async Task<ChangeUserRoleDto?> ChangeUserRoleAndReturnDtoAsync(int userId, string oldRole, string newRole)
+        {
+            if (userId <= 0 || oldRole == newRole) return null;
+
+            var transactionResult = await _unitOfWork.StartTransactionAsync();
+            if (!transactionResult.IsSuccess)
+            {
+                return null;
+            }
+
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+
+                if (user == null)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return null;
+                }
+
+                var removeResult = await _userManager.RemoveFromRoleAsync(user, oldRole);
+                if (!removeResult.Succeeded)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return null;
+                }
+
+                var addResult = await _userManager.AddToRoleAsync(user, newRole);
+                if (!addResult.Succeeded)
+                {
+                    await _unitOfWork.RollbackAsync();
+                    return null;
+                }
+
+                var commitResult = await _unitOfWork.CommitAsync();
+                if (!commitResult.IsSuccess)
+                {
+                    return null;
+                }
+
+                var roles = await GetUserRolesAsync(userId);
+
+                return new ChangeUserRoleDto
+                {
+                    Id = userId,
+                    oldRole = oldRole,
+                    newRole = newRole,
+                    Roles = roles
+                };
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                // Log the exception (optional)
+                throw new Exception($"Failed to change user role: {ex.Message}");
+
+            }
+            return null;
+
+        }
+
 
         public async Task<List<string>> GetAllRolesAsync()
         {

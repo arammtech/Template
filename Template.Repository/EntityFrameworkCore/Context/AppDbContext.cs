@@ -13,6 +13,7 @@ namespace Template.Repository.EntityFrameworkCore.Context
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
