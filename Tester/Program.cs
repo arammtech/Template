@@ -13,11 +13,12 @@ using Microsoft.AspNetCore.Identity;
 using Bogus;
 using static Template.Service.Implementations.EmployeeService;
 using Template.Service.DTOs.Admin;
+using Template.Service.EmailService;
+using Template.Utilities.Identity;
 
 var services = new ServiceCollection();
 var buider = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build();
 string connectionString = new ConfigurationBuilder().AddJsonFile("appsettings.Development.json").Build().GetSection("ConnectionStrings:DefaultConnection").Value;
-
 services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(connectionString));
 
@@ -25,6 +26,7 @@ options.UseSqlServer(connectionString));
 services.AddSingleton<IUnitOfWork, UnitOfWork>();
 services.AddSingleton<ILog, LogService>();
 
+services.Configure<EmailSettings>(buider.GetSection("EmailConfiguration"));
 services.AddLogging();
 
 services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
@@ -36,17 +38,36 @@ services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 }).AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 ;
+services.AddScoped<EmailService>();
+services.AddScoped<IEmailVerificationService, EmailVerificationService>();
+services.AddTransient<ITokenService, TokenService>();
+services.AddTransient<MailKitEmailSender>();
+services.AddTransient<SmtpEmailSender>();
+// Assign Defualt Startegy 
+services.AddTransient<IEmailSenderStrategy>(provider =>
+        provider.GetRequiredService<MailKitEmailSender>()
+    );
+
+
 
 ServiceProvider serviceProvider;
-    serviceProvider = services.BuildServiceProvider();
+serviceProvider = services.BuildServiceProvider();
 
+services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromSeconds(59);
+});
 
+Console.WriteLine("Email Sender Defualt : Mailkit");
+
+var emailService = serviceProvider.GetRequiredService<EmailService>();
 ApplicationUser GenerateFakeUser()
 {
     var faker = new Faker();
 
     return new ApplicationUser
     {
+        Id = faker.Random.Int(0, int.MaxValue),
         UserName = faker.Internet.UserName(),
         NormalizedUserName = faker.Internet.UserName().ToUpper(),
         Email = faker.Internet.Email(),
@@ -66,6 +87,4 @@ ApplicationUser GenerateFakeUser()
     };
 }
 
-var logger = serviceProvider.GetRequiredService<ILog>();
-
-logger.Log(new Exception(), System.Diagnostics.EventLogEntryType.Error);
+z
