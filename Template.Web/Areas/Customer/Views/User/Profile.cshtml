@@ -20,7 +20,7 @@
                     <div class="card__img bg-t"></div>
                     @if (!string.IsNullOrEmpty(Model.ImagePath))
                     {
-                        <img class="card__avatar" src="/uploads/images/users/@Model" />
+                        <img class="card__avatar" src="@Model.ImagePath" />
                     }
                     else
                     {
@@ -126,7 +126,7 @@
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="col">
-                            <a asp-area="customer" asp-controller="user" asp-action="editProfile" class="btn btn-input btn-lg btn-acc jump">تعديل</a>
+                            <a asp-area="customer" asp-controller="user" asp-action="editProfile" asp-route-id="@Model.Id" class="btn btn-input btn-lg btn-acc jump">تعديل</a>
                         </div>
                         <div class="col">
                             <a id="forgot-password" asp-area="identity"

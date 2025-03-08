@@ -18,8 +18,6 @@ namespace Template.Service.DTOs.Admin
         public string Email { get; set; }
         public string? UserName { get; set; }
         [StringLength(11, MinimumLength = 11, ErrorMessage = "رقم الهاتف يجب أن يتألف من 11 خانة حصرا")]
-        [DisplayName("رقم الهاتف )")]
-        [Required(ErrorMessage = "مطلوب رقم الهاتف )")]
         public string? Phone { get; set; }
         // make here validation
         [Required(ErrorMessage = "كلمة المرور مطلوبة")]
@@ -27,7 +25,7 @@ namespace Template.Service.DTOs.Admin
         [RegularExpression(@"^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$",
     ErrorMessage = "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، حرف كبير، رقم، وحرف خاص.")]
         public string? Password { get; set; }
-        public string? ImagePath { get; set; }
+        public string? ImagePath { get; set; } = "";
         [Required(ErrorMessage = "الدور مطلوب")]
         [DisplayName("الدور")]
         public List<string> Role { get; set; }

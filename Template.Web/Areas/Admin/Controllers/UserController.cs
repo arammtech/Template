@@ -62,7 +62,7 @@ namespace Template.Web.Areas.Admin.Controllers
             {
                 UserDto user = new();
 
-                ViewBag.Roles = _roleManager.Roles.ToList();
+                ViewBag.Roles = await _userService.GetAllApplicationRolesAsync();
                 return View(user);
             }
             catch

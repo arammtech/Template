@@ -74,10 +74,11 @@ namespace Template.Web.Areas.Customer.Controllers
             {
                if(ModelState.IsValid)
                 {
-                    string imagePath = (await _userService.GetUserByIdAsync(Id)).ImagePath;
+                    var oldUser = (await _userService.GetUserByIdAsync(Id));
+                    string imagePath = oldUser.ImagePath;
 
                    
-                    if (userImage != null)
+                    if (imagePath != null)
                     {
                       
                         //// Delete old image

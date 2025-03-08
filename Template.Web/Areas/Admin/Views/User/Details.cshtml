@@ -10,19 +10,22 @@
         <div class="row  p-4">
             <div class="col-4">
                 <div class="card">
-                    <div class="card__img bg-2"></div>
+                    <div class="card__img bg-t"></div>
                     @if (!string.IsNullOrEmpty(Model.ImagePath))
                     {
-                        <img class="card__avatar" src="/uploads/images/users/@Model" />
-                    }else {
+                        <img class="card__avatar" src="@Model.ImagePath" />
+                    }
+                    else
+                    {
                         <img class="card__avatar" src="/imgs/no-image.jfif" />
                     }
+
                     <div class="card__title">@(Model.FirstName + " " + Model.LastName)</div>
                     <div class="card__subtitle">@(string.Join(", ", Model.Role))</div>
 
                     <div class="col-12 px-4 card__button">
                         <a asp-area="admin" asp-controller="user" asp-action="editRole" asp-route-id="@Model.Id"
-                        class="btn btn-input btn-lg btn-em tc-1 jump">
+                           class="btn btn-input btn-lg btn-em tc-1 fill">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g opacity="0.4">
                                     <path d="M11.6797 14.62L14.2397 12.06L11.6797 9.5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
