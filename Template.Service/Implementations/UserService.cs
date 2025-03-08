@@ -44,7 +44,12 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-        public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
+        public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(
+            int page,
+            int pageSize = 10,
+            string? role = null,
+            Expression<Func<ApplicationUser, bool>>? filter = null,
+            bool? isLocked = null)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -75,14 +80,10 @@ namespace Template.Service.Implementations
                              where userRole.RoleId == roleId
                              select user;
             }
-
-            // Check if isLocked parameter has a value
             if (isLocked.HasValue)
             {
-                // If isLocked.Value is true, select users who are currently locked out
                 usersQuery = isLocked.Value
                     ? usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow)
-                    // If isLocked.Value is false, select users who are not currently locked out
                     : usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
             }
 
@@ -187,6 +188,13 @@ namespace Template.Service.Implementations
                     return Result.Failure(field.Value);
                 }
             }
+
+            // **Check if Email is Unique**
+            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            if (existingUser != null)
+            {
+                return Result.Failure("البريد الإلكتروني مسجل بالفعل");
+            }
             string errorMsg;
             var transactionResult = await _unitOfWork.StartTransactionAsync();
             if (!transactionResult.IsSuccess)
@@ -219,6 +227,10 @@ namespace Template.Service.Implementations
                         errorMsg = commitResult.ErrorMessage;
                         return commitResult;
                     }
+                    if(user.Id <= 0)
+                        return Result.Failure("حدث خطا اثناء اضافة يوزر");
+
+                    userDto.Id = user.Id;
 
                     return Result.Success();
                 }
@@ -278,6 +290,15 @@ namespace Template.Service.Implementations
                 if (user == null)
                 {
                     return Result.Failure("المستخدم غير موجود");
+                }
+
+
+
+                // **Check if Email is Unique (excluding the current user)**
+                var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+                if (existingUser != null && existingUser.Id != userDto.Id)
+                {
+                    return Result.Failure("البريد الإلكتروني مسجل بالفعل");
                 }
 
                 // Perform business logic/validation here
