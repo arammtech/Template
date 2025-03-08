@@ -40,14 +40,12 @@ namespace Template.Web.Areas.Admin.APIsControllers
 
         }
 
-
-
         //C:\Users\meryk\AppData\Local\SourceServer\13a535b10cec5cb2768d6ab5c80731f49d6b54dc56d6977252e531ad338caf07\Template.Web\Areas\Admin\APIsControllers\UserController.cs
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] int page, [FromQuery] int rowsPerPage, [FromQuery] string? filterProperty, [FromQuery] string? filter)
+        public async Task<IActionResult> GetAll([FromQuery]int page, [FromQuery]int rowsPerPage, [FromQuery] string? filterProperty, [FromQuery] string? filter)
         {
             List<UserDto> lstUsers = [];
-            (IEnumerable<UserDto> Users, int TotalRecords) result;
+            (IEnumerable<UserDto> Users, int TotalRecords) result ;
             int usersCount = 0;
             bool? isLocked = null;
             string? role = null;
@@ -86,78 +84,83 @@ namespace Template.Web.Areas.Admin.APIsControllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { success = false, message = "حدث خطأ أثناء استرجاع المستخدمين." });
+                // Optionally log the exception details
+                return StatusCode(500, new { success = false, message = "An error occurred while retrieving users." });
             }
         }
+
+  
+
+
+
 
         [HttpPost("LockUnLock")]
         public async Task<IActionResult> LockUnLock([FromQuery] int userId)
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(userId.ToString());
+                // Find the user by Id (adjust depending on your user ID type)
+                var userFromDb = await _userManager.FindByIdAsync(userId.ToString());
 
-                if (user == null)
+                if (userFromDb == null)
                 {
-                    return NotFound(new { success = false, message = $"لا يوجد مستخدم بالمعرّف = {userId}" });
+                    return NotFound(new { success = false, message = $"There is no user with the Id = {userId}" });
                 }
 
-
-                if (!user.LockoutEnabled)
+                // Prevent locking the main admin user
+                if (!userFromDb.LockoutEnabled)
                 {
-                    return BadRequest(new { success = false, message = "عذراً! لا يمكنك قفل هذا المستخدم، فهو المستخدم الرئيسي في هذا النظام." });
+                    return BadRequest(new { success = false, message = "Oops! You cannot lock this user, they are the main user in this system." });
                 }
 
-                string result = "";
+                string result;
 
-                if (user.LockoutEnd > DateTime.Now)
+                // If the user is already locked, unlock them; otherwise, lock them
+                if (userFromDb.LockoutEnd > DateTime.Now)
                 {
-                    var Result = await _userService.UnlockUserAsync(userId);
-
-                    if (Result.IsSuccess) result = "فك القفل";
-                    else return StatusCode(500, new { success = false, message = "حدث خطأ أثناء فك قفل المستخدم." });
+                    userFromDb.LockoutEnd = DateTime.Now; // Unlock user
+                    result = "unlocked";
                 }
                 else
                 {
-                    var Result = await _userService.LockUserAsync(userId);
-
-                    if (Result.IsSuccess) result = "قُفل";
-                    else return StatusCode(500, new { success = false, message = "حدث خطأ أثناء قفل المستخدم." });
+                    userFromDb.LockoutEnd = DateTime.Now.AddYears(1000); // Lock user for 1000 years
+                    result = "locked";
                 }
 
-                return Ok(new { success = true, message = $"تم {result} المستخدم بنجاح!" });
+                await _userManager.UpdateAsync(userFromDb); // Save changes via UserManager
+
+                return Ok(new { success = true, message = $"User has been {result} successfully!" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { success = false, message = "حدث خطأ أثناء قفل/فك قفل المستخدم." });
+                return StatusCode(500, new { success = false, message = "An error occurred while locking/unlocking the user." });
             }
         }
+
+
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete( int id)
         {
             if (id <= 0)
-                return BadRequest(new { success = false, message = $"({id}) هو معرف غير صالح" });
+                return BadRequest(new { success = false, message = $"({id}) is an invalid Id" });
 
             try
             {
-                var result = await _userService.DeleteUserAsync(id);
-                if (result.IsSuccess)
+               var result = await _userService.DeleteUserAsync(id);
+                if(result.IsSuccess)
                 {
-                    return Ok(new { success = true, message = "تم حذف المستخدم بنجاح!" });
+                    return Ok(new { success = true, message = "User deleted successfully!" });
                 }
                 else
                 {
-                    return StatusCode(500, new { success = false, message = "حدث خطأ أثناء حذف المستخدم." });
+                    return StatusCode(500, new { success = false, message = "An error occurred while deleting the user." });
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { success = false, message = "حدث خطأ أثناء حذف المستخدم." });
+                return StatusCode(500, new { success = false, message = "An error occurred while deleting the user." });
             }
         }
-
-
-
 
 
 

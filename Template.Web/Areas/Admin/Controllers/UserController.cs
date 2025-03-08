@@ -34,11 +34,11 @@ namespace Template.Web.Areas.Admin.Controllers
 
         }
 
+
         public IActionResult Index()
         {
             return View();
         }
-
         public async Task<IActionResult> Details(int id)
         {
             try
@@ -49,8 +49,7 @@ namespace Template.Web.Areas.Admin.Controllers
             }
             catch
             {
-                TempData["error"] = "حدث خطأ أثناء استرجاع بيانات المستخدم";
-                return View("Error");
+                return RedirectToAction("Index");
             }
 
         }
@@ -67,15 +66,12 @@ namespace Template.Web.Areas.Admin.Controllers
             }
             catch
             {
-                TempData["error"] = "حدث خطأ ما";
-                return View("Error");
+                return RedirectToAction("Index");
             }
 
         }
 
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add( UserDto user, IFormFile userImage)
         {
             try
@@ -83,33 +79,29 @@ namespace Template.Web.Areas.Admin.Controllers
                 if(ModelState.IsValid)
                 {
 
-                    user.IsLocked = false;
                     var result = await _userService.AddUserAsync(user);
 
-                     //int newUserId= await _userService.AddUserAsync(user);
-                    //user.Id = newUserId;
-
-                    if (result.IsSuccess)
+                    if(result.IsSuccess)
                     {
                         #region Handle image
                         
-                       await  _HandleUserImage(user.Id, user, userImage);
+                        _HandleUserImage(user.Id, user, userImage);
 
                         result = await _userService.UpdateUserAsync(user);
                         if (result.IsSuccess)
                         {
-                            TempData["success"] = "تم إضافة المستخدم بنجاح!";
+                            TempData["success"] = "تم إضافة بنجاح!";
 
                             return RedirectToAction("Index");
                         }
                     }
                     #endregion
 
-                    TempData["error"] = "حدث خطأ أثناء إضافة المستخدم";
-                    return View("Error");
                 }
 
                 ViewBag.Roles = _roleManager.Roles.ToList();
+
+                TempData["error"] = "حدث خطأ أثناء الكتاب.";
                 return View(user);
 
             }
@@ -117,7 +109,7 @@ namespace Template.Web.Areas.Admin.Controllers
             {
                 ViewBag.Roles = _roleManager.Roles.ToList();
 
-                TempData["error"] = "حدث خطأ أثناء إضافة المستخدم.";
+                TempData["error"] = "حدث خطأ أثناء الكتاب.";
                 return View("Error");
             }
 
@@ -133,20 +125,19 @@ namespace Template.Web.Areas.Admin.Controllers
                 ChangeUserRoleDto changeUserRoleDto = new();
                 changeUserRoleDto.Id = user.Id;
                 changeUserRoleDto.oldRole = string.Join(", ", user.Role);
-                changeUserRoleDto.Roles = (await _userService.GetAllApplicationRolesAsync()).ToList();
+                changeUserRoleDto.Roles = _roleManager.Roles.ToList();
+                //changeUserRoleDto.Roles = (await _userService.GetAllRolesAsync()).ToList();
 
                 return View(changeUserRoleDto);
             }
             catch
             {
-                TempData["error"] = "حدث خطأ أثناء استرجاع بيانات المستخدم";
-                return View("Error");
+                return RedirectToAction("Index");
             }
 
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> editRole(int id, ChangeUserRoleDto changeUserRoleDto)
         {
             try
@@ -155,18 +146,18 @@ namespace Template.Web.Areas.Admin.Controllers
 
                 if (result.IsSuccess)
                 {
-                    TempData["success"] = "تم تعديل دور المستخدم بنجاح!";
                     return RedirectToAction("index");
+
                 }
-             
-                TempData["error"] = "حدث خطأ أثناء تعديل دور المستخدم";
-                return View(changeUserRoleDto);
+                else
+                {
+                    return View(changeUserRoleDto);
+                }
 
             }
             catch
             {
-                TempData["error"] = "حدث خطأ أثناء تعديل دور المستخدم";
-                return View("Error");
+                return RedirectToAction("Index");
             }
         }
 

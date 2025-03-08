@@ -76,7 +76,7 @@ function deleteConfirm(url) {
                     if (response.success) {
                         sessionStorage.setItem('toastr-success-message', response.message);
 
-                        window.location.href = '/admin/user/index';
+                        window.location.href = '/customer/home/index';
                     } else {
                         toastr.error(response.message || "حدث خطأ غير متوقع.");
                     }

@@ -100,7 +100,7 @@ namespace Template.Service.Implementations
                     LastName = user.LastName,
                     Email = user.Email,
                     Phone = user.PhoneNumber,
-                    IsLocked = user.LockoutEnd.HasValue ? user.LockoutEnd.Value > DateTimeOffset.UtcNow : false,
+                    IsLocked = isLocked.HasValue ? isLocked.Value : false,
                     Role = (from userRole in _context.UserRoles
                             join role in _context.Roles on userRole.RoleId equals role.Id
                             where userRole.UserId == user.Id

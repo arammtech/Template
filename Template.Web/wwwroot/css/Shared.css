@@ -658,9 +658,3 @@ ol, ul {
 .hidden {
     display:none;
 }
-
-.back-btn-container {
-    position: absolute;
-    left: 2rem;
-    top: 2rem;
-}
