@@ -188,6 +188,13 @@ namespace Template.Service.Implementations
                     return Result.Failure(field.Value);
                 }
             }
+
+            // **Check if Email is Unique**
+            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            if (existingUser != null)
+            {
+                return Result.Failure("البريد الإلكتروني مسجل بالفعل");
+            }
             string errorMsg;
             var transactionResult = await _unitOfWork.StartTransactionAsync();
             if (!transactionResult.IsSuccess)
@@ -283,6 +290,15 @@ namespace Template.Service.Implementations
                 if (user == null)
                 {
                     return Result.Failure("المستخدم غير موجود");
+                }
+
+
+
+                // **Check if Email is Unique (excluding the current user)**
+                var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+                if (existingUser != null && existingUser.Id != userDto.Id)
+                {
+                    return Result.Failure("البريد الإلكتروني مسجل بالفعل");
                 }
 
                 // Perform business logic/validation here
