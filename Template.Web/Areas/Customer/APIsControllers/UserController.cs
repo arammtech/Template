@@ -30,14 +30,12 @@ namespace Template.Web.Areas.Customer.APIsControllers
       
 
         [HttpDelete]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete(int id)
         {
-            ClaimsIdentity claimsIdentity = (ClaimsIdentity)User?.Identity;
-            int userId = int.Parse(claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
-
+          
             try
             {
-                var result = await _userService.DeleteUserAsync(userId);
+                var result = await _userService.DeleteUserAsync(id);
                 if (result.IsSuccess)
                 {
                     await _signInManager.SignOutAsync();
