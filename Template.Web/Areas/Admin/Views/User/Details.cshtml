@@ -1,12 +1,11 @@
-﻿@using Template.Service.DTOs.Admin
-@model UserDto
+﻿@model UserDto
 @{
     ViewData["Title"] = "User Profile";
 }
 
 
 
-<section id="profile">
+<section id="user-details">
     <div class="container">
         <div class="row  p-4">
             <div class="col-4">
@@ -22,7 +21,7 @@
                     <div class="card__subtitle">@(string.Join(", ", Model.Role))</div>
 
                     <div class="col-12 px-4 card__button">
-                        <a asp-area="admin" asp-controller="user" asp-action="edit"
+                        <a asp-area="admin" asp-controller="user" asp-action="editRole" asp-route-id="@Model.Id"
                         class="btn btn-input btn-lg btn-em tc-1 jump">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g opacity="0.4">
@@ -115,7 +114,7 @@
                                     <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <div class="info-value">@(Model.IsLocked ? "مقفول" : "غير مقفول")</div>
+                            <div class="info-value">@(Convert.ToBoolean(Model.IsLocked) ? "مقفول" : "غير مقفول")</div>
                             </div>
                         </div>
                     </div>
@@ -123,13 +122,13 @@
                     <div class="col-12">
                         <div class="row gap-4">
                             <div class="col">
-                                @if(Model.IsLocked)
+                            @if (Convert.ToBoolean(Model.IsLocked))
                                 {
                                     <button data-id="@Model.Id" id="lockUser" class="btn btn-input btn-lg btn-em jump">فك القفل</button>
                                 }
                                 else
                                 {
-                                    <button data-id="@Model.Id" id="lockUser" class="btn btn-input btn-lg btn-2 jump">قفل</button>
+                                    <button data-id="@Model.Id" id="lockUser" class="btn btn-input btn-lg btn-1 jump">قفل</button>
                                 }
                             </div>
                             <div class="col">
@@ -141,7 +140,7 @@
                     <div class="col-12">
                         <div class="row f-end-ctr">
                             <div class="col-4">
-                                <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-1 jump">الرجوع</a>
+                                <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-2 jump">الرجوع</a>
                         </div>
                     </div>
 

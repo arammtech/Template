@@ -429,6 +429,104 @@ body.dark .btn-error {
 
 
 /* Cards */
+/* [1] user */
+
+
+.card {
+    position: relative;
+    height: 62rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: var(--radius-2);
+    background: var(--gray);
+    font-size: 1.6rem;
+    color: var(--text-3);
+}
+
+
+.card__img {
+    height: 192px;
+    width: 100%;
+    background: var(--aramm);
+}
+
+
+.card__avatar {
+    position: absolute;
+    width: 12rem;
+    height: 12rem;
+    background: var(--aramm);
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: calc(20% );
+    border: 5px solid var(--bg-1);
+}
+
+.card__title {
+    margin-top: 9rem;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--aramm);
+}
+
+.card__subtitle {
+    margin-top: 1rem;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.card__discription {
+    align-items: center;
+    margin-top: 1rem;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 2rem;
+}
+
+.card__button {
+    position: relative;
+    bottom: -35%;
+}
+
+.card .social-icons {
+    margin-top: 3rem;
+    position: relative;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0;
+}
+
+    .card .social-icons li {
+        display: inline;
+        transition: .5s;
+        -webkit-transition: .5s;
+        -moz-transition: .5s;
+        -ms-transition: .5s;
+        -o-transition: .5s;
+    }
+
+        .card .social-icons li a {
+            color: var(--text-1);
+            text-decoration: none;
+        }
+
+        .card .social-icons li:hover {
+            color: var(--text-2);
+            transform: translateY(-5px);
+            -webkit-transform: translateY(-5px);
+            -moz-transform: translateY(-5px);
+            -ms-transform: translateY(-5px);
+            -o-transform: translateY(-5px);
+        }
+
+
 
 
 

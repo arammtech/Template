@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deleteBtn) {
         deleteBtn.addEventListener("click", function () {
             const id = deleteBtn.dataset.id;
-            const url = `/api/admin/user?id=${id}`;
+            const url = `/api/customer/user?id=${id}`;
             deleteConfirm(url);
         });
     }
@@ -19,36 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
             lockUnlock(id);
         });
     }
-
-
 });
-
-
-function lockUnlock(userId) {
-    $.ajax({
-        type: 'POST',
-        url: `/api/admin/user/LockUnLock?userId=${userId}`, // Note the explicit route segment
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (data) {
-            if (data.success) {
-                console.log("Success:", data.message);
-                toastr.success(data.message);
-
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
-
-            } else {
-                console.log("Error:", data.message);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.log("AJAX Error:", xhr.responseText);
-            toastr.error("An error occurred.");
-        }
-    });
-}
 
 
 function deleteConfirm(url) {
@@ -69,6 +40,8 @@ function deleteConfirm(url) {
         }
     }).then((result) => {
         if (result.isConfirmed) {
+            window.location.href = '/customer/user/delete';
+
             $.ajax({
                 url: url,
                 type: 'DELETE',
@@ -76,7 +49,8 @@ function deleteConfirm(url) {
                     if (response.success) {
                         sessionStorage.setItem('toastr-success-message', response.message);
 
-                        window.location.href = '/customer/home/index';
+                        // I need to logout the user how
+                        window.location.href = '/admin/user/index';
                     } else {
                         toastr.error(response.message || "حدث خطأ غير متوقع.");
                     }

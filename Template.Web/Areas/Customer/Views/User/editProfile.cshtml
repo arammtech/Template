@@ -1,0 +1,147 @@
+﻿@using Template.Domain.Identity
+@model UserDto
+@{
+    ViewData["Title"] = "Add";
+
+}
+
+
+<section id="profile">
+    <form class="container" method="post" asp-area="customer" asp-controller="user" asp-action="editProfile" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <div class="row  p-4">
+            <div class="col p-4 round-2 row gap-5 ">
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="col form-input-box">
+                            <div class="input-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
+                                <input asp-for="FirstName"
+                                       placeholder="الاسم الاول" />
+                            </div>
+                            <span asp-validation-for="FirstName"></span>
+                        </div>
+                        <div class="col form-input-box">
+                            <div class="input-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M20.5899 22C20.5899 18.13 16.7399 15 11.9999 15C7.25991 15 3.40991 18.13 3.40991 22" stroke="#A27B5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
+                                <input asp-for="LastName"
+                                       placeholder="اسم العائلة" />
+                            </div>
+                            <span asp-validation-for="LastName"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="col form-input-box">
+                            <div class="input-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M17 9L13.87 11.5C12.84 12.32 11.15 12.32 10.12 11.5L7 9" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 16.5H8" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 12.5H5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <input asp-for="UserName"
+                                       placeholder="اسم المستخدم" />
+                            </div>
+                            <span asp-validation-for="UserName"></span>
+                        </div>
+                        <div class="col form-input-box">
+                            <div class="input-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M17 9L13.87 11.5C12.84 12.32 11.15 12.32 10.12 11.5L7 9" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 16.5H8" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 12.5H5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <input asp-for="Email"
+                                       placeholder="البريد الإلكتروني" />
+                            </div>
+                            <span asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="col form-input-box" role="search" style="margin-bottom: 0 !important;">
+                            <div class="col form-input-box">
+                                <div class="input-box">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path opacity="0.4" d="M17 9L13.87 11.5C12.84 12.32 11.15 12.32 10.12 11.5L7 9" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path opacity="0.4" d="M2 16.5H8" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path opacity="0.4" d="M2 12.5H5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <input asp-for="Phone"
+                                           placeholder="رقم الهاتف" />
+                                </div>
+                                <span asp-validation-for="Phone"></span>
+                            </div>
+                        <div class="col form-input-box">
+                            <div class="input-box">
+                                <input id="ImagePath"
+                                       class="form-control border-0 shadow"
+                                       type="file"
+                                       data-val="true"
+                                       name="userImage"
+                                       aria-describedby="mainImage-error"
+                                       aria-invalid="false" />
+
+                            </div>
+                            <span asp-validation-for="ImagePath"></span>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="col-12">
+                        <div class="row gap-4">
+                            <div class="col form-input-box" role="search" style="margin-bottom: 0 !important;">
+                                <div class="col form-input-box">
+                                    <a id="forgot-password"
+                                       asp-page="./ForgotPassword"
+                                       class="hov-t-2 hov-zoom-in">هل نسيت كلمة المرور؟</a>
+                                </div>
+                                @* make if in the controller and passed  in data *@
+                                <div class="info-box col bg-acc">
+                                    <a asp-page="/Account/ConfirmEmail" class="info-value">تأكيد حسابك؟</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="col">
+                                <button type="submit" class="btn btn-input btn-lg btn-1 jump">تعديل</button>
+                        </div>
+                        <div class="col">
+                            <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-em jump">الرجوع</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </div>
+
+
+    </form>
+
+</section>
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/show-password.js" asp-append-version="true"></script>
+}
+

@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Control the Welcome-Overelay Diaplay
     const overlay = document.getElementById("dashboardOverlay");
-    const leaveBtn = document.querySelector(".leaveDashboard");
+    const leaveBtns = document.querySelectorAll(".leaveDashboard");
   
       // Check if dashboardVisited flag exists and equals "1"
       const visited = sessionStorage.getItem("dashboardVisited");
@@ -94,10 +94,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
 
-      // When the "Leave Dashboard" button is clicked, reset the flag
-      leaveBtn.addEventListener("click", function() {
-        sessionStorage.setItem("dashboardVisited", "0");
-      });
+    // When the "Leave Dashboard" button is clicked, reset the flag
+    leaveBtns.forEach( btn=> {
+        btn.addEventListener("click", function () {
+            sessionStorage.setItem("dashboardVisited", "0");
+        });
+    });
+     
 
 
     // FullScreen
