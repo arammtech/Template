@@ -5,14 +5,22 @@
 
 
 <section id ="user-profile" class="sec-height mt-nav mb-footer">
-    <div class="container size-100 ">
+    <div class="row f-end-ctr back-btn-container">
+        <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-sm btn-icon shadow hov-zoom-in">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.57 5.93L3.5 12L9.57 18.07" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                <path opacity="0.4" d="M20.5 12H3.66998" stroke="#8F968D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </a>
+    </div>
+    <div class="container size-100">
           <div class="row  p-4">
             <div class="col-4">
                 <div class="card">
                     <div class="card__img bg-t"></div>
                     @if (!string.IsNullOrEmpty(Model.ImagePath))
                     {
-                        <img class="card__avatar" src="/uploads/images/users/@Model" />
+                        <img class="card__avatar" src="@Model.ImagePath" />
                     }
                     else
                     {
@@ -107,8 +115,23 @@
 
                 <div class="col-12">
                     <div class="row gap-4">
+                     
+                        <div class="col info-box">
+                            <a asp-area="identity" asp-page="/Account/ConfirmEmail" class="info-value hov-jump">تأكيد حسابك؟</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="row gap-4">
                         <div class="col">
-                            <a asp-area="customer" asp-controller="user" asp-action="editProfile"  data-id="@Model.Id" id="lockUser" class="btn btn-input btn-lg btn-1 jump">تعديل</a>
+                            <a asp-area="customer" asp-controller="user" asp-action="editProfile" asp-route-id="@Model.Id" class="btn btn-input btn-lg btn-acc jump">تعديل</a>
+                        </div>
+                        <div class="col">
+                            <a id="forgot-password" asp-area="identity"
+                               asp-page="/Account/ForgotPassword"
+                               class="btn btn-input btn-lg btn-1 jump">تعديل كلمة المرور</a>
                         </div>
                         <div class="col">
                             <button data-id="@Model.Id" id="deleteUser" class="btn btn-input btn-lg btn-error jump">حذف الحساب</button>
@@ -116,18 +139,12 @@
                     </div>
                 </div>
 
-                <div class="col-12">
-                    <div class="row f-end-ctr">
-                        <div class="col-4">
-                            <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-2 jump">الرجوع</a>
-                        </div>
-                    </div>
+               
 
 
 
                 </div>
             </div>
-        </div>
     </div>
 
    
@@ -137,6 +154,6 @@
 @section Scripts
 {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="module" src="~/js/user-profile.js"></script>
+    <script type="module" src="~/js/customer-profile.js"></script>
 
 }

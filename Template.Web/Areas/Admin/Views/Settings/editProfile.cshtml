@@ -1,27 +1,15 @@
-﻿@using Template.Domain.Identity
-@model UserDto
+﻿@model UserDto
 @{
-    ViewData["Title"] = "Add";
+    ViewData["Title"] = "Edit Profile";
 
 }
 
 
-<section id="user-edit-profile" class="sec-height mt-nav mb-footer">
-
-    <div class="row f-end-ctr back-btn-container">
-        <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-sm btn-icon shadow hov-zoom-in">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.57 5.93L3.5 12L9.57 18.07" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                <path opacity="0.4" d="M20.5 12H3.66998" stroke="#8F968D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-        </a>
-    </div>
-    <form class="container pt-3" method="post" asp-area="customer" asp-controller="user" asp-action="editProfile" enctype="multipart/form-data">
+<section id="add-user">
+    <form class="container" method="post" asp-area="admin" asp-controller="settings" asp-action="editProfile" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="Password" />
-        <input type="hidden" asp-for="Role" />
-     
-        <div class="row  p-4 round-2  gap-5">
+        <div class="row  p-4">
+            <div class="col p-4 round-2 row gap-5 ">
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="col form-input-box">
@@ -80,23 +68,32 @@
                         </div>
                     </div>
                 </div>
+                >
                 <div class="col-12">
                     <div class="row gap-4">
-                        <div class="col form-input-box" role="search" style="margin-bottom: 0 !important;">
-                                <div class="input-box">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M17 9L13.87 11.5C12.84 12.32 11.15 12.32 10.12 11.5L7 9" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M2 16.5H8" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path opacity="0.4" d="M2 12.5H5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    <input asp-for="Phone"
-                                           placeholder="رقم الهاتف" />
-                                </div>
-                                <span asp-validation-for="Phone"></span>
-                            </div>
                         <div class="col form-input-box">
                             <div class="input-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M17 9L13.87 11.5C12.84 12.32 11.15 12.32 10.12 11.5L7 9" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 16.5H8" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 12.5H5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <input asp-for="Phone"
+                                       placeholder="رقم الهاتف" />
+                            </div>
+                            <span asp-validation-for="Phone"></span>
+                        </div>
+                       
+
+                        <div class="col form-input-box">
+                            <div class="input-box">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M17 9L13.87 11.5C12.84 12.32 11.15 12.32 10.12 11.5L7 9" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 16.5H8" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path opacity="0.4" d="M2 12.5H5" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
                                 <input id="ImagePath"
                                        type="file"
                                        data-val="true"
@@ -110,16 +107,21 @@
                     </div>
                 </div>
 
-            <div class="col-12">
-                <div class="row  gap-4 f-end-ctr">
-                    <div class="col-3">
-                        <button type="submit"  class="btn btn-input btn-lg btn-1 jump">تعديل</button>
+
+
+
+                <div class="col-12">
+                    <div class="row gap-4">
+                        <div class="col">
+                            <button type="submit" class="btn btn-input btn-lg btn-1 jump">تعديل</button>
+                        </div>
+                        <div class="col">
+                            <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-em jump">الرجوع</a>
+                        </div>
                     </div>
-                   
                 </div>
+
             </div>
-
-
         </div>
     </form>
 

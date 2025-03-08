@@ -22,7 +22,7 @@ namespace Template.Service.EmailService
             {
                 using (var _mailMessage = new MailMessage())
                 {
-                    _mailMessage.From = new MailAddress(_emailSettings.SenderEmail,_emailSettings.SenderName);
+                    _mailMessage.From = new MailAddress(_emailSettings.SenderEmail,_emailSettings.SenderEmail);
                     _mailMessage.To.Add(new MailAddress(toMail,toName));
                     _mailMessage.Subject = subject;
                     _mailMessage.Body = body;
