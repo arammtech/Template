@@ -44,7 +44,12 @@ namespace Template.Service.Implementations
                 _roleUserDictionary[role.Name] = usersInRole.ToList();
             }
         }
-        public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null)
+        public async Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(
+            int page,
+            int pageSize = 10,
+            string? role = null,
+            Expression<Func<ApplicationUser, bool>>? filter = null,
+            bool? isLocked = null)
         {
             if (page < 1 || pageSize < 1)
             {
@@ -75,14 +80,10 @@ namespace Template.Service.Implementations
                              where userRole.RoleId == roleId
                              select user;
             }
-
-            // Check if isLocked parameter has a value
             if (isLocked.HasValue)
             {
-                // If isLocked.Value is true, select users who are currently locked out
                 usersQuery = isLocked.Value
                     ? usersQuery.Where(u => u.LockoutEnd.HasValue && u.LockoutEnd.Value > DateTimeOffset.UtcNow)
-                    // If isLocked.Value is false, select users who are not currently locked out
                     : usersQuery.Where(u => !u.LockoutEnd.HasValue || u.LockoutEnd.Value <= DateTimeOffset.UtcNow);
             }
 
@@ -100,7 +101,7 @@ namespace Template.Service.Implementations
                     LastName = user.LastName,
                     Email = user.Email,
                     Phone = user.PhoneNumber,
-                    IsLocked = isLocked.HasValue ? isLocked.Value : false,
+                    IsLocked = user.LockoutEnd.HasValue ? user.LockoutEnd.Value > DateTimeOffset.UtcNow : false,
                     Role = (from userRole in _context.UserRoles
                             join role in _context.Roles on userRole.RoleId equals role.Id
                             where userRole.UserId == user.Id
@@ -219,6 +220,10 @@ namespace Template.Service.Implementations
                         errorMsg = commitResult.ErrorMessage;
                         return commitResult;
                     }
+                    if(user.Id <= 0)
+                        return Result.Failure("حدث خطا اثناء اضافة يوزر");
+
+                    userDto.Id = user.Id;
 
                     return Result.Success();
                 }
