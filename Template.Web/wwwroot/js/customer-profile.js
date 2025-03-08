@@ -40,7 +40,6 @@ function deleteConfirm(url) {
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = '/customer/user/delete';
 
             $.ajax({
                 url: url,
@@ -50,7 +49,7 @@ function deleteConfirm(url) {
                         sessionStorage.setItem('toastr-success-message', response.message);
 
                         // I need to logout the user how
-                        window.location.href = '/admin/user/index';
+                        window.location.href = '/customer/home/index';
                     } else {
                         toastr.error(response.message || "حدث خطأ غير متوقع.");
                     }

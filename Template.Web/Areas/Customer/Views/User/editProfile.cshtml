@@ -6,11 +6,20 @@
 }
 
 
-<section id="profile">
-    <form class="container" method="post" asp-area="customer" asp-controller="user" asp-action="editProfile" enctype="multipart/form-data">
+<section id="user-edit-profile" class="sec-height mt-nav mb-footer">
+
+    <div class="row f-end-ctr back-btn-container">
+        <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-sm btn-icon shadow hov-zoom-in">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9.57 5.93L3.5 12L9.57 18.07" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                <path opacity="0.4" d="M20.5 12H3.66998" stroke="#8F968D" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </a>
+    </div>
+    <form class="container pt-3" method="post" asp-area="customer" asp-controller="user" asp-action="editProfile" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
-        <div class="row  p-4">
-            <div class="col p-4 round-2 row gap-5 ">
+     
+        <div class="row  p-4 round-2  gap-5">
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="col form-input-box">
@@ -72,7 +81,6 @@
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="col form-input-box" role="search" style="margin-bottom: 0 !important;">
-                            <div class="col form-input-box">
                                 <div class="input-box">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2 8.5C2 5 4 3.5 7 3.5H17C20 3.5 22 5 22 8.5V15.5C22 19 20 20.5 17 20.5H7" stroke="#A27B5C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
@@ -88,7 +96,6 @@
                         <div class="col form-input-box">
                             <div class="input-box">
                                 <input id="ImagePath"
-                                       class="form-control border-0 shadow"
                                        type="file"
                                        data-val="true"
                                        name="userImage"
@@ -101,39 +108,17 @@
                     </div>
                 </div>
 
-                    <div class="col-12">
-                        <div class="row gap-4">
-                            <div class="col form-input-box" role="search" style="margin-bottom: 0 !important;">
-                                <div class="col form-input-box">
-                                    <a id="forgot-password"
-                                       asp-page="./ForgotPassword"
-                                       class="hov-t-2 hov-zoom-in">هل نسيت كلمة المرور؟</a>
-                                </div>
-                                @* make if in the controller and passed  in data *@
-                                <div class="info-box col bg-acc">
-                                    <a asp-page="/Account/ConfirmEmail" class="info-value">تأكيد حسابك؟</a>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                <div class="col-12">
-                    <div class="row gap-4">
-                        <div class="col">
-                                <button type="submit" class="btn btn-input btn-lg btn-1 jump">تعديل</button>
-                        </div>
-                        <div class="col">
-                            <a id="backButton" href="javascript:void(0);" onclick="history.back();" class="btn btn-input btn-lg btn-em jump">الرجوع</a>
-                        </div>
+            <div class="col-12">
+                <div class="row  gap-4 f-end-ctr">
+                    <div class="col-3">
+                        <button type="submit"  class="btn btn-input btn-lg btn-1 jump">تعديل</button>
                     </div>
+                   
                 </div>
+            </div>
 
-            </div>
-            </div>
+
         </div>
-
-
     </form>
 
 </section>
