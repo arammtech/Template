@@ -221,6 +221,10 @@ namespace Template.Service.Implementations
                 }
 
                 userDto.Id = user.Id; 
+                if(!string.IsNullOrWhiteSpace(user.UserName))
+                {
+                    userDto.UserName = user.UserName;
+                }
                 return Result.Success(); 
             }
             catch (Exception ex)
