@@ -77,7 +77,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!visited || visited === "0") {
         // Show overlay (it is in HTML so it will display)
         setTimeout(() => {
-          overlay.style.animation = "fadeOutOverlay 0.5s forwards";
+            overlay.style.animation = "fadeOutOverlay 0.5s forwards";
+
+            history.pushState(null, "", location.href);
+       
+
           // After fade-out, remove overlay from DOM
           setTimeout(() => {
             if (overlay && overlay.parentNode) {
@@ -93,6 +97,10 @@ document.addEventListener('DOMContentLoaded', function () {
           overlay.parentNode.removeChild(overlay);
         }
       }
+
+    window.addEventListener("popstate", function () {
+        history.pushState(null, "", location.href);
+    });
 
     // When the "Leave Dashboard" button is clicked, reset the flag
     leaveBtns.forEach( btn=> {
