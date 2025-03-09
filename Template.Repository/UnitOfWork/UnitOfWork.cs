@@ -35,11 +35,13 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 var changes = _context.SaveChanges();
-                return changes > 0 ? Result.Success() : Result.Failure("No changes were made to the database.");
+                return changes > 0
+                    ? Result.Success()
+                    : Result.Failure(new[] { "No changes were made to the database." });
             }
             catch (Exception ex)
             {
-                return Result.Failure($"An error occurred while saving changes: {ex.Message}");
+                return Result.Failure(new[] { $"An error occurred while saving changes: {ex.Message}" });
             }
         }
 
@@ -48,11 +50,13 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 var changes = await _context.SaveChangesAsync();
-                return changes > 0 ? Result.Success() : Result.Failure("No changes were made to the database.");
+                return changes > 0
+                    ? Result.Success()
+                    : Result.Failure(new[] { "No changes were made to the database." });
             }
             catch (Exception ex)
             {
-                return Result.Failure($"An error occurred while saving changes: {ex.Message}");
+                return Result.Failure(new[] { $"An error occurred while saving changes: {ex.Message}" });
             }
         }
 
@@ -61,14 +65,14 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 if (_currentTransaction != null)
-                    return Result.Failure("A transaction is already in progress.");
+                    return Result.Failure(new[] { "A transaction is already in progress." });
 
                 _currentTransaction = _context.Database.BeginTransaction();
                 return Result.Success();
             }
             catch (Exception ex)
             {
-                return Result.Failure($"Failed to start a transaction: {ex.Message}");
+                return Result.Failure(new[] { $"Failed to start a transaction: {ex.Message}" });
             }
         }
 
@@ -77,14 +81,14 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 if (_currentTransaction != null)
-                    return Result.Failure("A transaction is already in progress.");
+                    return Result.Failure(new[] { "A transaction is already in progress." });
 
                 _currentTransaction = await _context.Database.BeginTransactionAsync();
                 return Result.Success();
             }
             catch (Exception ex)
             {
-                return Result.Failure($"Failed to start a transaction: {ex.Message}");
+                return Result.Failure(new[] { $"Failed to start a transaction: {ex.Message}" });
             }
         }
 
@@ -93,7 +97,7 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 if (_currentTransaction == null)
-                    return Result.Failure("No active transaction to commit.");
+                    return Result.Failure(new[] { "No active transaction to commit." });
 
                 _context.SaveChanges();
                 _currentTransaction.Commit();
@@ -102,7 +106,7 @@ namespace Template.Repository.UnitOfWork
             }
             catch (Exception ex)
             {
-                return Result.Failure($"An error occurred during commit: {ex.Message}");
+                return Result.Failure(new[] { $"An error occurred during commit: {ex.Message}" });
             }
         }
 
@@ -111,7 +115,7 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 if (_currentTransaction == null)
-                    return Result.Failure("No active transaction to commit.");
+                    return Result.Failure(new[] { "No active transaction to commit." });
 
                 await _context.SaveChangesAsync();
                 await _currentTransaction.CommitAsync();
@@ -120,7 +124,7 @@ namespace Template.Repository.UnitOfWork
             }
             catch (Exception ex)
             {
-                return Result.Failure($"An error occurred during commit: {ex.Message}");
+                return Result.Failure(new[] { $"An error occurred during commit: {ex.Message}" });
             }
         }
 
@@ -129,7 +133,7 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 if (_currentTransaction == null)
-                    return Result.Failure("No active transaction to roll back.");
+                    return Result.Failure(new[] { "No active transaction to roll back." });
 
                 _currentTransaction.Rollback();
                 CleanupTransaction();
@@ -137,7 +141,7 @@ namespace Template.Repository.UnitOfWork
             }
             catch (Exception ex)
             {
-                return Result.Failure($"An error occurred during rollback: {ex.Message}");
+                return Result.Failure(new[] { $"An error occurred during rollback: {ex.Message}" });
             }
         }
 
@@ -146,7 +150,7 @@ namespace Template.Repository.UnitOfWork
             try
             {
                 if (_currentTransaction == null)
-                    return Result.Failure("No active transaction to roll back.");
+                    return Result.Failure(new[] { "No active transaction to roll back." });
 
                 await _currentTransaction.RollbackAsync();
                 CleanupTransaction();
@@ -154,7 +158,7 @@ namespace Template.Repository.UnitOfWork
             }
             catch (Exception ex)
             {
-                return Result.Failure($"An error occurred during rollback: {ex.Message}");
+                return Result.Failure(new[] { $"An error occurred during rollback: {ex.Message}" });
             }
         }
 
@@ -170,11 +174,11 @@ namespace Template.Repository.UnitOfWork
             {
                 _context.Dispose();
                 _currentTransaction?.Dispose();
-                //return Result.Success();
             }
             catch (Exception ex)
             {
-                throw;
+                // Handle dispose exception if needed
+                throw new Exception($"An error occurred during disposal: {ex.Message}");
             }
         }
     }

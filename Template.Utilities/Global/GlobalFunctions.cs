@@ -19,6 +19,13 @@ namespace Template.Utilities.Global
                     return 15;
             }
         }
+        // Helper method to generate a default UserName based on available details
+        public static string GenerateDefaultUserName(string FirstName, string LastName)
+        {
+            // Example: Combine FirstName and LastName with a random number to ensure uniqueness
+            return $"{FirstName}.{LastName}{new Random().Next(1000, 9999)}";
+        }
+
 
 
         public static int GetRandom(int min, int max) 

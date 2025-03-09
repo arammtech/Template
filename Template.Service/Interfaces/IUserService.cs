@@ -11,19 +11,19 @@ namespace Template.Service.Interfaces
     {
         //  Task<PaginatedResult<UserDto>> GetUsersAsync(int page, int pageSize, string role);
 
-        Task<(IEnumerable<UserDto> Users, int TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null);
+        Task<(IEnumerable<UserDto>? Users, int? TotalRecords)> GetUsersAsync(int page, int pageSize = 10, string? role = null, Expression<Func<ApplicationUser, bool>>? filter = null, bool? isLocked = null);
         Task<UserDto?> GetUserByIdAsync(int userId);
         Task<Result> AddUserAsync(UserDto userDto);
         Task<Result> UpdateUserAsync(UserDto userDto);
         Task<Result> DeleteUserAsync(int userId);
 
-        Task<List<string>> GetAllRolesAsync();
+        Task<List<string>?> GetAllRolesAsync();
 
         Task<Result> ChangeUserRoleAsync(int userId, string oldRole, string newRole);
 
         Task<ChangeUserRoleDto?> ChangeUserRoleAndReturnDtoAsync(int userId, string oldRole, string newRole);
 
-        Task<List<ApplicationRole>> GetUserRolesAsync(int userId);
+        Task<List<ApplicationRole>?> GetUserRolesAsync(int userId);
 
         Task<Result> UnlockUserAsync(int userId);
 

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Global\**" />
+    <EmbeddedResource Remove="Global\**" />
+    <None Remove="Global\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MailKit" Version="4.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
@@ -21,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Customer\" />
-    <Folder Include="Global\" />
   </ItemGroup>
 
 </Project>
