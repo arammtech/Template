@@ -80,14 +80,18 @@ namespace Template.Web.Areas.Admin.Controllers
         {
             try
             {
-                if(ModelState.IsValid)
+                // remove require validation on the image
+                if (ModelState.ErrorCount == 1 && ModelState.ContainsKey(nameof(userImage)))
+                {
+                    ModelState.Remove(nameof(userImage));
+                }
+
+                if (ModelState.IsValid)
                 {
 
                     user.IsLocked = false;
                     var result = await _userService.AddUserAsync(user);
 
-                     //int newUserId= await _userService.AddUserAsync(user);
-                    //user.Id = newUserId;
 
                     if (result.IsSuccess)
                     {
@@ -120,8 +124,9 @@ namespace Template.Web.Areas.Admin.Controllers
                 TempData["error"] = "حدث خطأ أثناء إضافة المستخدم.";
                 return View("Error");
             }
-
         }
+ 
+
 
         [HttpGet]
         public async Task<IActionResult> editRole(int id)
@@ -151,6 +156,7 @@ namespace Template.Web.Areas.Admin.Controllers
         {
             try
             {
+
                 var result = await _userService.ChangeUserRoleAsync(id, changeUserRoleDto.oldRole, changeUserRoleDto.newRole);
 
                 if (result.IsSuccess)
