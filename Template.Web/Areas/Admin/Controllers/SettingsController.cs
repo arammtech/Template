@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Linq;
+using System.Text;
 using Template.Domain.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
 using Template.Service.DTOs.Admin;
@@ -31,43 +33,45 @@ namespace Template.Web.Areas.Admin.Controllers
 
         }
 
-
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Profile()
         {
 
             try
             {
                 UserDto admin = await _userService.GetUserByIdAsync(1);
+                var AppUser = await _userManager.GetUserAsync(User);
+
+                // Generate an email confirm token
+                var emailCode = await _userManager.GenerateEmailConfirmationTokenAsync(AppUser);
+                ViewBag.EmailCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(emailCode));
+
+                // Generate a password reset token
+                var passwordCode = await _userManager.GeneratePasswordResetTokenAsync(AppUser);
+                ViewBag.PasswordCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(passwordCode));
 
                 return View(admin);
             }
             catch
             {
-                return RedirectToAction("Index");
+                TempData["error"] = "حدث خطأ أثناء استرجاع بيانات الادمن";
+                return View("Error");
             }
 
 
         }
+
         [HttpGet]
         public async Task<IActionResult> editProfile(int id)
         {
             try
             {
                 var user = await _userService.GetUserByIdAsync(id);
-                //ViewBag.Roles = _roleManager.Roles.ToList();
-                //ViewBag.Roles = await _userService.GetAllApplicationRolesAsync();
 
                 return View(user);
             }
             catch
             {
-                TempData["error"] = "حدث خطأ أثناء استرجاع بيانات المستخدم";
+                TempData["error"] = "حدث خطأ أثناء استرجاع بيانات الادمن";
                 return View("Error");
             }
         }
@@ -78,13 +82,19 @@ namespace Template.Web.Areas.Admin.Controllers
         {
             try
             {
+                // remove require validation on the image
+                if (ModelState.ErrorCount == 1 && ModelState.ContainsKey(nameof(userImage)))
+                {
+                    ModelState.Remove(nameof(userImage));
+                }
+
                 if (ModelState.IsValid)
                 {
                     var oldUser = (await _userService.GetUserByIdAsync(Id));
                     string imagePath = oldUser.ImagePath;
 
 
-                    if (imagePath != null)
+                    if (userImage != null)
                     {
 
                         //// Delete old image
@@ -96,30 +106,30 @@ namespace Template.Web.Areas.Admin.Controllers
                         {
                             System.IO.File.Delete(fullPath);
                         }
+
+                        await _HandleUserImage(user.Id, user, userImage);
+
                     }
 
-                    await _HandleUserImage(user.Id, user, userImage);
 
                     var result = await _userService.UpdateUserAsync(user);
 
 
                     if (result.IsSuccess)
                     {
-                        TempData["success"] = "تم تعديل بيانات المستخدم بنجاح!";
+                        TempData["success"] = "تم تعديل بيانات الادمن بنجاح!";
                         return RedirectToAction("Profile");
                     }
 
-                    //ViewBag.Roles = await _userService.GetAllApplicationRolesAsync();
-                    TempData["error"] = "حدث خطأ أثناء تعديل بيانات المستخدم";
+                    TempData["error"] = "حدث خطأ أثناء تعديل بيانات الادمن";
                     return View(user);
                 }
 
-                //ViewBag.Roles = await _userService.GetAllApplicationRolesAsync();
                 return View(user);
             }
             catch
             {
-                TempData["error"] = "حدث خطأ أثناء تعديل بيانات المستخدم";
+                TempData["error"] = "حدث خطأ أثناء تعديل بيانات الادمن";
                 return View("Error");
 
             }
