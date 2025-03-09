@@ -91,13 +91,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    // For security,if the user is not confirmed force him to confirm his account
-                    if (!(await _userManager.IsEmailConfirmedAsync(user)))
-                    {
-                        return RedirectToPage("./ForgotPasswordConfirmation", new { email = Input.Email });
-                    }
-
-
+                
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

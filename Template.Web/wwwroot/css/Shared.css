@@ -49,9 +49,7 @@ body.light {
     --gradient-1: linear-gradient(135deg, var(--color-4), var(--color-6)) !important;
     --border-1: var(--color-6) !important;
     --border-2: var(--color-5) !important;
-    /* --shadow-1: 0 4px 14px var(--color-5) !important; */
-    --shadow-1: 0 4px 6px 0px var(--color-5) !important;
-    --shadow-2: 0 .5rem 1rem var(--color-3) !important;
+    --shadow-1: 0 4px 6px 0px var(--color-4) !important;
 }
 
 body.dark {
@@ -71,9 +69,7 @@ body.dark {
     --gradient-1: linear-gradient(135deg, var(--color-3), var(--color-4)) !important;
     --border-1: var(--color-2) !important;
     --border-2: var(--color-4) !important;
-    /* --shadow-1: 0 4px 14px var(--color-4) !important; */
     --shadow-1: 0 4px 6px 0px var(--color-4) !important;
-    --shadow-2: 0 .5rem 1rem var(--color-5) !important;
 }
 
 /* 

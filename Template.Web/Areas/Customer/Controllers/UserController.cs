@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Claims;
+using System.Text;
+using Template.Domain.Global;
 using Template.Domain.Identity;
 using Template.Service.DTOs.Admin;
 using Template.Service.Interfaces;
@@ -26,6 +29,8 @@ namespace Template.Web.Areas.Customer.Controllers
 
         }
 
+    
+
         public IActionResult Index()
         {
             return View();
@@ -38,9 +43,25 @@ namespace Template.Web.Areas.Customer.Controllers
                 ClaimsIdentity claimsIdentity = (ClaimsIdentity)User?.Identity;
                 int userId = int.Parse(claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value);
 
-                var user = await _userService.GetUserByIdAsync(userId);
+                var userDto = await _userService.GetUserByIdAsync(userId);
+                var AppUser = await _userManager.GetUserAsync(User);
 
-                return View(user);
+                // For security,if the user is not confirmed force him to confirm his account
+                if (!(await _userManager.IsEmailConfirmedAsync(AppUser)))
+                {
+                    ViewBag.EmailConfirmNeeded = "أضغط لتأكيد حسابك.";
+                }
+
+                // Generate an email confirm token
+                var emailCode = await _userManager.GenerateEmailConfirmationTokenAsync(AppUser);
+                ViewBag.EmailCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(emailCode));
+
+                // Generate a password reset token
+                var passwordCode = await _userManager.GeneratePasswordResetTokenAsync(AppUser);
+                ViewBag.PasswordCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(passwordCode));
+
+
+                return View(userDto);
             }
             catch
             {
@@ -72,7 +93,13 @@ namespace Template.Web.Areas.Customer.Controllers
         {
             try
             {
-               if(ModelState.IsValid)
+                // remove require validation on the image
+                if (ModelState.ErrorCount == 1 && ModelState.ContainsKey(nameof(userImage)))
+                {
+                    ModelState.Remove(nameof(userImage));
+                }
+
+                if (ModelState.IsValid)
                 {
                     var oldUser = (await _userService.GetUserByIdAsync(Id));
                     string imagePath = oldUser.ImagePath;

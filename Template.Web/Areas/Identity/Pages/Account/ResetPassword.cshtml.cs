@@ -22,7 +22,9 @@ namespace Template.Web.Areas.Identity.Pages.Account
             _userManager = userManager;
         }
 
-       
+        [TempData]
+        public string Layout { get; set; }
+
         [BindProperty]
         public InputModel Input { get; set; } = new();
 
@@ -56,7 +58,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
 
         }
 
-        public IActionResult OnGet(string code = null, string email =null)
+        public IActionResult OnGet(string code = null, string email = null, string layout = "")
         {
             if (email == null)
             {
@@ -73,6 +75,9 @@ namespace Template.Web.Areas.Identity.Pages.Account
                 Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code)),
                 Email = email
             };
+
+            Layout = layout;
+
             return Page();
         }
 

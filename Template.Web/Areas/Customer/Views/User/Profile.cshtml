@@ -14,10 +14,9 @@
         </a>
     </div>
     <div class="container size-100">
-          <div class="row  p-4">
+        <div class="row  p-4">
             <div class="col-4">
                 <div class="card">
-                    <div class="card__img bg-t"></div>
                     @if (!string.IsNullOrEmpty(Model.ImagePath))
                     {
                         <img class="card__avatar" src="@Model.ImagePath" />
@@ -28,9 +27,21 @@
                     }
                     <div class="card__title">@(Model.FirstName + " " + Model.LastName)</div>
                     <div class="card__subtitle">@(string.Join(", ", Model.Role))</div>
+                    <div class="card__button">
+                        <a asp-area="customer" asp-controller="user" asp-action="editProfile" asp-route-id="@Model.Id"
+                           class="btn btn-input btn-lg btn-1 jump">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.6797 14.62L14.2397 12.06L11.6797 9.5" stroke="#fff" stroke-width="1.5" />
+                                <path d="M4 12.0596H14.17" stroke="#fff" stroke-width="1.5" />
+                            </svg>
+                            تعديل
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="col-8 p-4 round-2 row gap-5 ">
+
+
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="info-box col">
@@ -113,26 +124,34 @@
                     </div>
                 </div>
 
+               
                 <div class="col-12">
                     <div class="row gap-4">
                      
-                        <div class="col info-box">
-                            <a asp-area="identity" asp-page="/Account/ConfirmEmail" class="info-value hov-jump">تأكيد حسابك؟</a>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="row gap-4">
-                        <div class="col">
-                            <a asp-area="customer" asp-controller="user" asp-action="editProfile" asp-route-id="@Model.Id" class="btn btn-input btn-lg btn-acc jump">تعديل</a>
-                        </div>
                         <div class="col">
                             <a id="forgot-password" asp-area="identity"
-                               asp-page="/Account/ForgotPassword"
+                               asp-page="/Account/ResetPassword"
+                               asp-route-email="@Model.Email"
+                               asp-route-code="@ViewBag.PasswordCode"
+                               asp-route-layout = ""
                                class="btn btn-input btn-lg btn-1 jump">تعديل كلمة المرور</a>
                         </div>
+
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.EmailConfirmNeeded))
+                        {
+                            <div class="col">
+                            <a asp-area="Identity"
+                                asp-page="/Account/ConfirmEmail"
+                                asp-route-userId="@Model.Id"
+                                   asp-route-code="@ViewBag.EmailCode"
+                                asp-route-fromProfile =@true
+                                   class="btn btn-input btn-lg btn-2 jump">
+                                @ViewBag.EmailConfirmNeeded
+                            </a>
+                            </div>
+                        }
+
+
                         <div class="col">
                             <button data-id="@Model.Id" id="deleteUser" class="btn btn-input btn-lg btn-error jump">حذف الحساب</button>
                         </div>

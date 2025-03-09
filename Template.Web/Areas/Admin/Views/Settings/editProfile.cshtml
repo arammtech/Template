@@ -8,6 +8,8 @@
 <section id="add-user">
     <form class="container" method="post" asp-area="admin" asp-controller="settings" asp-action="editProfile" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Password" />
+        <input type="hidden" asp-for="Role" />
         <div class="row  p-4">
             <div class="col p-4 round-2 row gap-5 ">
                 <div class="col-12">
@@ -68,7 +70,6 @@
                         </div>
                     </div>
                 </div>
-                >
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="col form-input-box">
@@ -96,9 +97,8 @@
                                 </svg>
                                 <input id="ImagePath"
                                        type="file"
-                                       data-val="true"
                                        name="userImage"
-                                       aria-describedby="mainImage-error"
+                                       aria-describedby="userImage-error"
                                        aria-invalid="false" />
 
                             </div>
@@ -106,10 +106,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
                 <div class="col-12">
                     <div class="row gap-4">
                         <div class="col">

@@ -21,6 +21,7 @@
     padding-right: 1rem;
 }
 
+
 .offcanvas .btn-close {
     position: relative;
     color: var(--text-3) !important;
@@ -188,6 +189,14 @@ footer ul {
     -ms-transition: .5s;
     -o-transition: .5s;
 }
+    .social-icons li svg {
+        display: inline;
+        transition: .5s;
+        -webkit-transition: .5s;
+        -moz-transition: .5s;
+        -ms-transition: .5s;
+        -o-transition: .5s;
+    }
 
 .social-icons li a,
 .menu li a ,
@@ -204,32 +213,6 @@ ul li {
     -moz-transform: translateY(-5px);
     -ms-transform: translateY(-5px);
     -o-transform: translateY(-5px);
-}
-
-
-/* HOVER COLORS (Official brand colors) */
-#facebook:hover svg path {
-    stroke: #1877F2; /* Facebook blue */
-}
-
-#github:hover svg path {
-    stroke: #181717; /* GitHub black */
-}
-
-#linkedin:hover svg path {
-    stroke: #0A66C2; /* LinkedIn blue */
-}
-
-#instagram:hover svg path {
-    stroke: #E1306C; /* Instagram pink-ish */
-}
-
-#youtube:hover svg path {
-    stroke: #FF0000; /* YouTube red */
-}
-
-#x:hover svg path{
-    stroke: #000; /* X is black */
 }
 
 /* End Footer */
