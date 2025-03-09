@@ -114,6 +114,41 @@
 }
 
 /* Shapes Fill and Empty*/
+
+/* Updates */
+/*.btn-1 {
+
+}
+body.dark btn-1 {
+
+}
+.btn-2 {
+}
+
+body.dark btn-2 {
+}
+.btn-3 {
+}
+
+body.dark btn-4 {
+}
+.btn-4 {
+}
+
+body.dark btn-4 {
+}
+.btn-5 {
+}
+
+body.dark btn-5 {
+}
+.btn-6 {
+}
+
+body.dark btn-6 {
+}*/
+
+
 /*Fill Colors */
 .btn-1 {
     background: var(--gradient-1) !important;
@@ -141,10 +176,6 @@ body.dark .btn-error {
 }
 
 .btn-acc {
-    background: var(--gradient-acc) !important;
-    color: var(--text-1) !important;
-}
-.btn-em {
     background: var(--gradient-acc) !important;
     color: var(--text-1) !important;
 }
@@ -271,8 +302,7 @@ body.dark .btn-error {
 
 .input-box input,
 .input-box select,
-.input-box textarea,
-.input-box .input-shape{
+.input-box textarea{
     height: 100% !important;
     width: 100% !important;
     color: var(--text-3) !important;
@@ -288,6 +318,11 @@ body.dark .btn-error {
     -ms-border-radius: var(--radius-2) !important;
     -o-border-radius: var(--radius-2) !important;
 }
+
+body.dark .input-box input {
+    background-color: var(--bg-shape) !important;
+}
+
 
     .input-box input::placeholder,
     .input-box select::placeholder,
@@ -432,64 +467,68 @@ body.dark .btn-error {
 /* [1] user */
 
 
+
 .card {
-    position: relative;
-    height: 62rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 600px;
+    max-width: 100%;
     border-radius: var(--radius-2);
-    background: var(--gray);
-    font-size: 1.6rem;
     color: var(--text-3);
+    background: var(--gray);
 }
 
-
-.card__img {
-    height: 192px;
-    width: 100%;
-    background: var(--aramm);
+body.dark .card {
+    background: var(--bg-2);
 }
-
 
 .card__avatar {
-    position: absolute;
-    width: 12rem;
-    height: 12rem;
-    background: var(--aramm);
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: calc(20% );
-    border: 5px solid var(--bg-1);
+    width: 15rem;
+    height: 15rem;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
 }
 
 .card__title {
-    margin-top: 9rem;
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--aramm);
+    font-size: 2rem;
+    font-weight: bold;
 }
 
 .card__subtitle {
-    margin-top: 1rem;
-    font-weight: 400;
-    font-size: 15px;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
+.social-icons {
+    display: flex;
+    gap: 10px;
+    padding: 0;
+    list-style: none;
+}
+
+
 .card__discription {
-    align-items: center;
-    margin-top: 1rem;
-    font-weight: 400;
-    font-size: 15px;
-    padding: 2rem;
+    font-size: 14px;
+    color: #555;
+    padding: 10px;
+    max-width: 90%;
 }
 
 .card__button {
-    position: relative;
-    bottom: -35%;
+    margin-top: auto;
+    padding-top: 10px;
+    width: 100%;
+    text-align: center;
 }
+
+
+
 
 .card .social-icons {
     margin-top: 3rem;
@@ -525,8 +564,6 @@ body.dark .btn-error {
             -ms-transform: translateY(-5px);
             -o-transform: translateY(-5px);
         }
-
-
 
 
 
@@ -1039,3 +1076,59 @@ body.dark .wave-opacity-shape-up .shape-fill {
 
 
 /* Notification */
+.toast {
+    animation: slide-in 0.5s forwards, fade-out 0.5s 4.5s forwards;
+    transition: opacity 0.3s ease;
+    z-index: 1005;
+    margin-top: 90vh !important;
+    font-size: 1.5rem !important;
+}
+
+/* Slide-in animation */
+@keyframes slide-in {
+    0% {
+        transform: translateY(20px); /* Starts slightly below */
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0); /* Ends at normal position */
+        opacity: 1;
+    }
+}
+/* Fade-out animation */
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Social Links */
+/* HOVER COLORS (Official brand colors) */
+#facebook:hover svg path {
+    fill: #1877F2; /* Facebook blue */
+}
+
+#github:hover svg path {
+    fill: #181717; /* GitHub black */
+}
+
+#linkedin:hover svg path {
+    fill: #0A66C2; /* LinkedIn blue */
+}
+
+#instagram:hover svg path {
+    fill: #E1306C; /* Instagram pink-ish */
+}
+
+#youtube:hover svg path {
+    fill: #FF0000; /* YouTube red */
+}
+
+#x:hover svg path {
+    fill: #000; /* X is black */
+}
