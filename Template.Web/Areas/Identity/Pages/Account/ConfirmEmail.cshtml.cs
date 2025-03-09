@@ -22,12 +22,11 @@ namespace Template.Web.Areas.Identity.Pages.Account
 
         [TempData]
         public string StatusMessage { get; set; }
-        public async Task<IActionResult> OnGetAsync(string userId, string code)
+
+        [TempData]
+        public bool FromProfile { get; set; }
+        public async Task<IActionResult> OnGetAsync(string userId, string code, bool fromProfile = false)
         {
-            //var userId = await _userManager.GetUserIdAsync(user);
-            //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            //return RedirectToPage("/Account/ConfirmEmail", new { area = "Identity", userId = user.Id, code = code, returnUrl = "/Account/ResetPassword" });
 
             if (userId == null || code == null)
             {
@@ -43,6 +42,10 @@ namespace Template.Web.Areas.Identity.Pages.Account
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "شكرًا لتأكيد بريدك الإلكتروني." : "خطأ في تأكيد بريدك الإلكتروني.";
+
+            if (fromProfile != null) FromProfile = fromProfile;
+
+
             return Page();
         }
     }
