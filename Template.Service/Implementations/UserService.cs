@@ -13,6 +13,7 @@ using Template.Utilities.Identity;
 using Template.Repository.EntityFrameworkCore.Context;
 using Template.Web.Areas.Admin.ViewModels;
 using static Template.Service.MostUses.Validations.UserValidation;
+using static Template.Service.MostUses.Generates.UserGenerate;
 namespace Template.Service.Implementations
 {
 
@@ -220,6 +221,10 @@ namespace Template.Service.Implementations
                 }
 
                 userDto.Id = user.Id; 
+                if(!string.IsNullOrWhiteSpace(user.UserName))
+                {
+                    userDto.UserName = user.UserName;
+                }
                 return Result.Success(); 
             }
             catch (Exception ex)
@@ -253,9 +258,27 @@ namespace Template.Service.Implementations
                     return Result.Failure("المستخدم غير موجود");
 
                 // Check if Email is unique (excluding current user)
-                var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
-                if (existingUser != null && existingUser.Id != userDto.Id)
+                var existingUserByEmail = await _userManager.FindByEmailAsync(userDto.Email);
+                if (existingUserByEmail != null && existingUserByEmail.Id != userDto.Id)
                     return Result.Failure("البريد الإلكتروني مسجل بالفعل");
+
+                if(!string.IsNullOrEmpty(user.UserName))
+                {
+                    // Check if Email is unique (excluding current user)
+                    var existingUserByUserName = await _userManager.FindByEmailAsync(userDto.UserName);
+                    if (existingUserByUserName != null && existingUserByUserName.Id != userDto.Id)
+                        return Result.Failure("اسم المستخدم ليس متاح");
+                }
+                else
+                {
+                    user.UserName = GenerateDefaultUserNameFromEmailOrNames(userDto);
+                    var existingUserByUserName = await _userManager.FindByEmailAsync(userDto.UserName);
+                    while (existingUserByUserName != null && existingUserByUserName.Id != userDto.Id)
+                    {
+                        user.UserName = GenerateDefaultUserNameFromEmailOrNames(userDto);
+                        existingUserByUserName = await _userManager.FindByEmailAsync(userDto.UserName);
+                    }
+                }
 
                 // Update user details
                 user.FirstName = userDto.FirstName;
