@@ -93,7 +93,13 @@ namespace Template.Web.Areas.Customer.Controllers
         {
             try
             {
-               if(ModelState.IsValid)
+                // remove require validation on the image
+                if (ModelState.ErrorCount == 1 && ModelState.ContainsKey(nameof(userImage)))
+                {
+                    ModelState.Remove(nameof(userImage));
+                }
+
+                if (ModelState.IsValid)
                 {
                     var oldUser = (await _userService.GetUserByIdAsync(Id));
                     string imagePath = oldUser.ImagePath;

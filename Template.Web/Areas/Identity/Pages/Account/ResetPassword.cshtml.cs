@@ -58,7 +58,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
 
         }
 
-        public IActionResult OnGet(string code = null, string email =null)
+        public IActionResult OnGet(string code = null, string email = null, string layout = "")
         {
             if (email == null)
             {
@@ -76,7 +76,7 @@ namespace Template.Web.Areas.Identity.Pages.Account
                 Email = email
             };
 
-            //if (layout != null) Layout = layout;
+            Layout = layout;
 
             return Page();
         }
